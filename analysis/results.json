@@ -1,0 +1,1375 @@
+{
+ "inventory": {
+  "raw_people": 12770,
+  "raw_terms": 45535,
+  "raw_no_birthday": 542,
+  "base_rows": 2777,
+  "base_cols": 24,
+  "m119_rows": 555,
+  "m119_cols": 39,
+  "hist_rows": 119,
+  "hist_cols": 6,
+  "pop_rows": 6,
+  "pop_cols": 11,
+  "portraits": 874
+ },
+ "funnel": {
+  "115": {
+   "rows": 561,
+   "nonvoting": 6,
+   "not_seated": 21,
+   "seated": 534,
+   "no_birthday": 0,
+   "no_nominate": 0
+  },
+  "116": {
+   "rows": 550,
+   "nonvoting": 6,
+   "not_seated": 12,
+   "seated": 532,
+   "no_birthday": 0,
+   "no_nominate": 0
+  },
+  "117": {
+   "rows": 557,
+   "nonvoting": 6,
+   "not_seated": 19,
+   "seated": 532,
+   "no_birthday": 0,
+   "no_nominate": 0
+  },
+  "118": {
+   "rows": 554,
+   "nonvoting": 6,
+   "not_seated": 14,
+   "seated": 534,
+   "no_birthday": 0,
+   "no_nominate": 1
+  },
+  "119": {
+   "rows": 555,
+   "nonvoting": 6,
+   "not_seated": 16,
+   "seated": 533,
+   "no_birthday": 0,
+   "no_nominate": 0
+  }
+ },
+ "congress": {
+  "115": {
+   "n": 534,
+   "median": 59.4,
+   "mean": 58.9,
+   "min": 32.5,
+   "max": 87.6,
+   "a70": 75,
+   "a80": 15,
+   "u40": 28,
+   "gen": {
+    "Gen Z": 0,
+    "Millennial": 5,
+    "Gen X": 134,
+    "Boomer": 334,
+    "Silent": 61
+   },
+   "House": {
+    "n": 434,
+    "median": 58.3,
+    "a70": 53
+   },
+   "Senate": {
+    "n": 100,
+    "median": 62.4,
+    "a70": 22
+   },
+   "Dem": {
+    "n": 239,
+    "median": 62.2,
+    "a70": 47
+   },
+   "Rep": {
+    "n": 293,
+    "median": 57.0,
+    "a70": 26
+   }
+  },
+  "116": {
+   "n": 532,
+   "median": 59.2,
+   "mean": 58.5,
+   "min": 29.2,
+   "max": 85.6,
+   "a70": 91,
+   "a80": 13,
+   "u40": 40,
+   "gen": {
+    "Gen Z": 0,
+    "Millennial": 26,
+    "Gen X": 156,
+    "Boomer": 298,
+    "Silent": 52
+   },
+   "House": {
+    "n": 433,
+    "median": 58.0,
+    "a70": 68
+   },
+   "Senate": {
+    "n": 99,
+    "median": 63.5,
+    "a70": 23
+   },
+   "Dem": {
+    "n": 277,
+    "median": 60.2,
+    "a70": 61
+   },
+   "Rep": {
+    "n": 249,
+    "median": 58.3,
+    "a70": 27
+   },
+   "new": {
+    "n": 108,
+    "median": 48.0
+   },
+   "returning": {
+    "n": 424,
+    "median": 61.5
+   }
+  },
+  "117": {
+   "n": 532,
+   "median": 60.0,
+   "mean": 59.3,
+   "min": 25.4,
+   "max": 87.6,
+   "a70": 100,
+   "a80": 16,
+   "u40": 31,
+   "gen": {
+    "Gen Z": 0,
+    "Millennial": 31,
+    "Gen X": 164,
+    "Boomer": 299,
+    "Silent": 38
+   },
+   "House": {
+    "n": 433,
+    "median": 58.8,
+    "a70": 74
+   },
+   "Senate": {
+    "n": 99,
+    "median": 65.0,
+    "a70": 26
+   },
+   "Dem": {
+    "n": 266,
+    "median": 61.8,
+    "a70": 71
+   },
+   "Rep": {
+    "n": 262,
+    "median": 58.7,
+    "a70": 26
+   },
+   "new": {
+    "n": 74,
+    "median": 54.2
+   },
+   "returning": {
+    "n": 458,
+    "median": 61.0
+   }
+  },
+  "118": {
+   "n": 534,
+   "median": 59.2,
+   "mean": 58.6,
+   "min": 26.0,
+   "max": 89.5,
+   "a70": 106,
+   "a80": 16,
+   "u40": 38,
+   "gen": {
+    "Gen Z": 1,
+    "Millennial": 55,
+    "Gen X": 190,
+    "Boomer": 259,
+    "Silent": 29
+   },
+   "House": {
+    "n": 434,
+    "median": 57.9,
+    "a70": 72
+   },
+   "Senate": {
+    "n": 100,
+    "median": 65.3,
+    "a70": 34
+   },
+   "Dem": {
+    "n": 259,
+    "median": 60.1,
+    "a70": 66
+   },
+   "Rep": {
+    "n": 271,
+    "median": 58.9,
+    "a70": 37
+   },
+   "new": {
+    "n": 94,
+    "median": 46.7
+   },
+   "returning": {
+    "n": 440,
+    "median": 62.0
+   }
+  },
+  "119": {
+   "n": 533,
+   "median": 58.9,
+   "mean": 58.8,
+   "min": 28.0,
+   "max": 91.3,
+   "a70": 117,
+   "a80": 19,
+   "u40": 38,
+   "gen": {
+    "Gen Z": 1,
+    "Millennial": 71,
+    "Gen X": 209,
+    "Boomer": 229,
+    "Silent": 23
+   },
+   "House": {
+    "n": 434,
+    "median": 57.4,
+    "a70": 84
+   },
+   "Senate": {
+    "n": 99,
+    "median": 64.7,
+    "a70": 33
+   },
+   "Dem": {
+    "n": 260,
+    "median": 59.1,
+    "a70": 68
+   },
+   "Rep": {
+    "n": 270,
+    "median": 58.8,
+    "a70": 47
+   },
+   "new": {
+    "n": 77,
+    "median": 50.8
+   },
+   "returning": {
+    "n": 456,
+    "median": 60.9
+   }
+  }
+ },
+ "old119": {
+  "n": 117,
+  "in115": 100
+ },
+ "tenure": [
+  {
+   "c": 1,
+   "year": 1789,
+   "tenure": 0.0,
+   "entry": 44.6,
+   "age": 44.6
+  },
+  {
+   "c": 2,
+   "year": 1791,
+   "tenure": 2.0,
+   "entry": 42.7,
+   "age": 45.3
+  },
+  {
+   "c": 3,
+   "year": 1793,
+   "tenure": 1.4,
+   "entry": 40.4,
+   "age": 41.6
+  },
+  {
+   "c": 4,
+   "year": 1795,
+   "tenure": 1.2,
+   "entry": 38.3,
+   "age": 41.0
+  },
+  {
+   "c": 5,
+   "year": 1797,
+   "tenure": 1.2,
+   "entry": 38.8,
+   "age": 41.6
+  },
+  {
+   "c": 6,
+   "year": 1799,
+   "tenure": 1.8,
+   "entry": 39.1,
+   "age": 43.9
+  },
+  {
+   "c": 7,
+   "year": 1801,
+   "tenure": 1.2,
+   "entry": 39.0,
+   "age": 44.2
+  },
+  {
+   "c": 8,
+   "year": 1803,
+   "tenure": 1.2,
+   "entry": 40.1,
+   "age": 44.9
+  },
+  {
+   "c": 9,
+   "year": 1805,
+   "tenure": 1.4,
+   "entry": 40.3,
+   "age": 43.5
+  },
+  {
+   "c": 10,
+   "year": 1807,
+   "tenure": 1.3,
+   "entry": 40.6,
+   "age": 44.7
+  },
+  {
+   "c": 11,
+   "year": 1809,
+   "tenure": 1.4,
+   "entry": 41.4,
+   "age": 45.5
+  },
+  {
+   "c": 12,
+   "year": 1811,
+   "tenure": 2.5,
+   "entry": 40.3,
+   "age": 45.6
+  },
+  {
+   "c": 13,
+   "year": 1813,
+   "tenure": 1.3,
+   "entry": 40.7,
+   "age": 44.5
+  },
+  {
+   "c": 14,
+   "year": 1815,
+   "tenure": 1.8,
+   "entry": 38.9,
+   "age": 43.5
+  },
+  {
+   "c": 15,
+   "year": 1817,
+   "tenure": 0.7,
+   "entry": 38.9,
+   "age": 42.3
+  },
+  {
+   "c": 16,
+   "year": 1819,
+   "tenure": 1.3,
+   "entry": 39.2,
+   "age": 43.5
+  },
+  {
+   "c": 17,
+   "year": 1821,
+   "tenure": 1.2,
+   "entry": 38.2,
+   "age": 42.4
+  },
+  {
+   "c": 18,
+   "year": 1823,
+   "tenure": 1.2,
+   "entry": 38.1,
+   "age": 42.9
+  },
+  {
+   "c": 19,
+   "year": 1825,
+   "tenure": 1.3,
+   "entry": 38.3,
+   "age": 43.7
+  },
+  {
+   "c": 20,
+   "year": 1827,
+   "tenure": 1.3,
+   "entry": 38.0,
+   "age": 43.5
+  },
+  {
+   "c": 21,
+   "year": 1829,
+   "tenure": 1.2,
+   "entry": 39.1,
+   "age": 43.7
+  },
+  {
+   "c": 22,
+   "year": 1831,
+   "tenure": 1.2,
+   "entry": 38.9,
+   "age": 44.1
+  },
+  {
+   "c": 23,
+   "year": 1833,
+   "tenure": 1.2,
+   "entry": 39.3,
+   "age": 44.6
+  },
+  {
+   "c": 24,
+   "year": 1835,
+   "tenure": 1.2,
+   "entry": 39.7,
+   "age": 44.5
+  },
+  {
+   "c": 25,
+   "year": 1837,
+   "tenure": 1.2,
+   "entry": 38.9,
+   "age": 42.9
+  },
+  {
+   "c": 26,
+   "year": 1839,
+   "tenure": 1.5,
+   "entry": 39.2,
+   "age": 43.7
+  },
+  {
+   "c": 27,
+   "year": 1841,
+   "tenure": 1.3,
+   "entry": 38.8,
+   "age": 42.8
+  },
+  {
+   "c": 28,
+   "year": 1843,
+   "tenure": 0.0,
+   "entry": 39.3,
+   "age": 43.0
+  },
+  {
+   "c": 29,
+   "year": 1845,
+   "tenure": 1.2,
+   "entry": 39.2,
+   "age": 43.6
+  },
+  {
+   "c": 30,
+   "year": 1847,
+   "tenure": 1.3,
+   "entry": 39.2,
+   "age": 43.8
+  },
+  {
+   "c": 31,
+   "year": 1849,
+   "tenure": 1.2,
+   "entry": 40.1,
+   "age": 44.1
+  },
+  {
+   "c": 32,
+   "year": 1851,
+   "tenure": 1.2,
+   "entry": 40.8,
+   "age": 43.9
+  },
+  {
+   "c": 33,
+   "year": 1853,
+   "tenure": 1.2,
+   "entry": 40.5,
+   "age": 43.6
+  },
+  {
+   "c": 34,
+   "year": 1855,
+   "tenure": 1.2,
+   "entry": 40.5,
+   "age": 44.3
+  },
+  {
+   "c": 35,
+   "year": 1857,
+   "tenure": 1.2,
+   "entry": 40.5,
+   "age": 44.6
+  },
+  {
+   "c": 36,
+   "year": 1859,
+   "tenure": 1.2,
+   "entry": 40.5,
+   "age": 44.6
+  },
+  {
+   "c": 37,
+   "year": 1861,
+   "tenure": 1.2,
+   "entry": 41.9,
+   "age": 45.7
+  },
+  {
+   "c": 38,
+   "year": 1863,
+   "tenure": 1.7,
+   "entry": 42.8,
+   "age": 46.4
+  },
+  {
+   "c": 39,
+   "year": 1865,
+   "tenure": 1.2,
+   "entry": 43.1,
+   "age": 47.8
+  },
+  {
+   "c": 40,
+   "year": 1867,
+   "tenure": 1.2,
+   "entry": 43.4,
+   "age": 46.7
+  },
+  {
+   "c": 41,
+   "year": 1869,
+   "tenure": 2.0,
+   "entry": 41.4,
+   "age": 45.6
+  },
+  {
+   "c": 42,
+   "year": 1871,
+   "tenure": 2.0,
+   "entry": 42.5,
+   "age": 46.4
+  },
+  {
+   "c": 43,
+   "year": 1873,
+   "tenure": 2.0,
+   "entry": 43.6,
+   "age": 47.9
+  },
+  {
+   "c": 44,
+   "year": 1875,
+   "tenure": 0.6,
+   "entry": 44.2,
+   "age": 48.1
+  },
+  {
+   "c": 45,
+   "year": 1877,
+   "tenure": 1.2,
+   "entry": 45.0,
+   "age": 49.1
+  },
+  {
+   "c": 46,
+   "year": 1879,
+   "tenure": 1.4,
+   "entry": 45.1,
+   "age": 49.1
+  },
+  {
+   "c": 47,
+   "year": 1881,
+   "tenure": 2.0,
+   "entry": 45.1,
+   "age": 50.7
+  },
+  {
+   "c": 48,
+   "year": 1883,
+   "tenure": 1.2,
+   "entry": 44.4,
+   "age": 49.2
+  },
+  {
+   "c": 49,
+   "year": 1885,
+   "tenure": 1.2,
+   "entry": 44.7,
+   "age": 50.0
+  },
+  {
+   "c": 50,
+   "year": 1887,
+   "tenure": 1.2,
+   "entry": 44.1,
+   "age": 49.9
+  },
+  {
+   "c": 51,
+   "year": 1889,
+   "tenure": 1.2,
+   "entry": 44.2,
+   "age": 50.5
+  },
+  {
+   "c": 52,
+   "year": 1891,
+   "tenure": 1.2,
+   "entry": 45.2,
+   "age": 50.6
+  },
+  {
+   "c": 53,
+   "year": 1893,
+   "tenure": 1.2,
+   "entry": 44.8,
+   "age": 50.5
+  },
+  {
+   "c": 54,
+   "year": 1895,
+   "tenure": 1.6,
+   "entry": 44.8,
+   "age": 50.1
+  },
+  {
+   "c": 55,
+   "year": 1897,
+   "tenure": 1.3,
+   "entry": 44.0,
+   "age": 48.6
+  },
+  {
+   "c": 56,
+   "year": 1899,
+   "tenure": 2.0,
+   "entry": 43.5,
+   "age": 48.9
+  },
+  {
+   "c": 57,
+   "year": 1901,
+   "tenure": 3.2,
+   "entry": 43.3,
+   "age": 50.1
+  },
+  {
+   "c": 58,
+   "year": 1903,
+   "tenure": 2.5,
+   "entry": 43.3,
+   "age": 50.0
+  },
+  {
+   "c": 59,
+   "year": 1905,
+   "tenure": 2.6,
+   "entry": 43.2,
+   "age": 50.3
+  },
+  {
+   "c": 60,
+   "year": 1907,
+   "tenure": 2.6,
+   "entry": 43.2,
+   "age": 51.0
+  },
+  {
+   "c": 61,
+   "year": 1909,
+   "tenure": 3.8,
+   "entry": 43.0,
+   "age": 50.5
+  },
+  {
+   "c": 62,
+   "year": 1911,
+   "tenure": 3.2,
+   "entry": 44.2,
+   "age": 50.4
+  },
+  {
+   "c": 63,
+   "year": 1913,
+   "tenure": 1.9,
+   "entry": 43.8,
+   "age": 49.8
+  },
+  {
+   "c": 64,
+   "year": 1915,
+   "tenure": 3.8,
+   "entry": 43.9,
+   "age": 51.4
+  },
+  {
+   "c": 65,
+   "year": 1917,
+   "tenure": 3.1,
+   "entry": 43.9,
+   "age": 50.7
+  },
+  {
+   "c": 66,
+   "year": 1919,
+   "tenure": 3.2,
+   "entry": 44.7,
+   "age": 51.3
+  },
+  {
+   "c": 67,
+   "year": 1921,
+   "tenure": 3.7,
+   "entry": 45.5,
+   "age": 51.7
+  },
+  {
+   "c": 68,
+   "year": 1923,
+   "tenure": 3.7,
+   "entry": 45.7,
+   "age": 52.9
+  },
+  {
+   "c": 69,
+   "year": 1925,
+   "tenure": 4.9,
+   "entry": 46.0,
+   "age": 54.0
+  },
+  {
+   "c": 70,
+   "year": 1927,
+   "tenure": 4.4,
+   "entry": 45.8,
+   "age": 55.1
+  },
+  {
+   "c": 71,
+   "year": 1929,
+   "tenure": 3.7,
+   "entry": 46.1,
+   "age": 55.0
+  },
+  {
+   "c": 72,
+   "year": 1931,
+   "tenure": 5.6,
+   "entry": 45.8,
+   "age": 56.2
+  },
+  {
+   "c": 73,
+   "year": 1933,
+   "tenure": 3.1,
+   "entry": 45.9,
+   "age": 54.1
+  },
+  {
+   "c": 74,
+   "year": 1935,
+   "tenure": 3.1,
+   "entry": 45.3,
+   "age": 53.4
+  },
+  {
+   "c": 75,
+   "year": 1937,
+   "tenure": 3.8,
+   "entry": 44.7,
+   "age": 52.7
+  },
+  {
+   "c": 76,
+   "year": 1939,
+   "tenure": 4.0,
+   "entry": 44.5,
+   "age": 51.5
+  },
+  {
+   "c": 77,
+   "year": 1941,
+   "tenure": 5.8,
+   "entry": 44.1,
+   "age": 51.4
+  },
+  {
+   "c": 78,
+   "year": 1943,
+   "tenure": 4.0,
+   "entry": 44.8,
+   "age": 52.3
+  },
+  {
+   "c": 79,
+   "year": 1945,
+   "tenure": 6.0,
+   "entry": 44.8,
+   "age": 52.8
+  },
+  {
+   "c": 80,
+   "year": 1947,
+   "tenure": 5.4,
+   "entry": 44.7,
+   "age": 51.9
+  },
+  {
+   "c": 81,
+   "year": 1949,
+   "tenure": 6.0,
+   "entry": 44.4,
+   "age": 52.1
+  },
+  {
+   "c": 82,
+   "year": 1951,
+   "tenure": 6.0,
+   "entry": 44.4,
+   "age": 52.7
+  },
+  {
+   "c": 83,
+   "year": 1953,
+   "tenure": 6.0,
+   "entry": 44.0,
+   "age": 53.1
+  },
+  {
+   "c": 84,
+   "year": 1955,
+   "tenure": 8.0,
+   "entry": 43.3,
+   "age": 53.6
+  },
+  {
+   "c": 85,
+   "year": 1957,
+   "tenure": 8.0,
+   "entry": 43.1,
+   "age": 53.9
+  },
+  {
+   "c": 86,
+   "year": 1959,
+   "tenure": 8.0,
+   "entry": 42.7,
+   "age": 52.8
+  },
+  {
+   "c": 87,
+   "year": 1961,
+   "tenure": 8.0,
+   "entry": 42.7,
+   "age": 53.6
+  },
+  {
+   "c": 88,
+   "year": 1963,
+   "tenure": 8.0,
+   "entry": 42.1,
+   "age": 52.8
+  },
+  {
+   "c": 89,
+   "year": 1965,
+   "tenure": 6.0,
+   "entry": 41.7,
+   "age": 51.3
+  },
+  {
+   "c": 90,
+   "year": 1967,
+   "tenure": 8.0,
+   "entry": 41.6,
+   "age": 51.5
+  },
+  {
+   "c": 91,
+   "year": 1969,
+   "tenure": 8.0,
+   "entry": 41.7,
+   "age": 52.5
+  },
+  {
+   "c": 92,
+   "year": 1971,
+   "tenure": 8.0,
+   "entry": 41.7,
+   "age": 52.2
+  },
+  {
+   "c": 93,
+   "year": 1973,
+   "tenure": 7.9,
+   "entry": 41.4,
+   "age": 51.6
+  },
+  {
+   "c": 94,
+   "year": 1975,
+   "tenure": 7.9,
+   "entry": 40.7,
+   "age": 50.9
+  },
+  {
+   "c": 95,
+   "year": 1977,
+   "tenure": 5.9,
+   "entry": 40.6,
+   "age": 50.4
+  },
+  {
+   "c": 96,
+   "year": 1979,
+   "tenure": 6.0,
+   "entry": 40.3,
+   "age": 50.0
+  },
+  {
+   "c": 97,
+   "year": 1981,
+   "tenure": 5.9,
+   "entry": 40.5,
+   "age": 49.3
+  },
+  {
+   "c": 98,
+   "year": 1983,
+   "tenure": 6.0,
+   "entry": 40.6,
+   "age": 50.0
+  },
+  {
+   "c": 99,
+   "year": 1985,
+   "tenure": 6.0,
+   "entry": 40.9,
+   "age": 50.5
+  },
+  {
+   "c": 100,
+   "year": 1987,
+   "tenure": 8.0,
+   "entry": 41.1,
+   "age": 51.0
+  },
+  {
+   "c": 101,
+   "year": 1989,
+   "tenure": 8.6,
+   "entry": 41.5,
+   "age": 51.5
+  },
+  {
+   "c": 102,
+   "year": 1991,
+   "tenure": 10.0,
+   "entry": 41.7,
+   "age": 52.5
+  },
+  {
+   "c": 103,
+   "year": 1993,
+   "tenure": 8.0,
+   "entry": 42.6,
+   "age": 52.2
+  },
+  {
+   "c": 104,
+   "year": 1995,
+   "tenure": 6.0,
+   "entry": 42.8,
+   "age": 52.1
+  },
+  {
+   "c": 105,
+   "year": 1997,
+   "tenure": 6.0,
+   "entry": 43.6,
+   "age": 52.8
+  },
+  {
+   "c": 106,
+   "year": 1999,
+   "tenure": 6.0,
+   "entry": 44.2,
+   "age": 53.6
+  },
+  {
+   "c": 107,
+   "year": 2001,
+   "tenure": 8.0,
+   "entry": 43.8,
+   "age": 54.5
+  },
+  {
+   "c": 108,
+   "year": 2003,
+   "tenure": 8.0,
+   "entry": 44.4,
+   "age": 55.7
+  },
+  {
+   "c": 109,
+   "year": 2005,
+   "tenure": 10.0,
+   "entry": 44.6,
+   "age": 57.0
+  },
+  {
+   "c": 110,
+   "year": 2007,
+   "tenure": 10.0,
+   "entry": 45.2,
+   "age": 57.7
+  },
+  {
+   "c": 111,
+   "year": 2009,
+   "tenure": 10.0,
+   "entry": 46.1,
+   "age": 58.1
+  },
+  {
+   "c": 112,
+   "year": 2011,
+   "tenure": 8.0,
+   "entry": 46.4,
+   "age": 58.2
+  },
+  {
+   "c": 113,
+   "year": 2013,
+   "tenure": 6.0,
+   "entry": 46.9,
+   "age": 58.2
+  },
+  {
+   "c": 114,
+   "year": 2015,
+   "tenure": 6.0,
+   "entry": 47.9,
+   "age": 58.5
+  },
+  {
+   "c": 115,
+   "year": 2017,
+   "tenure": 6.1,
+   "entry": 48.5,
+   "age": 59.4
+  },
+  {
+   "c": 116,
+   "year": 2019,
+   "tenure": 6.0,
+   "entry": 48.8,
+   "age": 59.2
+  },
+  {
+   "c": 117,
+   "year": 2021,
+   "tenure": 8.0,
+   "entry": 49.4,
+   "age": 60.0
+  },
+  {
+   "c": 118,
+   "year": 2023,
+   "tenure": 6.9,
+   "entry": 48.3,
+   "age": 59.1
+  },
+  {
+   "c": 119,
+   "year": 2025,
+   "tenure": 6.7,
+   "entry": 48.3,
+   "age": 58.9
+  }
+ ],
+ "pop": {
+  "row": {
+   "year": "2025",
+   "total_pop": "341784857",
+   "adults_18plus": "269763509",
+   "pct_under_25_of_total": "30.4",
+   "pct_under_30_of_total": "37.2",
+   "pct_of_adults_aged_18_24": "11.8",
+   "pct_of_adults_aged_18_29": "20.5",
+   "pct_aged_25plus_of_total": "69.6",
+   "pct_aged_30plus_of_total": "62.8",
+   "pct_aged_65plus_of_total": "18.9",
+   "median_age_pop": "39"
+  },
+  "adult_65": 23.9,
+  "adult_18_29": 20.5,
+  "cong_u30": 1,
+  "cong_u30_pct": 0.2,
+  "cong_65": 178,
+  "cong_65_pct": 33.4
+ },
+ "hist119": {
+  "45": 60,
+  "55": 69,
+  "35": 31,
+  "65": 61,
+  "50": 67,
+  "70": 63,
+  "60": 75,
+  "30": 6,
+  "40": 46,
+  "75": 35,
+  "80": 15,
+  "85": 3,
+  "25": 1,
+  "90": 1
+ },
+ "m119": {
+  "n": 533,
+  "race_unlisted": 397,
+  "rel_missing": 23,
+  "imm_unlisted": 454,
+  "imm_values": {
+   "not listed (unknown)": 454,
+   "Child of an immigrant": 60,
+   "Immigrant (foreign-born)": 19
+  },
+  "rel_values": [
+   [
+    "Protestant",
+    294
+   ],
+   [
+    "Catholic",
+    150
+   ],
+   [
+    "Jewish",
+    32
+   ],
+   [
+    "Unknown (declined / not reached)",
+    21
+   ],
+   [
+    "Mormon",
+    9
+   ],
+   [
+    "Orthodox Christian",
+    6
+   ],
+   [
+    "Unaffiliated / humanist",
+    4
+   ],
+   [
+    "Muslim",
+    4
+   ],
+   [
+    "Hindu",
+    4
+   ],
+   [
+    "Unitarian Universalist",
+    3
+   ],
+   [
+    "Buddhist",
+    3
+   ],
+   [
+    "not in Pew list",
+    2
+   ]
+  ]
+ },
+ "votes": [
+  {
+   "order": 1,
+   "t": "HALT Fentanyl Act",
+   "slot": "8",
+   "Y": {
+    "n": 399,
+    "median": 59.0,
+    "Democrat": 134,
+    "Republican": 264
+   },
+   "N": {
+    "n": 120,
+    "median": 58.8,
+    "Democrat": 118,
+    "Republican": 1
+   },
+   "absent": 14
+  },
+  {
+   "order": 2,
+   "t": "CFPB overdraft rule",
+   "slot": "12",
+   "Y": {
+    "n": 263,
+    "median": 58.9,
+    "Democrat": 0,
+    "Republican": 263
+   },
+   "N": {
+    "n": 259,
+    "median": 59.0,
+    "Democrat": 255,
+    "Republican": 2
+   },
+   "absent": 11
+  },
+  {
+   "order": 3,
+   "t": "Laken Riley Act",
+   "slot": "1",
+   "Y": {
+    "n": 325,
+    "median": 57.8,
+    "Democrat": 58,
+    "Republican": 267
+   },
+   "N": {
+    "n": 191,
+    "median": 60.9,
+    "Democrat": 189,
+    "Republican": 0
+   },
+   "absent": 17
+  },
+  {
+   "order": 4,
+   "t": "Tariff emergency (Canada)",
+   "slot": "10",
+   "Y": {
+    "n": 265,
+    "median": 59.6,
+    "Democrat": 254,
+    "Republican": 9
+   },
+   "N": {
+    "n": 251,
+    "median": 58.7,
+    "Democrat": 1,
+    "Republican": 250
+   },
+   "absent": 17
+  },
+  {
+   "order": 5,
+   "t": "Iran war powers resolution",
+   "slot": "9",
+   "Y": {
+    "n": 261,
+    "median": 59.6,
+    "Democrat": 251,
+    "Republican": 8
+   },
+   "N": {
+    "n": 248,
+    "median": 59.0,
+    "Democrat": 1,
+    "Republican": 246
+   },
+   "absent": 24
+  },
+  {
+   "order": 6,
+   "t": "California Advanced Clean Cars II waiver",
+   "slot": "11",
+   "Y": {
+    "n": 291,
+    "median": 57.9,
+    "Democrat": 36,
+    "Republican": 255
+   },
+   "N": {
+    "n": 208,
+    "median": 60.1,
+    "Democrat": 206,
+    "Republican": 0
+   },
+   "absent": 34
+  },
+  {
+   "order": 7,
+   "t": "Coastal Plain oil and gas leasing decision",
+   "slot": "13",
+   "Y": {
+    "n": 260,
+    "median": 58.7,
+    "Democrat": 3,
+    "Republican": 257
+   },
+   "N": {
+    "n": 252,
+    "median": 59.1,
+    "Democrat": 248,
+    "Republican": 2
+   },
+   "absent": 21
+  },
+  {
+   "order": 8,
+   "t": "GENIUS Act",
+   "slot": "7",
+   "Y": {
+    "n": 370,
+    "median": 57.1,
+    "Democrat": 120,
+    "Republican": 250
+   },
+   "N": {
+    "n": 152,
+    "median": 64.8,
+    "Democrat": 136,
+    "Republican": 14
+   },
+   "absent": 11
+  }
+ ],
+ "vote_values": {
+  "Y": 325,
+  "N": 191,
+  "": 17
+ },
+ "corr": {
+  "Democrat": {
+   "n": 260,
+   "r": -0.199
+  },
+  "Republican": {
+   "n": 270,
+   "r": -0.109
+  }
+ }
+}

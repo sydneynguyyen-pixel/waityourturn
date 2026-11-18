@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wait Your Turn: ASCII style test</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Instrument+Serif:ital@1&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Style test only, not part of the build. One screen: the Chamber page on a quiet light page, with the chamber and the portrait drawn in typed characters.
+   Reads its data from chamber.html, so run python3 src/build.py first. Spacing uses one scale: 8, 16, 32, 64. Two text sizes: headline and body. */
+:root{--ink:#f4f1e8;--mute:#b4b5b7;--line:#dcdcdc;--paper:#0f1318;--dark:#0f1318;--thread:#f4f1e8;--f:Archivo,system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace}
+*{box-sizing:border-box}
+body::before{content:"";position:fixed;inset:-32px;z-index:-2;background:#1a2028 url("game-assets/capitol-sunrise.webp") 62% 40%/cover;filter:blur(9px) saturate(1.2) brightness(.48)}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.34;mix-blend-mode:overlay;pointer-events:none}
+body{margin:0;min-height:100svh;background:var(--paper);color:var(--ink);font:400 16px/1.5 var(--f)}
+main{max-width:1240px;margin:0 auto;padding:32px 32px 64px}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:32px}
+header b{font-weight:600}
+nav{display:flex;gap:32px;color:var(--mute)}nav span[aria-current]{color:var(--ink)}
+h1{font:500 clamp(34px,5.4vw,72px)/1.04 var(--f);letter-spacing:-.025em;margin:64px 0 0;max-width:15em;text-wrap:balance}
+h1 em{font:italic 400 1em/1 "Instrument Serif",serif;letter-spacing:-.01em;color:var(--mute)}
+.bar{display:flex;flex-wrap:wrap;gap:8px 32px;align-items:center;margin:64px 0 16px}
+.bar button,.years button,summary{font:inherit;color:inherit;background:none;border:0;padding:8px 0;cursor:pointer}
+.gen{display:flex;align-items:center;gap:8px}
+.gen i{display:grid;place-items:center;width:24px;height:24px;color:#0f1318;font:500 16px/1 var(--mono);font-style:normal}
+.gen small{font-size:inherit;color:var(--mute)}
+.gens{display:flex;flex-wrap:wrap;gap:0 32px;flex:1}
+.gens.pick .gen[aria-pressed=false]{opacity:.35}
+.gen[aria-pressed=true]{text-decoration:underline;text-underline-offset:6px}
+details.f{position:relative}summary{list-style:none;border-bottom:1px solid var(--ink);padding:8px 0 4px}summary::-webkit-details-marker{display:none}
+.pop{position:absolute;right:0;top:calc(100% + 8px);z-index:3;background:var(--paper);border:1px solid var(--ink);padding:16px;display:grid;gap:16px;width:240px}
+.pop div{display:flex;flex-wrap:wrap;gap:0 16px}.pop p{margin:0;color:var(--mute)}
+.pop button[aria-pressed=true]{text-decoration:underline;text-underline-offset:6px}.pop button[aria-pressed=false]{color:var(--mute)}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 208px;gap:32px;align-items:end}
+.room{position:relative}
+.room canvas{display:block;width:100%;cursor:crosshair}
+.count{text-shadow:0 1px 6px rgba(0,0,0,.6);position:absolute;left:0;right:0;bottom:16px;text-align:center;color:var(--thread);pointer-events:none}
+.count b{display:block;font:400 clamp(28px,4vw,52px)/1 var(--f);letter-spacing:-.02em}
+.who canvas{display:block;touch-action:none;margin-bottom:16px}
+.who b{display:block;font-weight:600}.who span{display:block;color:var(--mute)}
+.years{display:flex;gap:32px;margin:16px 0 0;flex-wrap:wrap;align-items:baseline}
+.years button{color:var(--mute)}.years button[aria-pressed=true]{color:var(--ink);font-weight:600;border-bottom:2px solid var(--ink)}
+.years p{margin:0 0 0 auto;color:var(--mute)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+@media (max-width:760px){
+  main{padding:16px 16px 64px}nav span:not([aria-current]){display:none}
+  h1{margin-top:32px}.bar{margin:32px 0 16px}
+  .stage{grid-template-columns:1fr}.room{margin:0 -8px}
+  .who{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:end}.who canvas{margin:0}
+  .years{gap:16px 24px}.years p{margin:0;flex-basis:100%}
+}
+</style></head><body>
+<svg class="grain" width="100%" height="100%" aria-hidden="true"><filter id="gn"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0"/></filter><rect width="100%" height="100%" filter="url(#gn)"/></svg>
+<main>
+  <header><b>Wait Your Turn</b><nav aria-label="Style test, links are not live"><span aria-current="page">Chamber</span><span>Play</span><span>How Congress works</span><span>About</span></nav></header>
+  <h1 id="take"></h1>
+  <div class="bar">
+    <div class="gens" id="gens"></div>
+    <details class="f" id="f"><summary id="fsum">Filter</summary>
+      <div class="pop">
+        <div id="fch"><p>Chamber</p><span style="flex-basis:100%"></span><button data-v="all">Both</button><button data-v="H">House</button><button data-v="S">Senate</button></div>
+        <div id="fpa"><p>Party</p><span style="flex-basis:100%"></span><button data-v="">All</button><button data-v="D">Democrat</button><button data-v="R">Republican</button><button data-v="I">Independent</button></div>
+      </div>
+    </details>
+  </div>
+  <div class="stage">
+    <div class="room"><canvas id="cv" role="img" aria-label="The chamber: one typed character for each member of Congress, in their generation's color"></canvas><div class="count"><b id="n"></b><span id="nl"></span></div></div>
+    <div class="who" id="who"><canvas id="face" aria-hidden="true"></canvas><div><b id="wn"></b><span id="wl"></span></div></div>
+  </div>
+  <div class="years" id="years"></div>
+</main>
+<script>
+const GEN=['Gen Z','Millennial','Gen X','Baby boomer','Silent'],GR=[['#8fe3ff','#d8f6ff'],['#3fd0a8','#b6f09a'],['#ff8a3d','#ffe066'],['#8f7bff','#7fc4ff'],['#ff5fa2','#ffa6d6']],GY=[[1997,2004],[1981,1996],[1965,1980],[1946,1964],[1930,1945]] /* ombre test: each generation runs between two colors, from its oldest members (first color) to its youngest (second) */;
+// one character per generation, denser as the generation gets older, so the chamber also reads without color
+const GLYPH=['.','+','x','#','@'],RAMP=' .:-=+*#%@';
+const hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),mix=(g,by)=>{const [a,b]=GR[g].map(hx),t=Math.max(0,Math.min(1,(by-GY[g][0])/(GY[g][1]-GY[g][0])));return`rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*t))})`};
+const gi=by=>by>=1997?0:by>=1981?1:by>=1965?2:by>=1946?3:4,$=id=>document.getElementById(id);
+const CX=500,CY=495,AR=.535,CS=[115,116,117,118,119],year=c=>1789+2*(c-1);
+function arcSeats(total,r0,r1,rows){const rs=[...Array(rows)].map((_,i)=>r0+(r1-r0)*i/(rows-1)),sum=rs.reduce((a,b)=>a+b,0),n=rs.map(r=>Math.round(total*r/sum));n[rows-1]+=total-n.reduce((a,b)=>a+b,0);
+  const pts=[];rs.forEach((r,i)=>{for(let j=0;j<n[i];j++){const t=Math.PI*j/(n[i]-1);pts.push({t,r,x:CX-r*Math.cos(t),y:CY-r*Math.sin(t)})}});return pts.sort((a,b)=>a.t-b.t||a.r-b.r)}
+const SEATS={H:arcSeats(435,225,470,10),S:arcSeats(100,92,168,4)},SIZE={H:29,S:20},NOMDEF={D:-.4,R:.5,I:0};
+const S={c:119,gen:null,view:'all',party:'',sel:null};let DB,ROS={},cells=[],K=1;
+function roster(c){const out={H:[],S:[]};DB.data[c].forEach(r=>out[r[2]].push({bg:r[0],name:r[1],ch:r[2],st:r[3],p:r[4],age:r[5],by:r[6],nom:r[7]??NOMDEF[r[4]],g:gi(r[6]),yrs:r[8]}));
+  ['H','S'].forEach(k=>out[k].sort((a,b)=>a.nom-b.nom));return out}
+const lit=m=>(S.view==='all'||m.ch===S.view)&&(S.gen===null||m.g===S.gen)&&(!S.party||m.p===S.party);
+function draw(){const cv=$('cv'),w=cv.clientWidth,d=devicePixelRatio||1;cv.width=w*d;cv.height=w*AR*d;K=w/1000;const x=cv.getContext('2d');x.scale(d*K,d*K);x.textAlign='center';x.textBaseline='middle';
+  cells=[];let n=0;['H','S'].forEach(k=>{x.font=`400 ${SIZE[k]}px "IBM Plex Mono",monospace`;SEATS[k].forEach((s,i)=>{const m=ROS[S.c][k][i];if(!m)return;const on=lit(m);n+=on;cells.push({x:s.x,y:s.y,m});
+    x.globalAlpha=on?1:.14;x.shadowColor='rgba(0,0,0,.55)';x.shadowBlur=3;x.fillStyle=on?mix(m.g,m.by):'#f4f1e8';x.fillText(GLYPH[m.g],s.x,s.y);
+    if(m===S.sel){x.globalAlpha=1;x.strokeStyle='#f4f1e8';x.lineWidth=1;const h=SIZE[k]*.62;x.strokeRect(s.x-h,s.y-h,2*h,2*h)}})});
+  x.globalAlpha=1;$('n').textContent=n;const all=cells.length;$('nl').textContent=n===all?'members':`of ${all} members`}
+// portrait: characters from the 24x30 brightness grid. Moving the pointer over it lights the characters near the pointer in the member's generation ombre (top = first color, bottom = second); the color fades out as a trail.
+const F={ch:[],heat:new Float32Array(720),m:null,run:0},CW=8;
+function face(m){const cv=$('face'),d=devicePixelRatio||1;cv.style.width=24*CW+'px';cv.style.height=30*CW+'px';cv.width=24*CW*d;cv.height=30*CW*d;cv.getContext('2d').scale(d,d);
+  F.m=m;F.heat.fill(0);F.ch=[];const b=DB.img[m.bg];
+  if(b){const v=[...atob(b)].map(c=>c.charCodeAt(0)),so=[...v].sort((p,q)=>p-q),lo=so[36],hi=so[715]||255;F.ch=v.map(l=>RAMP[Math.min(9,Math.floor(Math.pow(Math.max(0,Math.min(1,(l-lo)/(hi-lo||1))),1.1)*10))])}
+  paintFace()}
+function paintFace(){const x=$('face').getContext('2d');x.clearRect(0,0,24*CW,30*CW);x.textAlign='center';x.textBaseline='middle';
+  if(!F.ch.length){x.font='400 16px Archivo';x.fillStyle='#b4b5b7';x.fillText('No portrait',96,120);return}
+  const [a,b]=GR[F.m.g].map(hx),T=[244,241,232];
+  for(let i=0;i<720;i++){const c=F.ch[i],h=F.heat[i];if(c===' '&&h<.05)continue;const t=(i/24|0)/29,col=a.map((v,k)=>v+(b[k]-v)*t).map((v,k)=>Math.round(T[k]+(v-T[k])*h));
+    x.font=`${h>.3?500:400} 10px "IBM Plex Mono",monospace`;x.fillStyle=`rgb(${col})`;x.fillText(c===' '?'.':c,(i%24+.5)*CW,((i/24|0)+.5)*CW)}}
+function glow(e){const r=$('face').getBoundingClientRect(),px=(e.clientX-r.left)/CW,py=(e.clientY-r.top)/CW,R=18;
+  for(let i=0;i<720;i++){const dx=i%24+.5-px,dy=(i/24|0)+.5-py,q=1-Math.hypot(dx,dy)/R;if(q>0)F.heat[i]=Math.max(F.heat[i],Math.min(1,q*2.2))}
+  if(!F.run){F.run=1;requestAnimationFrame(cool)}}
+function cool(){let any=0;const still=matchMedia('(prefers-reduced-motion:reduce)').matches;for(let i=0;i<720;i++){if(F.heat[i]>0){F.heat[i]=Math.max(0,F.heat[i]-(still?.2:.018));any=1}}paintFace();if(any)requestAnimationFrame(cool);else F.run=0}
+function pick(m){S.sel=m;face(m);$('wn').textContent=m.name;$('wl').innerHTML=`${m.ch==='H'?'House':'Senate'}, ${m.st}<br>${m.yrs} years old in ${year(S.c)}<br>${GEN[m.g]}`;draw()}
+function story(){const o=c=>DB.data[c].filter(r=>r[5]>=70).length,n=o(S.c),n0=o(115),y=year(S.c);
+  $('take').innerHTML=`${n} members of Congress were 70 or older in ${y}.`+(S.c===115?'':` <em>${n>=n0?'Up':'Down'} from ${n0} in 2017.</em>`);
+  const cnt=[0,0,0,0,0];DB.data[S.c].forEach(r=>cnt[gi(r[6])]++);
+  $('gens').className='gens'+(S.gen===null?'':' pick');
+  $('gens').innerHTML=GEN.map((g,i)=>cnt[i]||S.gen===i?`<button class="gen" data-g="${i}" aria-pressed="${S.gen===i}"><i style="background:linear-gradient(135deg,${GR[i][0]},${GR[i][1]})">${GLYPH[i]}</i>${g} <small>${cnt[i]}</small></button>`:'').join('');
+  $('years').innerHTML=CS.map(c=>`<button data-c="${c}" aria-pressed="${c===S.c}">${year(c)}</button>`).join('')+'<p>Tap a seat to see who it is. Seats are ordered by voting record, not real seating.</p>';
+  const f=[S.view==='H'?'House':S.view==='S'?'Senate':'',({D:'Democrat',R:'Republican',I:'Independent'})[S.party]||''].filter(Boolean);$('fsum').textContent=f.length?'Filter: '+f.join(', '):'Filter';
+  document.querySelectorAll('#fch button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===S.view));document.querySelectorAll('#fpa button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===S.party))}
+function setC(c){S.c=c;const all=[...ROS[c].H,...ROS[c].S],keep=S.sel&&all.find(m=>m.bg===S.sel.bg);story();pick(keep||all.reduce((a,b)=>b.age>a.age?b:a))}
+$('gens').onclick=e=>{const b=e.target.closest('button');if(!b)return;const g=+b.dataset.g;S.gen=S.gen===g?null:g;story();draw()};
+$('years').onclick=e=>{const b=e.target.closest('button');if(b)setC(+b.dataset.c)};
+$('fch').onclick=e=>{if(e.target.dataset.v!==undefined){S.view=e.target.dataset.v;story();draw()}};
+$('fpa').onclick=e=>{if(e.target.dataset.v!==undefined){S.party=e.target.dataset.v;story();draw()}};
+document.addEventListener('click',e=>{if(!$('f').contains(e.target))$('f').open=false});
+$('cv').onclick=e=>{const r=$('cv').getBoundingClientRect(),px=(e.clientX-r.left)/K,py=(e.clientY-r.top)/K;let best=null,bd=900;cells.forEach(c=>{const d=(c.x-px)**2+(c.y-py)**2;if(d<bd){bd=d;best=c}});if(best)pick(best.m)};
+$('face').addEventListener('pointermove',glow);$('face').addEventListener('pointerdown',glow);
+let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,120)});
+(async()=>{const html=await fetch('chamber.html').then(r=>r.text());DB=JSON.parse(new DOMParser().parseFromString(html,'text/html').getElementById('data').textContent);
+  CS.forEach(c=>ROS[c]=roster(c));await document.fonts.load('400 20px "IBM Plex Mono"');await document.fonts.ready;setC(119)})();
+</script>
+</body></html>

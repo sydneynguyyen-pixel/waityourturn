@@ -1,0 +1,1570 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wait Your Turn</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: white poster page. Two views. "Chamber" is just the halftone chamber, its scrubber and a one-line caption; the color key and notes sit behind a Key button. The three interactive tools live in a collapsible sidebar (a bottom sheet on phones). "About the data" holds the cut-paper collage, stats, the text list and the method notes. Single look by choice. */
+:root{
+  --paper:#fdfcfa; --panel:#f2f0ea; --ink:#121212; --mute:#6d6b66; --rule:#121212; --soft:#e9e7e2;
+  --sun:#f7c600; --red:#ff5a36; --pink:#e98dca; --blue:#2458e6; --violet:#9e63d6; --green:#45a86f;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif; --serif:"Instrument Serif",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace; --body:"IBM Plex Sans",system-ui,sans-serif;
+  --rail:56px; --drawer:380px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font:15px/1.5 var(--body);margin:0;padding-block:18px 20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>")}
+.wrap{max-width:1240px;margin:0 auto;display:grid;min-width:0}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 28px;padding-bottom:12px;border-bottom:3px solid var(--ink)}
+.brand{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 28px}
+h1{font:900 clamp(26px,3.6vw,50px)/.9 var(--display);font-stretch:112%;letter-spacing:-.045em;margin:0}
+h1 em{font:italic 400 1.04em/.8 var(--serif);letter-spacing:-.02em}
+.nav{display:flex;gap:16px}
+.nav button{border:0;border-radius:0;padding:2px 0;font:500 11.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);border-bottom:2px solid transparent;background:none}
+.nav button[aria-current=page]{color:var(--ink);border-bottom-color:var(--ink)}
+.mono{font:500 11.5px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.vs{display:flex;gap:10px 26px;flex-wrap:wrap;align-items:center}
+.vs div{display:flex;align-items:center;gap:8px}
+.vs b{font:900 clamp(30px,3.2vw,42px)/.9 var(--display);font-stretch:112%;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.vs span{font:500 10.5px/1.25 var(--mono);text-transform:uppercase;letter-spacing:.06em;max-width:15ch;color:var(--mute)}
+button,select,input[type=number]{font:500 13px var(--body);color:var(--ink);background:transparent;border:2px solid var(--ink);border-radius:999px;padding:5px 13px;cursor:pointer}
+select,input[type=number]{border-radius:6px;padding:4px 8px}
+button:hover{background:var(--soft)}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+button[aria-pressed=true],.chip[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+/* play: "Wait your turn" */
+.pstage{min-width:0}.pstage canvas{display:block;width:100%;touch-action:manipulation}.pstage canvas.pickable{cursor:pointer}
+.pcap{text-align:center;color:var(--mute);margin:8px 0 0;min-height:1.4em}
+/* riso look: two inks only (black + the player's generation color), flat color with black halftone, off-register outlines, rough stamps */
+.ppanel{background:var(--paper);border:2.5px solid var(--ink);border-radius:10px;box-shadow:8px 8px 0 var(--pc,var(--soft));transform-origin:left center}
+.pband{padding:16px 22px 20px;border-bottom:2.5px solid var(--ink);border-radius:7px 7px 0 0;display:grid;gap:10px;background:var(--pc,var(--soft)) var(--ht) right center/cover no-repeat}
+.pband .mono{color:var(--ink)}
+.ppanel h2{font:900 44px/.9 var(--display);font-stretch:114%;letter-spacing:-.04em;margin:0}.ppanel h2 em{font:italic 400 1.05em/.85 var(--serif);letter-spacing:-.01em}
+.pbody{padding:20px 22px 22px;display:grid;gap:14px}
+.ppanel p{margin:0;font:400 16px/1.4 var(--body)}.ppanel p b{font-weight:700}
+.ppanel canvas{display:block;flex:none}
+.pyou{display:flex;align-items:center;gap:14px}.pyou .runin{margin:0 0 4px}.pyou .mono{color:var(--mute)}
+.pbtn{font:700 15px var(--body);background:var(--ink);color:var(--paper);padding:9px 18px;justify-self:start;box-shadow:3px 3px 0 var(--pc,var(--soft))}.pbtn:hover{background:#333}.pbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--pc,var(--soft))}
+.prow{display:flex;flex-wrap:wrap;gap:8px}
+.pwho{display:flex;align-items:center;gap:12px}.pwho div{display:grid;gap:1px;min-width:0}.pwho b{font:800 20px/1.1 var(--display)}.pwho span{font:400 14px/1.35 var(--body);color:var(--mute)}
+.pvs{display:flex;align-items:center;gap:12px}.pvs>div{display:flex;align-items:center;gap:8px}.pvs>div>div{display:grid}.pvs>i{font:italic 400 22px var(--serif);color:var(--mute)}
+.pvs b{font:900 46px/.85 var(--display);font-stretch:114%;letter-spacing:-.04em;font-variant-numeric:tabular-nums;text-shadow:3px 3px 0 var(--pc,var(--soft))}.pvs span{font:500 10.5px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin-top:6px}
+.pdots{display:flex;gap:6px}.pdots span{flex:1;font:500 11px var(--mono);text-align:center;padding:4px 0;border:2px solid var(--ink);border-radius:5px;color:var(--ink)}.pdots span.done{background:var(--ink);color:var(--paper)}.pdots span.now{background:var(--paper)}
+.pstamp{justify-self:end;margin:-44px -4px -6px 0;position:relative;font:900 21px/1 var(--display);font-stretch:116%;letter-spacing:.03em;text-transform:uppercase;border:4px solid var(--ink);border-radius:6px;padding:8px 13px;transform:rotate(-5deg);background:var(--paper);filter:url(#prough)}
+.pstamp.open{background:var(--ink);color:var(--paper);transform:rotate(4deg)}
+@media (prefers-reduced-motion:no-preference){.ppanel.pflip{animation:pflip .42s cubic-bezier(.2,.8,.3,1)}.pflip .pstamp{animation:pstamp .3s .34s cubic-bezier(.2,1.6,.4,1) backwards}}
+@keyframes pflip{from{transform:perspective(900px) rotateY(-75deg);opacity:.3}}@keyframes pstamp{from{scale:2.2;opacity:0}}
+@media (max-width:900px){.pband,.pbody{padding-inline:18px}}
+.gst{display:block;fill:none;stroke-width:.4;stroke-linecap:round;overflow:visible}
+.ghud .gst{height:clamp(34px,8cqh,54px)}.gbig .gst{height:min(50cqh,74cqw)}.pband h2 .gst{height:66px}
+/*GAME_CSS*/
+/* how congress works */
+.hhead{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px}.hhead .sec{margin:0 0 4px}
+.hnum{font:900 15px/1 var(--mono);background:var(--ink);color:var(--paper);border-radius:999px;padding:7px 10px;margin-top:2px}
+.kick{margin:0;font:400 16px/1.35 var(--body);color:var(--mute)}
+.runin{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font:600 15px var(--body);margin-bottom:14px}.runin input{width:96px;font:700 18px var(--display);padding:4px 8px}.runin select{font:600 15px var(--body)}
+.runtiles{list-style:none;margin:0 0 22px;padding:0;background:#fff;border:2px solid var(--ink);border-radius:18px;max-width:640px}
+.rrow{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:4px 14px;align-items:center;padding:12px 18px;border-top:1.5px solid var(--soft)}.rrow:first-child{border-top:0}
+.rrow .ck{width:24px;height:24px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font:800 13px var(--body)}.rrow.yes .ck{background:var(--sun)}
+.rrow .nm{font:800 18px/1.1 var(--display);letter-spacing:-.01em}.rrow .nm small{font:500 12px var(--mono);color:var(--mute);margin-left:6px;letter-spacing:0}
+.rrow .st{font:600 14px var(--body);text-align:right}.rrow.no .st{color:var(--mute);font-weight:500}
+.rrow .bar{grid-column:2/-1;height:6px;border-radius:99px;background:var(--soft);overflow:hidden}.rrow .bar i{display:block;height:100%;background:var(--ink);border-radius:99px;transition:width .4s}
+.agestrip{position:relative;margin:6px 0;overflow-x:auto}.agestrip svg{display:block;width:100%;min-width:560px;height:auto}.agestrip text{font:500 11px var(--mono);fill:var(--mute)}.agestrip .rl{font:600 11px var(--mono);fill:var(--ink);paint-order:stroke;stroke:var(--paper);stroke-width:4px}.agestrip .you{font:800 13px var(--display);fill:var(--ink)}
+.hcap{font:500 14px/1.45 var(--body);margin:6px 0 0;max-width:70ch}.hcap b{font-weight:800}
+.chcards{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:640px){.chcards{grid-template-columns:1fr}}
+.chcard{border:2px solid var(--ink);border-radius:16px;padding:16px;display:grid;gap:12px;align-content:start;box-shadow:5px 5px 0 var(--ink);background:#fff}
+.chcard h3{font:900 32px/1 var(--display);font-stretch:112%;letter-spacing:-.04em;margin:0}
+.dotgrid{display:grid;grid-template-columns:repeat(29,1fr);gap:2px;max-width:360px}.dotgrid.s{grid-template-columns:repeat(20,1fr);max-width:250px}.dotgrid i{aspect-ratio:1;border-radius:50%;background:var(--ink)}
+.facts{list-style:none;margin:0;padding:0;display:grid}
+.facts li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-top:1.5px solid var(--soft);padding:7px 0}.facts li:first-child{border-top:2px solid var(--ink)}.facts b{order:2;font:900 20px/1 var(--display);letter-spacing:-.02em}.facts span{order:1;font:500 13px var(--body);color:var(--mute)}
+.term{display:flex;gap:4px}.term i{flex:1;height:14px;border-radius:99px;background:var(--sun);border:1.5px solid var(--ink)}.termlab{font:500 11px var(--mono);color:var(--mute);margin-top:-6px}
+.punch{font:900 clamp(22px,3vw,34px)/1.05 var(--display);letter-spacing:-.03em;margin:22px 0 0}.punch span{font:italic 400 1.05em var(--serif);letter-spacing:0}
+.yrbar{display:flex;gap:6px;margin-bottom:14px}.yrbar button{font:800 17px var(--display);padding:6px 16px}.yrbar button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.ballot{display:grid;grid-template-columns:180px 1fr;gap:20px;align-items:start}@media(max-width:640px){.ballot{grid-template-columns:1fr}}
+.bnum b{display:block;font:900 72px/.85 var(--display);font-stretch:112%;letter-spacing:-.05em}.bnum span{font:500 13px/1.4 var(--body);color:var(--mute);display:block;margin-top:8px}
+.bvis svg{display:block;width:100%;max-width:600px;height:auto}.bvis text{font:600 11px var(--mono);fill:var(--ink)}.bvis circle{transition:fill .3s}
+.steps{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-wrap:wrap;gap:6px;counter-reset:st}
+.steps button{display:inline-flex;align-items:center;gap:8px;font:700 14px var(--body)}.steps button b{font:800 11px var(--mono);width:20px;height:20px;border-radius:50%;border:1.5px solid currentColor;display:inline-grid;place-items:center}
+.steps button[aria-current=step]{background:var(--ink);color:var(--paper)}.steps button.done{background:var(--sun)}
+.stepcard{border:2px solid var(--ink);border-radius:16px;padding:18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:20px;align-items:center;box-shadow:5px 5px 0 var(--ink);background:#fff}@media(max-width:640px){.stepcard{grid-template-columns:1fr}}
+.stepcard h3{font:900 28px/1 var(--display);letter-spacing:-.03em;margin:0 0 8px}.stepcard p{margin:0;font-size:15px;line-height:1.45}.stepcard .big{font:900 56px/.9 var(--display);font-stretch:112%;letter-spacing:-.04em;margin:10px 0 2px}.stepcard .big small{font-size:18px;color:var(--mute);letter-spacing:0}
+.stepcard .nav2{display:flex;gap:6px;margin-top:14px}.stepcard svg{width:100%;max-width:400px;height:auto;display:block;margin-bottom:8px}.stepcard svg text{font:600 11px var(--mono);fill:var(--ink)}
+.choice{display:flex;gap:10px;flex-wrap:wrap}.choice span{font:900 24px var(--display);border:2px solid var(--ink);border-radius:12px;padding:14px 18px}.choice span:first-child{background:var(--sun)}
+.bill{font:900 40px var(--display);border:2px solid var(--ink);border-radius:6px;padding:26px 30px;transform:rotate(-3deg);display:inline-block;background:#fff;box-shadow:4px 4px 0 var(--ink)}
+.tfgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}@media(max-width:900px){.tfgrid{grid-template-columns:1fr 1fr}}@media(max-width:480px){.tfgrid{grid-template-columns:1fr}}
+.tf{position:relative;min-height:170px;border:2px solid var(--ink);border-radius:16px;padding:16px;text-align:left;display:grid;align-content:space-between;gap:10px;background:#fff;box-shadow:4px 4px 0 var(--ink);transition:transform .15s}
+.tf:hover{background:#fff;transform:translate(-1px,-1px)}.tf .q{font:800 19px/1.15 var(--display);letter-spacing:-.015em}.tf .hint{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--mute)}
+.tf .a{display:none}.tf[aria-pressed=true]{background:var(--ink);color:var(--paper)}.tf[aria-pressed=true] .q,.tf[aria-pressed=true] .hint{display:none}.tf[aria-pressed=true] .a{display:grid;gap:8px}
+.tf .a b{justify-self:start;font:900 26px/1 var(--display);font-stretch:112%;background:var(--sun);color:var(--ink);padding:5px 12px 6px;transform:rotate(-3deg)}.tf .a span{font:400 14px/1.4 var(--body)}
+.hsrc{font:500 11.5px/1.5 var(--mono);color:var(--mute);margin:40px 0 0;max-width:80ch}.hsrc a{color:var(--ink)}
+/* chamber view */
+.stage{min-width:0;margin-top:16px}#v-how,#v-about,#v-sources{min-width:0}
+.take{margin:4px 0 2px;font:800 clamp(18px,2vw,24px)/1.15 var(--display);letter-spacing:-.015em;max-width:60ch}.take b{font-weight:900}#take{margin:6px 0 14px;font-size:clamp(22px,2.6vw,32px)}#take span{font:italic 400 1.02em var(--serif);letter-spacing:0;color:var(--mute)}.caption b{color:var(--ink)}
+.delta{margin:0 0 12px;font:500 12px/1.4 var(--mono);color:var(--mute)}.delta b{color:var(--ink);font-weight:600}
+.stagebar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 20px;margin:4px 0 14px;background:var(--panel);border-radius:18px;padding:12px 16px}
+.view{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.lbar{min-width:0}
+.key{position:static}.stagebar{position:relative}
+.key summary{list-style:none;display:inline-flex;align-items:center;gap:10px;border:2px solid var(--ink);border-radius:999px;padding:4px 13px;font:500 13px var(--body);cursor:pointer}
+.key summary::-webkit-details-marker{display:none}
+.key summary span{display:inline-flex}.key summary i{width:10px;height:12px;border-radius:50%;border:1px solid var(--ink);margin-left:-3px}
+.key[open] summary{background:var(--ink);color:var(--paper)}
+.keybox{position:absolute;right:12px;top:calc(100% + 8px);z-index:6;width:min(360px,calc(100vw - 32px));background:var(--paper);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:14px;display:grid;gap:12px}
+.legend{display:grid;gap:4px;font:500 11.5px var(--mono)}
+.keyrows{list-style:none;margin:0;padding:12px 0 0;border-top:1.5px solid var(--soft);display:grid;gap:8px;font-size:13px}.keyrows li{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center}.kv{font:500 10.5px var(--mono);color:var(--mute);display:flex;justify-content:center}.kv i{width:14px;height:17px;border-radius:50%;display:block}.ko{background:radial-gradient(circle,#121212 0 34%,#0000 38%) 0 0/5px 5px,#c9ad3b;box-shadow:0 0 0 2px #fff,0 0 0 3.5px #c9ad3b}.kd{border:1.5px dashed #bdbab2}.kn{background:#efede8;border:1.5px dashed #121212}
+.legend i{display:inline-block;width:12px;height:14px;border-radius:50%;margin-right:8px;vertical-align:-3px;border:1px solid var(--ink)}
+.keybox p{margin:0;font:500 11.5px/1.45 var(--mono);color:var(--mute)}
+.cvwrap{position:relative;container-type:inline-size;margin:0 auto}canvas{display:block;width:100%}
+#ov{position:absolute;left:0;top:0;width:100%;pointer-events:none}
+.count{position:absolute;left:50%;top:50.6cqw;transform:translate(-50%,-100%);margin:0;text-align:center;pointer-events:none;font:900 clamp(15px,calc(6cqw - 5px),72px)/.82 var(--display);font-stretch:112%;letter-spacing:-.045em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.count small{display:block;max-width:max(56px,16cqw);margin:.28em auto 0;white-space:normal;font:800 max(8.5px,1.45cqw)/1.1 var(--display);font-stretch:100%;letter-spacing:-.01em}
+.count small span{display:inline-block;white-space:nowrap}
+.scrub{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:center;margin-top:12px}
+/* Congress scrubber: same black track, with a raised paper knob that has a pressed-in center */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:30px;margin:0;background:none;cursor:pointer;touch-action:none}
+input[type=range]:focus-visible{outline:none}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--ink)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--ink)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-11px;border-radius:50%;border:1px solid #c9c5bd;background:radial-gradient(circle,#ebe8e2 0 36%,#d3cfc7 41%,#fff 47%,#0000 50%),linear-gradient(#fff,#dcd8d0);box-shadow:0 3px 6px #0000002e,0 1px 1px #00000033,inset 0 1px 0 #fff;transition:transform .15s,box-shadow .15s}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;border:1px solid #c9c5bd;background:radial-gradient(circle,#ebe8e2 0 36%,#d3cfc7 41%,#fff 47%,#0000 50%),linear-gradient(#fff,#dcd8d0);box-shadow:0 3px 6px #0000002e,0 1px 1px #00000033,inset 0 1px 0 #fff;transition:transform .15s,box-shadow .15s}
+input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.06)}input[type=range]:hover::-moz-range-thumb{transform:scale(1.06)}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(.96);box-shadow:0 1px 2px #00000040,inset 0 1px 0 #fff}input[type=range]:active::-moz-range-thumb{transform:scale(.96);box-shadow:0 1px 2px #00000040,inset 0 1px 0 #fff}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(--paper),0 0 0 6px var(--blue)}input[type=range]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 3px var(--paper),0 0 0 6px var(--blue)}
+.ticks span{cursor:pointer}
+.ticks{display:flex;justify-content:space-between;font:500 11px/1.3 var(--mono);color:var(--mute);grid-column:2}.ticks span{text-align:center}
+.caption{font:500 11px/1.4 var(--mono);color:var(--mute);margin:10px 0 0;text-align:center}
+/* floating member card, anchored beside the seat */
+.card{position:absolute;z-index:3;width:340px;max-width:calc(100% - 16px);overflow:auto;background:var(--paper);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:14px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13.5px;align-content:start;pointer-events:none}
+.card.pinned{pointer-events:auto}
+.card.docked{position:relative;width:auto;max-width:none;margin-top:10px;box-shadow:none}
+.card canvas{width:96px;height:120px;grid-row:1/5}.card .nm{font:900 22px/1 var(--display);letter-spacing:-.03em;padding-right:22px}.card .m{color:var(--mute)}
+.card .x{position:absolute;top:6px;right:6px;border:0;padding:0 7px;font:600 18px/1.3 var(--body);border-radius:50%}
+.card .full{grid-column:1/-1}.card table{border-collapse:collapse;width:100%;font-size:12px;margin-top:6px}.card td{padding:2px 4px 2px 0;vertical-align:top;border-top:1px solid var(--soft)}
+.ok{font-weight:600}.no{color:var(--mute)}
+/* sidebar: a slim rail of tool names when closed, a drawer when open; the page makes room so nothing is covered */
+.side{position:fixed;z-index:10;top:0;right:0;bottom:0;width:var(--rail);background:var(--paper);border-left:3px solid var(--ink)}
+.side-open .side{width:var(--drawer)}
+.rail{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 0}
+.rail button{border:0;border-radius:0;background:none;position:relative}
+.rail .tool{writing-mode:vertical-rl;padding:12px 6px;font:800 16px var(--display);letter-spacing:-.01em}
+.rail .tool:hover{background:var(--soft)}
+.rail .tool.on::after{content:"";position:absolute;top:2px;left:50%;margin-left:-4px;width:8px;height:8px;border-radius:50%;background:var(--sun);border:1px solid var(--ink)}
+.rail .open{font:600 18px/1 var(--body);padding:4px 10px 10px}
+.drawer{display:none;flex-direction:column;height:100%;min-height:0}
+.side-open .rail{display:none}.side-open .drawer{display:flex}
+.dhead{padding:14px 18px 0;border-bottom:1px solid var(--ink)}
+.dhead .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.dhead .x{border:0;padding:0 8px;font:600 22px/1.2 var(--body);border-radius:50%}
+.dhead #active{display:block;color:var(--mute);margin:2px 0 10px;font-size:10.5px}
+.picker{position:relative;min-width:0}
+#toolpick{display:inline-flex;align-items:baseline;gap:10px;border:2px solid var(--ink);border-radius:999px;padding:5px 14px 6px;background:var(--paper)}
+#toolpick .mono{font-size:10.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em}#toolpick b{font:800 18px/1 var(--display);letter-spacing:-.01em}#toolpick i{font-style:normal;font-size:12px}
+#toolpick[aria-expanded=true]{background:var(--ink);color:var(--paper)}#toolpick[aria-expanded=true] .mono{color:#bdbab2}
+.toolmenu{position:absolute;left:0;top:calc(100% + 8px);z-index:12;width:min(320px,calc(100vw - 48px));background:var(--paper);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:6px;display:grid;gap:2px}
+.toolmenu[hidden]{display:none}
+.toolmenu button{border:0;border-radius:8px;text-align:left;padding:8px 10px 8px 30px;display:grid;gap:2px;position:relative;background:none}
+.toolmenu button:hover{background:var(--soft)}.toolmenu b{font:800 16px var(--display);letter-spacing:-.01em}.toolmenu span{font-size:12.5px;color:var(--mute)}
+.toolmenu button[aria-checked=true]::before{content:"";position:absolute;left:10px;top:13px;width:10px;height:10px;border-radius:50%;background:var(--ink)}
+.toolmenu button.on b::after{content:"filtering";margin-left:8px;font:500 10px var(--mono);text-transform:uppercase;letter-spacing:.06em;background:var(--sun);border:1px solid var(--ink);border-radius:999px;padding:1px 6px;vertical-align:2px}
+.dbody{flex:1;min-height:0;overflow:auto;padding:16px 18px 40px}
+.pane{display:grid;gap:12px;align-content:start}
+.pane h2{font:900 24px/1 var(--display);font-stretch:108%;letter-spacing:-.03em;margin:0}
+.how summary{cursor:pointer;font:500 12.5px var(--body);color:var(--mute);text-decoration:underline;list-style:none}.how summary::-webkit-details-marker{display:none}
+.how p{margin:6px 0 0;color:var(--mute);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{padding:3px 11px;font-size:12.5px}
+#attrs{display:grid;gap:14px}
+fieldset{border:0;padding:0;margin:0;display:grid;gap:6px;min-width:0}legend{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mute);padding:0;margin-bottom:4px}
+.intro{margin:0;font-size:13.5px;line-height:1.45}
+.hint{margin:-4px 0 2px;font-size:14px;line-height:1.4;color:var(--mute)}
+.pane{gap:16px}.pane fieldset{background:var(--panel);border-radius:14px;padding:10px 12px 12px}
+.wbox{background:var(--panel);border-radius:16px;padding:16px;display:grid;gap:10px}.wbox:empty{display:none}
+.wbig{display:flex;align-items:baseline;gap:12px}.wbig b{font:900 52px/.85 var(--display);font-stretch:112%;letter-spacing:-.05em;font-variant-numeric:tabular-nums}.wbig span{font:500 14px/1.3 var(--body)}
+.wbar{display:flex;height:16px;border-radius:99px;overflow:hidden;border:1.5px solid var(--ink);background:#e9e7e2}.wbar i{display:block;min-width:4px}
+.wleg{display:flex;flex-wrap:wrap;gap:4px 14px;font:500 12px var(--mono)}.wleg i{display:inline-block;width:10px;height:10px;border-radius:50%;border:1px solid var(--ink);margin-right:5px;vertical-align:-1px}
+.wnote{margin:0;font-size:13.5px;line-height:1.4}.wnote.dim{color:var(--mute);font-size:12px}
+.seg{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.seg .mono{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin-right:4px}.seg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.prog{display:grid;gap:5px;font:500 11.5px var(--mono);color:var(--mute)}.prog b{color:var(--ink)}
+.qcard{border:2px solid var(--ink);border-radius:14px;padding:12px 14px;display:grid;gap:9px;box-shadow:3px 3px 0 var(--ink)}
+.qcard .meta{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--mute)}
+.qcard h3{font:800 19px/1.1 var(--display);letter-spacing:-.015em;margin:0}
+.qcard .what{margin:0;font-size:13.5px;line-height:1.45}.qcard .what span{display:block;font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin-bottom:2px}
+.qcard .src{font-size:12px;color:var(--mute)}.qcard .src a{color:var(--ink)}
+.qcard .opts{display:grid;grid-template-columns:1fr 1fr;gap:6px}.qcard .opts button{text-align:left;font-size:12.5px;line-height:1.35;padding:7px 10px;border-radius:10px;border-width:1.5px}.qcard .opts button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.qcard .happened{font:500 11.5px/1.5 var(--mono);color:var(--mute);border-top:1px solid var(--soft);padding-top:8px}
+.qcard .nav{display:flex;justify-content:space-between;align-items:center;gap:8px}.qcard .nav .skip{border:0;color:var(--mute);padding:0;font-size:12px;text-decoration:underline;background:none}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:8px}.qdots{display:flex;flex-wrap:wrap;gap:4px}.qdots button{width:24px;height:24px;padding:0;border-width:1.5px;font:600 10.5px var(--mono);border-radius:50%}.qdots button.ans{background:var(--ink);color:var(--paper)}.qdots button[aria-current=true]{outline:2px solid #2458e6;outline-offset:2px}
+.q{border-top:1px solid var(--soft);padding:10px 0;display:grid;gap:6px;align-content:start}.q small{color:var(--mute);font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.q>b{font-weight:600}.q .opts{display:grid;grid-template-columns:1fr 1fr;gap:6px}.q .opts button{text-align:left;font-size:12.5px;line-height:1.35;padding:7px 10px;border-radius:10px;border-width:1.5px}
+.q .skip{justify-self:start;border:0;color:var(--mute);padding:0;font-size:12px;text-decoration:underline;background:none}
+.fnote{border-left:3px solid var(--sun);padding:4px 10px;font-size:12.5px;color:var(--ink);background:#f6f4ee}
+@media(min-width:761px){body{padding-right:calc(var(--rail) + 20px)}body.side-open{padding-right:calc(var(--drawer) + 28px)}}
+@media(max-width:760px){
+  body{padding-bottom:84px}
+  .side{top:auto;left:0;width:auto;border-left:0;border-top:3px solid var(--ink)}
+  .side-open .side{width:auto;height:var(--sheet,60vh)}
+  body.side-open{padding-bottom:var(--sheet,60vh)}
+  .rail{flex-direction:row;justify-content:space-around;padding:6px 8px}
+  .rail .tool{writing-mode:horizontal-tb;padding:8px 6px}
+  .rail .open{transform:rotate(90deg);padding:6px 10px}
+  .keybox{left:0;right:auto}
+}
+@media(min-width:761px){body.about{padding-right:max(16px,env(safe-area-inset-right,0px))}}
+body.about{padding-bottom:40px}.about .side{display:none}
+/* about view: collage, stats, list, method */
+.hero{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:20px 40px;align-items:center;margin-top:28px}
+@media(max-width:760px){.hero{grid-template-columns:minmax(0,1fr)}}
+.lede{font:400 17px/1.45 var(--body);max-width:52ch;margin:0 0 18px}
+.collage{position:relative;aspect-ratio:1.12;width:100%;max-width:360px;min-width:0}
+.collage>*{position:absolute}
+.sun{width:52%;aspect-ratio:1;border-radius:50%;background:var(--sun);right:6%;top:2%}
+.sheet{left:4%;top:20%;width:66%;height:60%;background:#ddd9d1;background-image:repeating-linear-gradient(#0000 0 15px,#b8b4aa 15px 16px);box-shadow:0 1px 0 #0002}
+.slab{left:24%;bottom:2%;width:58%;height:15%;background:var(--pink);color:#121212;padding:6px 10px;font:500 10px/1.25 var(--mono);display:flex;align-items:center}
+.cut{filter:drop-shadow(0 2px 0 #0003)}
+.cap{font:500 10px/1.25 var(--mono);background:var(--paper);padding:2px 5px;border:1px solid var(--ink)}
+.stats{display:flex;flex-wrap:wrap;gap:10px 38px;margin:0;padding:0;list-style:none}
+.stats b{display:block;font:800 38px/1 var(--display);font-stretch:108%;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stats span{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--mute)}
+.block,.hblock{background:var(--panel);border-radius:24px;padding:clamp(20px,3.4vw,40px);margin-top:28px;scroll-margin-top:16px}
+.block>.sec,.hblock .sec{margin-bottom:6px}.block>.take{font:500 17px/1.45 var(--body);letter-spacing:0;max-width:62ch;margin:0 0 22px}.block>.take b{font-weight:700}
+.more{margin-top:18px}.more summary{display:inline-flex;font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.05em;cursor:pointer;border:1.5px solid var(--ink);border-radius:999px;padding:4px 12px;list-style:none}.more summary::-webkit-details-marker{display:none}.more summary::after{content:" +";white-space:pre}.more[open] summary::after{content:" −"}.more[open] summary{background:var(--ink);color:var(--paper)}.more p{font:400 14px/1.55 var(--body);color:var(--mute);max-width:72ch;margin:12px 0 0}
+.morerow{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:flex-start}.morerow>details{margin-top:18px}.morerow>details[open]{flex-basis:100%}
+.sec{font:900 28px/1 var(--display);font-stretch:108%;letter-spacing:-.03em;margin:0 0 18px}.sec.big{font-size:clamp(34px,4vw,52px);margin:28px 0 14px}
+.sub{font:900 20px var(--display);letter-spacing:-.02em;margin:0 0 4px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.kcard{border:2px solid var(--ink);border-radius:14px;padding:18px;display:grid;gap:10px;align-content:start;background:#fff}
+.kcard.wide{grid-column:span 2}@media(max-width:560px){.kcard.wide{grid-column:auto}}
+.kcard h3{font:800 18px/1.1 var(--display);letter-spacing:-.02em;margin:0}.kcard p{margin:0;font-size:13.5px;color:var(--mute)}
+.vis{height:96px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:4px}
+svg.vis text{font:500 10px var(--mono);fill:var(--mute)}
+.gens{flex-direction:column;align-items:flex-start;gap:3px;font:500 11px var(--mono)}.gens i{display:inline-block;width:11px;height:13px;border-radius:50%;border:1px solid var(--ink);margin-right:8px;vertical-align:-2px}
+.sw{gap:18px}.sw span{display:grid;justify-items:center;gap:6px;font:500 11px var(--mono);color:var(--mute)}
+.sw i{width:38px;height:46px;border-radius:50%;display:block}
+.ht{background:radial-gradient(circle,#121212 0 34%,#0000 38%) 0 0/7px 7px,var(--c)}.ht.dim{background:radial-gradient(circle,#d0cdc5 0 34%,#0000 38%) 0 0/7px 7px,#efede8}
+.dash{border:1.5px dashed #bdbab2}
+.stamp{flex-direction:column;gap:2px}.stamp b{font:900 40px/1 var(--display);font-stretch:112%;letter-spacing:-.04em;background:var(--sun);padding:6px 14px 8px;transform:rotate(-3deg)}.stamp span{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
+.tag{justify-self:start;font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.08em;background:var(--sun);border:1.5px solid var(--ink);border-radius:999px;padding:2px 10px}
+.hchart{position:relative;margin:4px 0 8px}.hchart svg{display:block;overflow:visible}.hchart text{font:500 10.5px var(--mono);fill:var(--mute)}.hchart .ht1{font:700 12px var(--body);fill:var(--ink)}.hchart .lab{font:600 11px var(--mono);fill:var(--ink)}
+.htip{position:absolute;top:0;pointer-events:none;background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:7px 10px;font:500 12px/1.4 var(--body);white-space:nowrap;box-shadow:3px 3px 0 var(--ink);z-index:2}.htip b{font:800 14px var(--display)}.htip small{display:block;color:var(--mute);font:500 11px var(--mono)}
+.hnote{font:400 13px/1.5 var(--body);color:var(--mute);max-width:80ch;margin:6px 0 10px}
+.htable summary{font:600 12px var(--mono);cursor:pointer;text-transform:uppercase;letter-spacing:.05em}.htable table{border-collapse:collapse;font:400 12.5px var(--mono);margin-top:10px;width:100%;max-width:640px}.htable th,.htable td{text-align:right;padding:3px 8px;border-bottom:1px solid var(--soft)}.htable th:first-child,.htable td:first-child{text-align:left}.htable div{max-height:360px;overflow:auto}
+.listhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:10px 20px}.listhead .sec{margin:0}
+input[type=search]{font:500 13px var(--body);border:2px solid var(--ink);border-radius:999px;padding:6px 14px;width:min(280px,100%);background:var(--paper);color:var(--ink)}
+.listnote{font:500 11px/1.4 var(--mono);color:var(--mute);margin:8px 0 12px}
+.list{max-height:420px;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:0 24px;font-variant-numeric:tabular-nums;border-top:1px solid var(--ink)}
+.list button{border:0;border-bottom:1px solid var(--soft);border-radius:0;padding:6px 0;font:400 13px var(--body);text-align:left;display:grid;grid-template-columns:14px 1fr auto;gap:8px;align-items:center}
+.list button i{width:10px;height:12px;border-radius:50%;border:1px solid var(--ink)}.list button small{font:500 11px var(--mono);color:var(--mute)}
+.list button.dim{color:#a9a69f}.list button.dim i{opacity:.35}
+.bb{background:#fff;border:2px solid var(--ink);border-radius:18px;padding:20px 22px;display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:16px 28px;align-items:center;margin-bottom:22px}@media(max-width:700px){.bb{grid-template-columns:1fr}}
+.bbtxt b#bbn{display:block;font:900 72px/.85 var(--display);font-stretch:112%;letter-spacing:-.05em;font-variant-numeric:tabular-nums}.bbtxt span{display:block;font:400 16px/1.4 var(--body);margin-top:8px}.bbtxt span b{font-weight:700}
+.bbdots{display:grid;grid-template-columns:repeat(41,1fr);gap:2px}.bbdots i{aspect-ratio:1;border-radius:50%;background:#e9e7e2;transition:background .3s}.bbdots i.on{background:var(--c);box-shadow:inset 0 0 0 1px #121212}
+.bbbar{grid-column:1/-1;flex-wrap:wrap}.bbbar::before{content:"Born before";font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin-right:6px}.bbbar button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.gtl{display:grid;gap:14px}.gtlbar{margin:0 0 12px}.gtlbar button[aria-pressed=true]{background:var(--ink);color:var(--paper)}.gcard[hidden]{display:none}
+.gcard{border:2px solid var(--ink);border-radius:14px;padding:18px 20px;display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr) minmax(0,1fr);gap:10px 28px;background:#fff}
+@media(max-width:820px){.gcard{grid-template-columns:minmax(0,1fr)}}
+.gcard h3{font:800 20px/1.05 var(--display);letter-spacing:-.02em;margin:0 0 6px;display:flex;align-items:center;gap:8px}.gcard h3 i{width:14px;height:17px;border-radius:50%;border:1px solid var(--ink);flex:none}
+.gcard .gmeta{font:500 11.5px/1.5 var(--mono);color:var(--mute)}
+.gcard h4{font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:0 0 6px}
+.gcard ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:13.5px;line-height:1.35}
+.gcard li{display:grid;grid-template-columns:3.4em minmax(0,1fr);gap:6px}.gcard li b{font:600 12.5px var(--mono)}.gcard li a{color:var(--mute);font-size:11.5px;text-underline-offset:2px;margin-left:4px;white-space:nowrap}
+.gmodal{border:3px solid var(--ink);border-radius:18px;padding:18px 20px 16px;width:min(680px,calc(100vw - 24px));max-height:calc(100dvh - 24px);background:var(--paper);color:var(--ink);box-shadow:6px 6px 0 var(--ink)}
+.gmodal::backdrop{background:#12121259}
+.gmodal[open]{display:grid;gap:14px;animation:gmin .22s ease-out}@keyframes gmin{from{transform:translateY(12px);opacity:0}}
+@media(prefers-reduced-motion:reduce){.gmodal[open]{animation:none}}
+.gmtop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.gmtop h2{font:900 clamp(24px,4vw,34px)/1 var(--display);font-stretch:108%;letter-spacing:-.03em;margin:0 0 6px;display:flex;align-items:center;gap:10px}
+.gmtop h2 i{width:20px;height:24px;border-radius:50%;border:1.5px solid var(--ink);flex:none}.gmeta{font:500 11.5px/1.5 var(--mono);color:var(--mute)}
+.gmodal .x{border:0;font-size:26px;line-height:1;padding:0 4px;background:none}
+.dyk{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:16px 22px;align-items:center;min-height:250px}
+@media(max-width:560px){.dyk{grid-template-columns:minmax(0,1fr);min-height:0}.dyk .pic{max-width:200px}}
+.dyk .pic{display:grid;gap:5px}.dyk canvas,.dyk .tile{width:100%;aspect-ratio:1;border-radius:14px;border:2px solid var(--ink);display:block}
+.dyk .tile{display:grid;place-items:center;font:900 64px/1 var(--display);font-stretch:112%;letter-spacing:-.04em;background:radial-gradient(circle,#12121230 0 30%,#0000 34%) 0 0/8px 8px,var(--c)}
+.dyk .credit{font:500 10px/1.35 var(--mono);color:var(--mute)}.dyk .credit a{color:var(--mute)}
+.dyk .tag{font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.07em;color:var(--mute)}
+.dyk .yr{font:900 clamp(48px,8vw,72px)/.9 var(--display);font-stretch:112%;letter-spacing:-.045em;margin:4px 0 8px}
+.dyk .fact{font:700 19px/1.25 var(--display);letter-spacing:-.01em;margin:0 0 10px}
+.dyk .then{margin:0;font-size:14px;line-height:1.45;border-left:3px solid var(--sun);padding:2px 10px;background:#f6f4ee}.dyk .src{font-size:12px;color:var(--mute);margin-top:8px}.dyk .src a{color:var(--mute)}
+.gmnav{display:flex;align-items:center;justify-content:center;gap:12px}.gmdots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.gmdots button{width:10px;height:10px;padding:0;border-width:1.5px}.gmdots button[aria-current=true]{background:var(--ink)}
+.gmgo{justify-self:center;background:var(--ink);color:var(--paper)}
+.srcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:18px;margin-top:28px}.srcgroup{background:var(--panel);border-radius:20px;padding:20px 22px}
+.srcgroup h3{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mute);margin:0 0 10px}
+.cite{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:13.5px}.cite li{padding-left:1.6em;text-indent:-1.6em}.cite a{color:var(--ink);text-underline-offset:2px;word-break:break-word}
+.vtable{display:grid;font-size:13px;border-top:1px solid var(--ink);margin-top:10px}
+.vtable div{display:grid;grid-template-columns:28px minmax(0,1fr) 150px 150px;gap:4px 14px;padding:8px 0;border-bottom:1px solid var(--soft);align-items:baseline}
+.vtable small{font:500 11px var(--mono);color:var(--mute);text-transform:uppercase;letter-spacing:.06em}.vtable a{color:var(--ink)}
+@media(max-width:620px){.vtable div{grid-template-columns:24px minmax(0,1fr)}.vtable div>a{grid-column:2}}
+.gen{flex-wrap:wrap;min-width:0}.gen button{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;padding:5px 11px}.gen button i{width:10px;height:12px;border-radius:50%;border:1px solid var(--ink)}
+.lbar{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ASCII look (Nov 17, replaces the stitch look): a soft, dark, grainy photo of the Capitol behind the page, off-white Archivo in two sizes, spacing on an 8/16/32/64 scale, and the chamber drawn as one typed character per member in an ombre of that member's generation. Set by showView() as body.stitch (the class name is kept from the stitch look). */
+body.stitch{--paper:#10151b;--panel:rgba(14,19,27,.55);--ink:#f4f1e8;--mute:#b4b5b7;--rule:#f4f1e8;--soft:rgba(var(--ik),.18);--blue:#f4f1e8;color-scheme:dark;background:#10151b;padding-block:32px;font-family:var(--display);font-size:16px}
+body.stitch::before{content:"";position:fixed;inset:-32px;z-index:-2;background:#1a2028 var(--sbg) 62% 40%/cover no-repeat;filter:blur(9px) saturate(1.2) brightness(.48)}
+body.stitch::after{opacity:.34;z-index:-1;mix-blend-mode:overlay}
+body.stitch .top{border:0;padding:0;align-items:baseline}body.stitch .brand{flex:1;justify-content:space-between}body.stitch .vs{display:none}
+body.stitch h1{font:600 16px/1.5 var(--display);font-stretch:100%;letter-spacing:0}body.stitch h1 em{font:inherit}
+body.stitch .nav{gap:8px 32px;flex-wrap:wrap}
+body.stitch .nav button{border:0;padding:0;font:400 16px/1.5 var(--display);letter-spacing:0;text-transform:none;color:var(--mute)}body.stitch .nav button[aria-current=page]{color:var(--ink)}
+body.stitch button,body.stitch select,body.stitch input[type=number]{border-width:1px;border-radius:0}
+body.stitch #take{font:500 clamp(34px,5.4vw,72px)/1.04 var(--display);font-stretch:100%;letter-spacing:-.025em;margin:64px 0 0;max-width:15em;text-wrap:balance}
+body.stitch #take b{font-weight:inherit}body.stitch #take span{font:italic 400 1em/1 var(--serif);letter-spacing:-.01em}
+body.stitch .stagebar{background:none;border:0;border-radius:0;padding:0;margin:64px 0 16px;gap:8px 32px}
+body.stitch .stage button{font:400 16px/1.5 var(--display);letter-spacing:0;text-transform:none;border:0;background:none;color:var(--ink);padding:8px 0}
+body.stitch .stage button[aria-pressed=true]{text-decoration:underline;text-underline-offset:6px}
+body.stitch .stage .mono{font:400 14px/1.5 var(--display);letter-spacing:0;text-transform:none;color:var(--mute)}
+body.stitch .gen{gap:0 32px;flex:1}body.stitch .gen button{gap:8px}
+body.stitch .gen button i{display:grid;place-items:center;width:24px;height:24px;border:0;border-radius:0;color:var(--on);font:500 16px/1 var(--mono)}
+body.stitch .gen button small{font-size:inherit;color:var(--mute)}body.stitch .gen.pick button[aria-pressed=false]{opacity:.4}
+.filt{position:relative}.filt summary{list-style:none;cursor:pointer;border-bottom:1px solid var(--ink);padding:8px 0 4px}.filt summary::-webkit-details-marker{display:none}
+.filt .pop{position:absolute;right:0;top:calc(100% + 8px);z-index:6;width:min(320px,calc(100vw - 32px));background:rgba(14,19,27,.94);border:1px solid var(--ink);padding:16px;display:grid;gap:16px}
+.filt .view{gap:0 16px}.filt .view .mono{flex-basis:100%}.filt .view button[aria-pressed=false]{color:var(--mute)}
+.filt ul{list-style:none;margin:0;padding:16px 0 0;border-top:1px solid var(--soft);display:grid;gap:8px;font-size:14px;color:var(--mute)}
+body.stitch .count{font-weight:400;font-stretch:100%;letter-spacing:-.02em}body.stitch .count small{font-weight:400}
+body.stitch .scrub{grid-template-columns:1fr;margin-top:16px}body.stitch .scrub label{display:none}
+body.stitch .ticks{grid-column:1;font:400 16px/1.5 var(--display);letter-spacing:0}
+body.stitch .caption{font:400 16px/1.5 var(--display);letter-spacing:0;text-transform:none;text-align:left;margin:16px 0 0}
+body.stitch .card{width:420px;border:1px solid var(--ink);box-shadow:none;background:rgba(14,19,27,.94);padding:16px;gap:4px 16px;font-size:14px}
+body.stitch .card canvas{width:168px;height:210px;touch-action:none}
+body.stitch .card .nm{font:600 20px/1.2 var(--display);font-stretch:100%;letter-spacing:0}
+body.stitch .gmodal{border:1px solid var(--ink);border-radius:0;box-shadow:none;background:rgba(14,19,27,.96);padding:32px;gap:16px}body.stitch .gmodal::backdrop{background:rgba(8,10,14,.6)}
+body.stitch .gmtop h2{font:500 32px/1.1 var(--display);font-stretch:100%;letter-spacing:-.02em;margin-bottom:8px}body.stitch .gmtop h2 i{width:24px;height:24px;border:0;border-radius:0}
+body.stitch .gmeta,body.stitch .dyk .credit,body.stitch .dyk .tag,body.stitch .dyk .src{font:400 14px/1.5 var(--display);letter-spacing:0;text-transform:none;color:var(--mute);background:none;padding:0;border-radius:0}
+body.stitch .dyk canvas,body.stitch .dyk .tile{border:0;border-radius:0}body.stitch .dyk .tile{font:500 56px/1 var(--display);font-stretch:100%;letter-spacing:-.02em;color:var(--on);background:var(--c)}
+body.stitch .dyk .yr{font:500 clamp(48px,8vw,72px)/1 var(--display);font-stretch:100%;letter-spacing:-.025em;margin:8px 0}
+body.stitch .dyk .fact{font:400 20px/1.3 var(--display);letter-spacing:0;margin:0 0 16px}
+body.stitch .dyk .then{background:none;border-left:1px solid var(--ink);padding:0 0 0 16px;color:var(--mute);font-size:16px}body.stitch .dyk .then b{color:var(--ink);font-weight:500}
+body.stitch .gmodal button{font:400 16px/1.5 var(--display)}body.stitch .gmgo{padding:8px 24px}
+body.stitch .dyk .tag{border:0}
+body.stitch .side,body.stitch .side button,body.stitch .side input,body.stitch .side select{font-family:var(--display)}
+body.stitch #toolpick b,body.stitch .toolmenu b{font:500 18px/1.2 var(--display);font-stretch:100%;letter-spacing:0}
+body.stitch .pane h2{font:500 24px/1.2 var(--display);font-stretch:100%;letter-spacing:-.01em}
+body.stitch .wbig b{font:500 52px/1 var(--display);font-stretch:100%;letter-spacing:-.02em}
+body.stitch .qcard h3{font:500 20px/1.25 var(--display);letter-spacing:0}
+body.stitch .rail button{font-family:var(--display);font-weight:500}
+body.stitch .wbox{border-radius:0;border:1px solid var(--soft);background:rgba(14,19,27,.5)}
+body.stitch .toolmenu{border-width:1px;box-shadow:none;background:rgba(14,19,27,.96)}
+body.stitch .side{border-color:var(--soft);border-width:1px;background:rgba(14,19,27,.8);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+body.stitch .wbar{background:var(--soft);border-width:1px;border-radius:0}body.stitch .fnote{background:rgba(var(--ik),.08)}
+body.stitch input[type=range]::-webkit-slider-runnable-track{height:1px}body.stitch input[type=range]::-moz-range-track{height:1px}
+body.stitch input[type=range]::-webkit-slider-thumb{width:16px;height:16px;margin-top:-8px;border-radius:50%;border:0;background:var(--ink);box-shadow:none}
+body.stitch input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;border:0;background:var(--ink);box-shadow:none}
+body.stitch .gs{margin-top:32px}
+body.stitch #toolpick,body.stitch .side summary{border-radius:0;border-width:1px}
+body.stitch .side h2,body.stitch .side h3,body.stitch .card b,body.stitch .card h3{font-weight:600;font-stretch:100%;letter-spacing:0}
+body.stitch .side .mono{font-family:var(--display);letter-spacing:.04em}
+@media (max-width:760px){body.stitch{padding-block:16px}body.stitch #take{margin-top:32px}body.stitch .stagebar{margin:32px 0 16px}body.stitch .nav{gap:4px 16px}body.stitch .gen{gap:0 24px}}
+
+/* How Congress works, About the data and Sources in the same look: no filled panels, one thin rule per section, flat dark cards, Archivo 400/500, no caps labels. */
+body.stitch{--sun:#ffe066;--pink:#ffa6d6;--ik:244,241,232;--on:#10151b}
+body.stitch .block,body.stitch .hblock{background:none;border-radius:0;border-top:1px solid var(--soft);padding:32px 0 0;margin-top:64px}
+body.stitch .sec{font:500 28px/1.15 var(--display);font-stretch:100%;letter-spacing:-.02em;margin:0 0 16px}body.stitch .sec.big{font-size:clamp(28px,3vw,40px);margin:48px 0 16px}
+body.stitch .sub{font:500 20px/1.3 var(--display);letter-spacing:0}
+body.stitch .hhead{gap:16px;margin-bottom:24px;align-items:baseline}body.stitch .hhead .sec{margin:0 0 8px}
+body.stitch .hnum{background:none;color:var(--mute);padding:0;font:400 16px/1.5 var(--mono);border-radius:0}
+body.stitch .kick,body.stitch .lede,body.stitch .block>.take,body.stitch .hcap{font:400 16px/1.5 var(--display);color:var(--mute)}body.stitch .hcap b,body.stitch .block>.take b{font-weight:500;color:var(--ink)}
+body.stitch .punch{font:500 clamp(20px,2.4vw,28px)/1.2 var(--display);letter-spacing:-.01em;margin-top:32px}
+body.stitch .runtiles,body.stitch .chcard,body.stitch .stepcard,body.stitch .kcard,body.stitch .bb,body.stitch .gcard,body.stitch .tf,body.stitch .htip{background:rgba(14,19,27,.5);border:1px solid var(--soft);border-radius:0;box-shadow:none}
+body.stitch .htip{background:rgba(12,16,22,.96)}
+body.stitch .tf:hover{background:rgba(14,19,27,.7);transform:none;border-color:var(--ink)}body.stitch .tf[aria-pressed=true]{background:var(--ink);color:var(--on)}
+body.stitch .chcard,body.stitch .stepcard,body.stitch .bb,body.stitch .gcard,body.stitch .tf,body.stitch .kcard{padding:24px}
+body.stitch .chcard h3,body.stitch .stepcard h3,body.stitch .kcard h3,body.stitch .gcard h3,body.stitch .tf .q,body.stitch .rrow .nm{font:500 20px/1.25 var(--display);font-stretch:100%;letter-spacing:0}
+body.stitch .chcard h3{font-size:28px;letter-spacing:-.02em}
+body.stitch .facts b,body.stitch .yrbar button,body.stitch .steps button,body.stitch .runin,body.stitch .runin input,body.stitch .runin select,body.stitch .rrow .st{font:400 16px/1.4 var(--display);letter-spacing:0}
+body.stitch .facts b{font-weight:500}body.stitch .facts li,body.stitch .rrow{border-top-width:1px}body.stitch .facts li:first-child{border-top:1px solid var(--soft)}
+body.stitch .bnum b,body.stitch .bbtxt b#bbn,body.stitch .stepcard .big,body.stitch .stats b{font:400 64px/1 var(--display);font-stretch:100%;letter-spacing:-.03em}body.stitch .stats b{font-size:40px}
+body.stitch .bbtxt span b{font-weight:500}
+body.stitch .rrow .ck{border-width:1px;font-weight:500}body.stitch .rrow.yes .ck,body.stitch .steps button.done,body.stitch .choice span:first-child,body.stitch .tf .a b,body.stitch .stamp b,body.stitch .tag{color:var(--on)}
+body.stitch .term i{border:0;border-radius:0;height:8px}body.stitch .rrow .bar,body.stitch .rrow .bar i{border-radius:0;height:4px}
+body.stitch .choice span{font:500 20px var(--display);border-width:1px;border-radius:0}
+body.stitch .bill{font:500 32px var(--mono);background:none;border:1px solid var(--ink);border-radius:0;box-shadow:none}
+body.stitch .tf .a b{font:500 20px/1 var(--display);font-stretch:100%;transform:none;padding:6px 12px}
+body.stitch .stamp b{font:500 32px/1 var(--display);font-stretch:100%;letter-spacing:-.02em;transform:none}
+body.stitch .tag{border:0;border-radius:0}
+body.stitch .steps button b{border-width:1px;font:400 12px var(--display)}
+body.stitch .rrow .nm small,body.stitch .termlab,body.stitch .tf .hint,body.stitch .hsrc,body.stitch .stats span,body.stitch .stamp span,body.stitch .gens,body.stitch .sw span,body.stitch .listnote,body.stitch .list button small,body.stitch .gcard .gmeta,body.stitch .gcard h4,body.stitch .gcard li b,body.stitch .srcgroup h3,body.stitch .vtable small,body.stitch .htable summary,body.stitch .htable table,body.stitch .htip small,body.stitch .bbbar::before,body.stitch .cap,body.stitch .slab{font-family:var(--display);font-weight:400;font-size:14px;letter-spacing:0;text-transform:none}
+body.stitch .agestrip text,body.stitch .bvis text,body.stitch .stepcard svg text,body.stitch .hchart text,body.stitch svg.vis text{font-family:var(--display);font-weight:400;letter-spacing:0}
+body.stitch .more summary,body.stitch .how summary{font:400 14px/1.5 var(--display);letter-spacing:0;text-transform:none;border:0;border-bottom:1px solid var(--mute);border-radius:0;padding:0;color:var(--mute);background:none;text-decoration:none}
+body.stitch .more[open] summary{background:none;color:var(--ink);border-color:var(--ink)}
+body.stitch .bbdots i{background:var(--soft);border-radius:0}body.stitch .bbdots i.on{background:var(--c);box-shadow:none}
+body.stitch .dotgrid i{border-radius:0;opacity:.85}
+body.stitch .list{border-top-color:var(--soft)}body.stitch .list button{font:400 14px/1.4 var(--display);background:none;color:var(--ink)}body.stitch .list button.dim{color:var(--mute);opacity:.6}body.stitch .list button i,body.stitch .gcard h3 i,body.stitch .gens i{border:0;border-radius:0}
+body.stitch input[type=search]{font:400 16px var(--display);border:0;border-bottom:1px solid var(--ink);border-radius:0;padding:8px 0;background:none}
+body.stitch .srcgroup{background:none;border-radius:0;border-top:1px solid var(--soft);padding:24px 0 0}body.stitch .srcgrid{gap:48px 32px;margin-top:48px}
+body.stitch .cite,body.stitch .vtable{font-size:14px}body.stitch .vtable{border-top-color:var(--soft)}
+body.stitch .ht.dim{background:radial-gradient(circle,rgba(var(--ik),.25) 0 34%,#0000 38%) 0 0/7px 7px,rgba(var(--ik),.06)}body.stitch .dash{border:1px dashed var(--mute)}
+body.stitch .sheet{background-color:rgba(var(--ik),.12);background-image:repeating-linear-gradient(#0000 0 15px,rgba(var(--ik),.2) 15px 16px);box-shadow:none}
+body.stitch .cap{background:rgba(12,16,22,.9);border-color:var(--soft)}
+body.stitch .gtlbar button,body.stitch .bbbar button,body.stitch .yrbar button,body.stitch .steps button,body.stitch .stepcard .nav2 button{font:400 14px/1.4 var(--display);padding:8px 16px;border-color:var(--soft);background:none;color:var(--ink)}
+body.stitch .gtlbar button[aria-pressed=true],body.stitch .bbbar button[aria-pressed=true],body.stitch .yrbar button[aria-pressed=true],body.stitch .steps button[aria-current=step]{background:var(--ink);color:var(--on);border-color:var(--ink)}
+body.stitch .more .grules,body.stitch .more p{color:var(--mute)}body.stitch .more a,body.stitch .hsrc a{color:var(--ink)}
+/* Round 2 (Nov 17): quieter headline, member card in its own column beside the chamber, tools opened from the filter row (no rail), a flat drawer, and a full-window game. */
+body.stitch #take{font:500 clamp(24px,2.6vw,36px)/1.15 var(--display);letter-spacing:-.015em;margin:48px 0 0;max-width:24em}
+body.stitch .stagebar{margin:32px 0 16px;align-items:center}
+.stage>.room{display:grid;grid-template-columns:minmax(0,1fr) 216px;gap:32px;align-items:end}
+body.stitch .card{position:static;width:auto;max-width:none;border:0;background:none;padding:0;display:grid;grid-template-columns:1fr;gap:4px;pointer-events:auto;overflow:visible;font-size:14px;line-height:1.5}
+body.stitch .card canvas{width:168px;height:210px;grid-row:auto;margin-bottom:12px}
+body.stitch .card .nm{font:500 20px/1.2 var(--display);padding:0}body.stitch .card .hintline{margin-top:8px}
+body.stitch .card table{font-size:12px}
+.tools{display:flex;gap:0 24px}body.stitch .tools button{font:400 16px/1.5 var(--display);border:0;background:none;color:var(--mute);padding:8px 0;position:relative}
+body.stitch .tools button:hover{color:var(--ink)}body.stitch .tools button.on{color:var(--ink)}body.stitch .tools button.on::after{content:"";position:absolute;left:0;right:0;bottom:4px;border-bottom:1px solid var(--ink)}
+body.stitch .rail{display:none!important}body.stitch:not(.side-open) .side{display:none}
+@media(min-width:761px){body.stitch:not(.side-open){padding-right:max(32px,env(safe-area-inset-right,0px))}body.stitch{padding-left:32px}body.stitch.about{padding-right:32px}}
+body.stitch .side{border:0;border-left:1px solid var(--soft);background:rgba(12,16,22,.72);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+body.stitch .dhead{border:0;padding:32px 32px 0}body.stitch .dbody{padding:24px 32px 48px}
+body.stitch #toolpick{border:0;padding:0;background:none;color:var(--ink);gap:8px;align-items:baseline}body.stitch #toolpick .mono{display:none}
+body.stitch #toolpick b{font:500 24px/1.2 var(--display);letter-spacing:-.01em}body.stitch #toolpick i{color:var(--mute)}
+body.stitch .dhead .x{font:300 24px/1 var(--display);color:var(--mute);background:none}
+body.stitch .dhead #active{font:400 14px/1.5 var(--display);letter-spacing:0;text-transform:none;margin:4px 0 0}
+body.stitch .toolmenu{border:1px solid var(--soft);padding:8px;background:rgba(12,16,22,.98)}body.stitch .toolmenu button{border-radius:0;padding:8px 8px 8px 28px}
+body.stitch .toolmenu b{font:500 16px/1.3 var(--display)}body.stitch .toolmenu span{font-size:14px}
+body.stitch .toolmenu button[aria-checked=true]::before{width:6px;height:6px;top:16px}
+body.stitch .toolmenu button.on b::after{font:400 12px var(--display);letter-spacing:0;text-transform:none;background:none;border:0;color:var(--mute);padding:0}
+body.stitch .pane{gap:24px}body.stitch .pane h2{font:400 16px/1.5 var(--display);letter-spacing:0;color:var(--mute)}
+body.stitch .side .hint,body.stitch .side .intro,body.stitch .side .wnote{font-size:14px;line-height:1.5}
+body.stitch .side button{font:400 14px/1.4 var(--display);border:1px solid var(--soft);border-radius:0;background:none;color:var(--ink);padding:8px 16px;box-shadow:none}
+body.stitch .side button:hover{border-color:var(--ink)}
+body.stitch .side button[aria-pressed=true],body.stitch .side .qdots button.ans{background:var(--ink);color:var(--on);border-color:var(--ink)}
+body.stitch .side #toolpick,body.stitch .side .dhead .x,body.stitch .side .toolmenu button,body.stitch .side .skip{border:0}body.stitch .side #toolpick,body.stitch .side .dhead .x,body.stitch .side .skip{padding:0}
+body.stitch .side input[type=number],body.stitch .side select{font:400 16px var(--display);background:none;color:var(--ink);border:0;border-bottom:1px solid var(--ink);border-radius:0;padding:4px 0}
+body.stitch .side select option{color:var(--on)}
+body.stitch .pane fieldset{background:none;border-radius:0;border-top:1px solid var(--soft);padding:16px 0 0}
+body.stitch .side legend,body.stitch .side .mono,body.stitch .seg .mono,body.stitch .qcard .meta,body.stitch .qcard .what span,body.stitch .prog,body.stitch .wleg,body.stitch .qcard .happened{font:400 14px/1.5 var(--display);letter-spacing:0;text-transform:none;color:var(--mute)}
+body.stitch .chip{padding:6px 12px}
+body.stitch .wbox{background:none;border:0;border-top:1px solid var(--soft);border-radius:0;padding:24px 0 0;gap:16px}
+body.stitch .wbig b{font:400 56px/1 var(--display);letter-spacing:-.03em}body.stitch .wbig span{font:400 14px/1.4 var(--display);color:var(--mute)}
+body.stitch .wbar{height:8px;border:0;border-radius:0;background:var(--soft)}body.stitch .wleg i{border:0;border-radius:0}
+body.stitch .qcard{border:0;border-radius:0;box-shadow:none;padding:0;gap:16px}body.stitch .qcard h3{font:500 20px/1.3 var(--display)}
+body.stitch .qcard .opts button,body.stitch .q .opts button{font-size:14px;padding:12px;border-radius:0;border-width:1px}
+body.stitch .qdots button{width:28px;height:28px;padding:0;border-radius:0;font:400 12px var(--display)}body.stitch .qdots button[aria-current=true]{outline:1px solid var(--ink);outline-offset:2px}
+body.stitch .fnote{border-left:1px solid var(--ink);background:none;padding:0 0 0 16px;font-size:14px;color:var(--mute)}
+body.stitch .side a{color:var(--ink)}
+/* the game fills the window; the header floats over it and "How the game works" sits below the fold */
+body.playing .top{position:relative;z-index:6}
+body.playing .gs{position:absolute;left:0;top:56px;width:100%;height:calc(100svh - 56px);margin:0}body.stitch.playing{padding-top:16px;background:#0c1016}body.stitch.playing::before{display:none}
+body.playing #v-play{padding-top:calc(100svh - 72px)}
+
+.stage>.room .cvwrap{width:100%}.stage{container-type:inline-size}
+@container (max-width:900px){body.stitch .gen{flex-basis:100%}}
+@container (max-width:680px){.stage>.room{grid-template-columns:1fr;gap:16px}body.stitch .card{grid-template-columns:auto 1fr;gap:4px 16px;align-content:end}body.stitch .card canvas{width:120px;height:150px;grid-row:1/9;margin:0}}
+body.stitch #toolpick:focus-visible{outline:1px solid var(--ink);outline-offset:6px}
+@media (max-width:760px){body.stitch #take{margin-top:32px}body.stitch .stagebar{margin:24px 0 16px}
+  body.stitch .side{border-left:0;border-top:1px solid var(--soft);background:rgba(12,16,22,.92)}body.stitch .dhead{padding:16px 16px 0}body.stitch .dbody{padding:16px 16px 32px}body.stitch:not(.side-open){padding-bottom:32px}}
+
+/* Round 3 (Nov 17): the tools are a section under the chamber, not a sidebar. The old tool menu is shown as a row of tabs; each tool lays out in columns on wide screens. */
+body.stitch .side{display:block!important;position:static;width:auto;height:auto;max-width:1240px;margin:48px auto 0;border:0;border-top:1px solid var(--soft);background:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+body.stitch.about .side{display:none!important}
+body.stitch .drawer{display:block;height:auto}
+body.stitch .dhead{padding:24px 0 0}body.stitch .dbody{padding:32px 0 64px;overflow:visible}
+body.stitch #toolpick,body.stitch #closeside{display:none}
+body.stitch .toolmenu{display:flex!important;flex-wrap:wrap;position:static;width:auto;border:0;background:none;padding:0;gap:0 32px}
+body.stitch .side .toolmenu button{padding:0 0 4px;border:0;border-bottom:1px solid transparent;background:none}body.stitch .toolmenu button::before{display:none}body.stitch .toolmenu button span{display:none}
+body.stitch .toolmenu b{font:500 20px/1.4 var(--display)}body.stitch .toolmenu button[aria-checked=false]{color:var(--mute)}body.stitch .side .toolmenu button[aria-checked=true]{border-bottom-color:var(--ink)}
+body.stitch .toolmenu button.on b::after{content:" · on";margin:0}
+body.stitch .dhead #active{margin-top:8px}
+body.stitch .pane h2{font:400 16px/1.5 var(--display);color:var(--mute);margin:0}
+@media(min-width:761px){body.stitch,body.stitch.side-open{padding-right:32px}}
+@media(min-width:900px){
+  body.stitch.widetools #p-age{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px 64px;align-items:start}body.stitch.widetools #p-age>*{grid-column:1}body.stitch.widetools #ageout{grid-column:2;grid-row:1/5;border-top:0;padding-top:0}
+  body.stitch.widetools #attrs{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px 48px;align-items:start}
+  body.stitch.widetools #p-iss{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px 64px;align-items:start}body.stitch.widetools #p-iss>h2,body.stitch.widetools #p-iss>.hint{grid-column:1/-1}
+  body.stitch.widetools #p-iss>.qhead{grid-column:1}body.stitch.widetools #qcard{grid-column:1;grid-row:4/9}body.stitch.widetools #p-iss>.wbox,body.stitch.widetools #p-iss>.seg,body.stitch.widetools #p-iss>.how,body.stitch.widetools #clearvotes{grid-column:2}body.stitch.widetools #iss-status{border-top:0;padding-top:0}
+}
+@media(max-width:760px){body.stitch,body.stitch.side-open{padding-bottom:32px}}
+
+/* Page transitions: the view you open fades up; its sections follow a beat apart. Off when the reader asks for reduced motion. */
+@media (prefers-reduced-motion:no-preference){
+  #v-chamber:not([hidden]),#v-how:not([hidden]),#v-about:not([hidden]),#v-sources:not([hidden]),body.stitch:not(.about) .side{animation:vin .6s cubic-bezier(.2,.7,.2,1) backwards}
+  #v-play:not([hidden]){animation:vfade .8s ease-out backwards}
+  #v-how:not([hidden])>*,#v-about:not([hidden])>*,#v-sources:not([hidden])>*{animation:vin .7s cubic-bezier(.2,.7,.2,1) backwards}
+  #v-how>:nth-child(2),#v-about>:nth-child(2),#v-sources>:nth-child(2){animation-delay:.08s}#v-how>:nth-child(3),#v-about>:nth-child(3),#v-sources>:nth-child(3){animation-delay:.16s}#v-how>:nth-child(n+4),#v-about>:nth-child(n+4),#v-sources>:nth-child(n+4){animation-delay:.24s}
+  body.stitch:not(.about) .side{animation-delay:.15s}
+}
+@keyframes vin{from{opacity:0;translate:0 16px}}@keyframes vfade{from{opacity:0}}
+
+/* Round 4 (Nov 17): sub-pages, ASCII portraits on About, characters in place of dots, sources in columns. */
+.subnav{display:flex;flex-wrap:wrap;gap:8px 32px;margin:32px 0 0;padding-bottom:16px;border-bottom:1px solid var(--soft)}
+body.stitch .subnav button{font:400 16px/1.5 var(--display);border:0;border-bottom:1px solid transparent;background:none;color:var(--mute);padding:0 0 4px}body.stitch .subnav button:hover{color:var(--ink)}body.stitch .subnav button[aria-current=page]{color:var(--ink);border-bottom-color:var(--ink)}
+.pgnav{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:64px;padding-top:24px;border-top:1px solid var(--soft);color:var(--mute);font-size:14px}
+body.stitch .pgnav button{font:400 16px/1.4 var(--display);border:1px solid var(--soft);background:none;color:var(--ink);padding:12px 24px;text-align:left}body.stitch .pgnav button:hover{border-color:var(--ink)}body.stitch .pgnav .nx{background:var(--ink);color:var(--on);border-color:var(--ink)}
+body.stitch .subnav~.block,body.stitch .subnav~.hblock,body.stitch .subnav~.hero{border-top:0;margin-top:48px;padding-top:0}
+body.stitch .srcgrid{display:block;margin-top:0}
+body.stitch .srcgroup h3{font:500 28px/1.15 var(--display);letter-spacing:-.02em;color:var(--ink);margin:0 0 24px}
+body.stitch .cite{display:block;columns:3 280px;column-gap:48px}body.stitch .cite li{break-inside:avoid;margin-bottom:16px}
+body.stitch .hero{grid-template-columns:auto minmax(0,1fr);gap:32px 64px;align-items:end}
+.duo{display:flex;gap:32px;flex-wrap:wrap}.duo figure{margin:0}.duo canvas{width:168px;height:210px;touch-action:none;margin-bottom:12px}.duo b{display:block;font-weight:500}.duo span{display:block;color:var(--mute);font-size:14px}
+body.stitch .bbdots{container-type:inline-size}
+body.stitch .bbdots i{background:none!important;font:400 clamp(6px,1.9cqw,16px)/1 var(--mono);font-style:normal;text-align:center;display:grid;place-items:center;color:rgba(var(--ik),.18);transition:color 1.4s,scale 1.4s;cursor:default}
+body.stitch .bbdots i.on{color:var(--c)}body.stitch .bbdots i:hover{color:#fff;scale:1.9;transition-duration:0s}
+body.stitch .gens i,body.stitch .gtlbar button i{display:inline-grid;place-items:center;width:20px;height:20px;font:500 13px/1 var(--mono);font-style:normal;color:var(--on);border:0;border-radius:0;vertical-align:middle}
+body.stitch .gens{gap:6px;font-size:14px}
+body.stitch .sw i.gl{font:400 40px/46px var(--mono);font-style:normal;width:38px;height:46px;text-align:center}body.stitch .sw i.gl.dim{color:rgba(var(--ik),.2)}
+body.stitch .stamp b{background:none;color:var(--ink);padding:0;font:400 40px/1 var(--display)}
+body.stitch .kcard .tag{background:none;color:var(--mute);padding:0;font:400 14px var(--display);letter-spacing:0;text-transform:none}
+body.stitch .list button i{background:var(--c,currentColor)}
+@media(max-width:760px){body.stitch .hero{grid-template-columns:1fr}.duo canvas{width:140px;height:175px}.pgnav{flex-wrap:wrap}}
+
+/* Round 5 (Nov 17): widgets sit on white frosted glass so they read apart from the photo and from the chamber. Inside a glass panel the ink is dark; pictures made of colored characters keep a dark screen (.bbdots, .agestrip, .dotgrid). */
+body.stitch .side,body.stitch :is(#v-how,#v-mini) .hblock,body.stitch #v-about>.block,body.stitch #v-sources .srcgroup,body.stitch #v-sources>.block{--ink:#12161c;--mute:#565d67;--rule:#12161c;--soft:rgba(18,22,28,.16);--ik:18,22,28;--on:#f7f5ee;--sun:#f4c400;--blue:#12161c;color:var(--ink);color-scheme:light;
+  background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(246,244,238,.84));-webkit-backdrop-filter:blur(36px) saturate(1.7);backdrop-filter:blur(36px) saturate(1.7);border:1px solid rgba(255,255,255,.7);border-radius:28px;box-shadow:inset 0 1px 0 #fff,0 32px 80px rgba(0,0,0,.28);padding:40px;margin-top:32px}
+body.stitch .side{padding:8px 40px 0;margin-top:48px}
+body.stitch .subnav~.block,body.stitch .subnav~.hblock{border:1px solid rgba(255,255,255,.7);margin-top:32px;padding:40px}
+body.stitch #v-sources .srcgroup{border:1px solid rgba(255,255,255,.7);padding:40px;margin-top:32px}
+body.stitch .side .runtiles,body.stitch .side .tf,body.stitch :is(.hblock,.block) :is(.runtiles,.chcard,.stepcard,.kcard,.bb,.gcard,.tf){background:rgba(255,255,255,.55);border-color:var(--soft);border-radius:16px}
+body.stitch :is(.hblock,.block) .tf:hover{background:#fff}
+body.stitch :is(.side,.hblock,.block,.srcgroup) button,body.stitch :is(.side,.hblock,.block) :is(input,select){border-radius:999px}
+body.stitch .side .toolmenu button,body.stitch :is(.side,.hblock,.block) :is(input[type=number],input[type=search],select),body.stitch .side .qdots button,body.stitch .more summary{border-radius:0}
+body.stitch :is(.bbdots,.agestrip,.dotgrid){--ink:#f4f1e8;--mute:#b4b5b7;--soft:rgba(244,241,232,.18);--ik:244,241,232;background:#10151b;border-radius:16px;padding:16px}
+body.stitch .htip,body.stitch .cap{--ink:#f4f1e8;--mute:#b4b5b7;color:var(--ink)}
+@media(max-width:760px){body.stitch .side,body.stitch :is(#v-how,#v-mini) .hblock,body.stitch #v-about>.block,body.stitch #v-sources .srcgroup,body.stitch #v-sources>.block{padding:24px 16px;border-radius:20px}body.stitch .side{padding:0 16px}}
+
+/* Round 6 (Nov 17): frosted header, the game fits the window with no page scroll, charts drawn with thin characters, event photos back as typed pictures. */
+body.stitch .top{position:sticky;top:16px;z-index:20;align-items:center;padding:12px 28px;background:rgba(255,255,255,.13);-webkit-backdrop-filter:blur(28px) saturate(1.7);backdrop-filter:blur(28px) saturate(1.7);border:1px solid rgba(255,255,255,.28);border-radius:28px;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 16px 48px rgba(0,0,0,.2)}
+body.stitch .top h1{margin:0}
+body.stitch.playing{overflow:hidden;height:100svh;padding-bottom:0}
+body.playing .top{position:relative;top:0}
+body.playing .gs{top:96px;height:calc(100svh - 96px)}body.playing #v-play{padding-top:0}
+body.playing #v-play>details.more{position:fixed;left:16px;bottom:12px;z-index:7;margin:0!important}
+body.playing #v-play>details.more[open]{inset:104px 16px 16px;overflow:auto;padding:32px;background:rgba(12,16,22,.9);-webkit-backdrop-filter:blur(28px);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.28);border-radius:28px}
+@media(max-width:900px){body.playing .gdlg{bottom:48px}body.playing .gs{top:124px;height:calc(100svh - 124px)}}
+body.stitch .agestrip text.gl{font:300 8px/1 var(--mono)}
+body.stitch .bvis text.gl{font:300 13px/1 var(--mono);text-anchor:middle;dominant-baseline:central;fill:rgba(244,241,232,.3);transition:fill .4s}body.stitch .bvis text.gl.on{fill:#ffe066}
+body.stitch .dotgrid i{background:none;opacity:1;display:grid;place-items:center;font:300 11px/1 var(--mono);font-style:normal;color:var(--ink)}body.stitch .dotgrid i::before{content:"#"}
+body.stitch .dotgrid.s i{font-size:12px}
+body.stitch .bvis{--ink:#f4f1e8;--mute:#b4b5b7;background:#10151b;border-radius:16px;padding:16px}
+body.stitch .dyk canvas{background:#10151b;border-radius:16px;touch-action:none;height:auto}
+.gfact{display:grid;gap:16px;margin-top:16px;background:rgba(255,255,255,.55);border:1px solid var(--soft);border-radius:16px;padding:24px}
+#gtlfact{grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:24px 48px}
+@media(max-width:700px){#gtlfact{grid-template-columns:minmax(0,1fr)}#gtlfact .pic{max-width:260px}}
+body.stitch .gfact .gmnav button{padding:6px 14px}body.stitch .gfact .gmdots button{width:10px;height:10px;padding:0;border-color:var(--ink)}
+
+/* Round 7 (Nov 17): one main action per tool. In the quiz, Yes and No are the only filled buttons; jump dots, Back, Skip and Clear are quiet text; match options and the result of the vote appear only after an answer. */
+body.stitch .side .qcard .opts button{background:var(--ink);color:var(--on);border-color:var(--ink);border-radius:16px;padding:16px 20px;font-size:16px;text-align:left}
+body.stitch .side .qcard .opts button:hover{opacity:.85}
+body.stitch .side .qcard .opts:has([aria-pressed=true]) button[aria-pressed=false]{background:none;color:var(--mute);border-color:var(--soft)}
+body.stitch .side .qdots{gap:6px;align-items:center}
+body.stitch .side .qdots button{width:8px;height:8px;min-width:0;padding:0;font-size:0;border-radius:999px;border:1px solid var(--mute);background:none}
+body.stitch .side .qdots button.ans{background:var(--ink);border-color:var(--ink)}body.stitch .side .qdots button[aria-current=true]{width:24px;outline:0;border-color:var(--ink)}
+body.stitch .side .qcard .nav button,body.stitch .side #clearvotes{border:0;background:none;padding:4px 0;color:var(--mute);text-decoration:underline;text-underline-offset:3px}
+body.stitch .side .qcard .nav button:hover,body.stitch .side #clearvotes:hover{color:var(--ink)}
+body.stitch .side .qcard .nav button:last-child{display:none}body.stitch .side .qcard .nav{justify-content:space-between}
+body.stitch .side .qcard:not(:has(.opts [aria-pressed=true])) .happened{display:none}
+body.stitch #p-iss:not(:has(.qdots .ans)) :is(#thr,.how,#clearvotes){display:none}
+body.stitch #p-age>button{background:var(--ink);color:var(--on);border-color:var(--ink);padding:12px 24px;font-size:16px}
+
+/* Round 8: menu hover is a color change only; the header scrolls with the page so it never sits on a white panel; quiz columns keep the card under the dots. */
+body.stitch .nav button,body.stitch .nav button:hover,body.stitch .subnav button:hover{background:none}body.stitch .nav button:hover{color:var(--ink)}
+body.stitch .top{position:relative;top:0}
+@media(min-width:900px){body.stitch.widetools #p-iss{grid-template-rows:repeat(7,auto) 1fr}body.stitch.widetools #p-iss>.qhead{grid-row:3}body.stitch.widetools #qcard{grid-row:4/9}body.stitch.widetools #iss-status{grid-row:4}body.stitch.widetools #thr{grid-row:5}body.stitch.widetools #p-iss>.how{grid-row:6}body.stitch.widetools #clearvotes{grid-row:7}}
+body.playing #v-play>details.more:not([open]) summary{background:rgba(12,16,22,.7);padding:4px 12px;border:0;border-radius:999px;color:var(--ink)}
+#gtlfact{grid-template-columns:minmax(0,340px) minmax(0,1fr)}
+
+/* phone widths: character grids may shrink below the width of their glyphs */
+body.stitch .dotgrid{grid-template-columns:repeat(29,minmax(0,1fr));max-width:100%}body.stitch .dotgrid.s{grid-template-columns:repeat(20,minmax(0,1fr))}
+body.stitch .dotgrid i,body.stitch .bbdots i{min-width:0;overflow:hidden}
+body.stitch .chcard,body.stitch .bb,body.stitch .gfact,body.stitch .bbdots,body.stitch #gtlfact>*{min-width:0}
+@media(max-width:760px){body.stitch .dotgrid i{font-size:8px}body.stitch :is(.bbdots,.agestrip,.dotgrid,.bvis){padding:8px}.gfact{padding:16px}}
+@media(max-width:700px){#gtlfact{grid-template-columns:minmax(0,1fr)}}
+
+/* Round 9: revealed true/false cards and finished steps stay readable on glass; vote dots are characters on a dark screen. */
+body.stitch :is(.hblock,.block) .tf[aria-pressed=true]{background:var(--ink);color:var(--on);border-color:var(--ink)}
+body.stitch .tf .a b{background:none;color:inherit;padding:0;font:500 28px/1 var(--display)}body.stitch .tf .a span{font:400 16px/1.45 var(--display)}
+body.stitch .steps button.done{background:none;color:var(--ink)}body.stitch .steps button.done b{background:var(--ink);color:var(--on);border-color:var(--ink)}
+body.stitch .steps button:not(.done):not([aria-current=step]){color:var(--mute)}
+body.stitch .stepcard svg:has(text.gl){--ink:#f4f1e8;--mute:#b4b5b7;background:#10151b;border-radius:16px;padding:12px;box-sizing:content-box;max-width:calc(100% - 24px)}
+body.stitch .stepcard svg text.gl{font:300 11px/1 var(--mono);text-anchor:middle;dominant-baseline:central;fill:rgba(244,241,232,.3)}body.stitch .stepcard svg text.gl.on{fill:#ffe066}
+body.stitch .stepcard svg:has(text.gl) text:not(.gl){fill:#f4f1e8}
+/* Sydney: the tabs at the top are enough; no Back / Next footer on sub-pages. */
+.pgnav{display:none!important}
+
+/* Round 10: the game photo runs behind the header (no dark bar); Could you run uses both columns. */
+body.playing .top{z-index:8}
+body.playing .gs{top:0;height:100svh;--top:96px}body.playing .gover{top:var(--top)}
+@media(max-width:900px){body.playing .gs{top:0;height:100svh;--top:124px}}
+@media(min-width:900px){
+  body.stitch #h-run{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:16px 40px;align-items:start}
+  body.stitch #h-run>.hhead{grid-column:1/-1;margin-bottom:8px}body.stitch #h-run>.runin{grid-column:1;margin:0}
+  body.stitch #h-run>.runtiles{grid-column:1;margin:0;max-width:none}
+  body.stitch #h-run>.agestrip{grid-column:2;grid-row:2/5;margin:0;align-self:start}body.stitch #h-run .agestrip svg{min-width:0}
+  body.stitch #h-run>.hcap{grid-column:1;margin:0}
+}
+
+/* "How the game works" overlay: rules flow in columns across the whole panel */
+body.playing #v-play>details.more[open] .grules{display:block;columns:3 300px;column-gap:48px;max-width:none;margin:24px 0}
+body.playing #v-play>details.more[open] .grules dt{break-after:avoid;font-weight:500;color:var(--ink);margin-bottom:4px}
+body.playing #v-play>details.more[open] .grules dd{break-inside:avoid;margin:0 0 24px}
+body.playing #v-play>details.more[open]>p{max-width:none;columns:2 400px;column-gap:48px;border-top:1px solid var(--soft);padding-top:24px;font-size:14px}
+body.playing #v-play>details.more[open]{z-index:9;inset:16px}
+body.playing #v-play>details.more[open] summary{position:sticky;top:0;float:right;background:var(--ink);color:var(--on);border:0;border-radius:999px;padding:6px 16px}
+
+@media (max-width:760px){body.playing #v-play>details.more[open] .grules,body.playing #v-play>details.more[open]>p{columns:auto;column-count:1}body.playing #v-play>details.more[open] summary{float:none;display:inline-block;margin-bottom:8px}}
+
+/* Hover bug: the member card changes height from member to member. It now sits in its own fixed column and never moves or resizes the chamber. */
+@container (min-width:681px){.stage>.room{position:relative;align-items:start}body.stitch .room>.card{position:absolute;top:0;right:0;bottom:0;width:216px;overflow:auto;align-content:start;scrollbar-width:none}}
+@container (max-width:680px){body.stitch .room>.card{min-height:190px;align-content:start}}
+
+/* Round 11: four menu items. Chamber has tabs (Today / Since 1789 / Generations / Members). Play is a hub; an activity that filters the chamber opens beside it (body.act). About this site holds How to read, Method and Sources. */
+body.stitch #v-cham>.subnav{margin-top:32px}
+body.stitch #v-about{display:block;padding:0;margin:0}
+body.stitch #v-about>.hero{margin-top:32px}
+body.stitch #v-hub,body.stitch #v-mini{padding-top:48px}
+body.stitch .hub{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:24px;margin-top:40px;align-items:stretch}
+body.stitch .hub button{all:unset;box-sizing:border-box;cursor:pointer;display:grid}
+body.stitch .hub .hubmain,body.stitch .hub .hublist{--ink:#12161c;--mute:#565d67;--soft:rgba(18,22,28,.16);--ik:18,22,28;--on:#f7f5ee;color:var(--ink);background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(246,244,238,.84));-webkit-backdrop-filter:blur(36px) saturate(1.7);backdrop-filter:blur(36px) saturate(1.7);border:1px solid rgba(255,255,255,.7);border-radius:28px}
+body.stitch .hub .hubmain{padding:40px;align-content:end;gap:8px;min-height:360px}
+body.stitch .hubmain .hk{font:400 14px/1.5 var(--display);color:var(--mute)}
+body.stitch .hubmain b{font:500 44px/1.05 var(--display);letter-spacing:-.02em}
+body.stitch .hubmain .hd{font:400 17px/1.45 var(--display);color:var(--mute);max-width:30ch}
+body.stitch .hubmain i{font:500 16px/1 var(--display);font-style:normal;justify-self:start;margin-top:20px;background:var(--ink);color:var(--on);border-radius:999px;padding:14px 28px;transition:transform .2s}
+body.stitch .hubmain:hover i{transform:translateX(4px)}
+body.stitch .hublist{padding:12px 32px;display:grid;align-content:center}
+body.stitch .hublist button{grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;padding:18px 0;border-bottom:1px solid var(--soft);align-items:center}
+body.stitch .hublist button:last-child{border-bottom:0}
+body.stitch .hublist b{font:500 20px/1.3 var(--display);grid-column:1}
+body.stitch .hublist span{font:400 14.5px/1.4 var(--display);color:var(--mute);grid-column:1}
+body.stitch .hublist button::after{content:"→";grid-column:2;grid-row:1/3;font:400 20px/1 var(--display);color:var(--mute);transition:transform .2s,color .2s}
+body.stitch .hublist button:hover::after{transform:translateX(4px);color:var(--ink)}
+body.stitch .hub button:focus-visible{outline:2px solid #f4f1e8;outline-offset:3px}
+body.stitch .backlink{all:unset;cursor:pointer;font:400 15px/1.5 var(--display);color:var(--mute);margin-bottom:8px;display:inline-block}
+body.stitch .backlink:hover{color:var(--ink)}body.stitch .backlink:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+body.stitch #v-mini .hblock{margin-top:16px}
+/* an activity beside the chamber */
+body.act #v-cham>.subnav,body.act #take,body.act .stage>.room>.card,body.act #toolmenu,body.act .dhead{display:none!important}
+body.act .stage>.room{grid-template-columns:minmax(0,1fr)}
+body.stitch.act .side{padding:28px 28px 32px;margin-top:24px}
+body.stitch.act .side .dbody{padding:0}
+body.act .stagebar{margin-top:24px}
+@media(min-width:900px){
+  body.act #v-cham{margin-right:456px}
+  body.stitch.act .side{position:fixed;z-index:4;top:112px;right:max(32px,calc((100vw - 1240px)/2));width:424px;max-height:calc(100svh - 144px);overflow:auto;margin:0;scrollbar-width:thin}
+}
+/* About this site */
+body.stitch .method{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:16px 40px;margin:24px 0 0;max-width:860px;font-size:16px;line-height:1.5}
+body.stitch .method dt{font-weight:500}body.stitch .method dd{margin:0;color:var(--mute)}
+@media(max-width:760px){body.stitch .method{grid-template-columns:1fr;gap:2px}body.stitch .method dd{margin-bottom:16px}}
+@media(min-width:900px){body.stitch #v-sources .srcgrid{columns:2;column-gap:24px}body.stitch #v-sources .srcgrid .srcgroup{break-inside:avoid;margin:0 0 24px}body.stitch #v-sources .srcgrid{margin-top:32px}}
+@media(max-width:760px){body.stitch .hub{grid-template-columns:minmax(0,1fr)}body.stitch .hub .hubmain{min-height:260px;padding:28px}body.stitch .hubmain b{font-size:36px}body.stitch .hublist{padding:8px 20px}}
+@media (prefers-reduced-motion:no-preference){#v-hub:not([hidden]),#v-mini:not([hidden]){animation:vin .6s cubic-bezier(.2,.7,.2,1) backwards}}
+body.stitch #hero .stats{display:none}
+#v-mini,#v-hub,#v-cham{min-width:0}#v-mini>*,#v-hub>*{min-width:0;max-width:100%}
+body.stitch.act .side .pane>h2{font:500 26px/1.2 var(--display);margin:8px 0 0}
+@media(min-width:900px){body.stitch.act .side{height:auto;bottom:auto}}
+
+/* Round 12: Play hub as a bento. The game card carries a moving preview; the three activities are tiles with typed-character icons. */
+body.stitch .hub{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr) minmax(0,1fr);grid-auto-rows:auto;gap:20px}
+body.stitch .hub .hubmain{grid-row:1/3;min-height:0;padding:20px 20px 32px;align-content:start;gap:8px}
+body.stitch .hub .hubmain>.hk{margin-top:20px}body.stitch .hub .hubmain>:not(.hubscreen){margin-inline:12px}
+body.stitch .hubscreen{display:grid;place-items:center;background:#10151b;border-radius:18px;overflow:hidden;aspect-ratio:56/38;background-image:linear-gradient(rgba(16,21,27,.55),rgba(16,21,27,.8)),var(--hubph);background-size:cover;background-position:center}
+body.stitch .hubscreen canvas{display:block;max-width:100%}
+body.stitch .hub .hubtile{--ink:#12161c;--mute:#565d67;--soft:rgba(18,22,28,.16);--ik:18,22,28;--on:#f7f5ee;color:var(--ink);background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(246,244,238,.84));-webkit-backdrop-filter:blur(36px) saturate(1.7);backdrop-filter:blur(36px) saturate(1.7);border:1px solid rgba(255,255,255,.7);border-radius:28px;padding:20px 20px 28px;align-content:start;gap:6px;transition:transform .25s cubic-bezier(.2,.7,.2,1)}
+body.stitch .hub .hubtile.wide{grid-column:2/4;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:6px 24px;align-items:center;padding-bottom:20px}
+body.stitch .hub .hubtile.wide .hubico{grid-row:1/4}body.stitch .hub .hubtile.wide b{align-self:end}body.stitch .hub .hubtile.wide .hd{align-self:start}
+body.stitch .hub .hubtile:hover,body.stitch .hub .hubmain:hover{transform:translateY(-3px)}body.stitch .hub .hubmain{transition:transform .25s cubic-bezier(.2,.7,.2,1)}
+body.stitch .hubico{display:block;background:#10151b;border-radius:18px;padding:12px;margin-bottom:12px}
+body.stitch .hubico svg{display:block;width:100%;height:auto;max-height:150px}
+body.stitch .hubico text{font:300 20px "IBM Plex Mono",ui-monospace,monospace;text-anchor:middle}
+body.stitch .hubtile b{font:500 22px/1.25 var(--display);margin-inline:8px}
+body.stitch .hubtile .hd{font:400 15px/1.45 var(--display);color:var(--mute);margin-inline:8px}
+body.stitch .hub .hubmain b{font-size:36px}
+@media(max-width:900px){body.stitch .hub{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}body.stitch .hub .hubmain{grid-column:1/-1;grid-row:auto}body.stitch .hub .hubtile.wide{grid-column:1/-1}}
+@media(max-width:560px){body.stitch .hub{grid-template-columns:minmax(0,1fr)}body.stitch .hub .hubtile.wide{grid-template-columns:minmax(0,1fr)}body.stitch .hub .hubtile.wide .hubico{grid-row:auto}}
+@media (prefers-reduced-motion:reduce){body.stitch .hub .hubtile,body.stitch .hub .hubmain{transition:none}}
+/* age now lives inside Who's like you */
+body.stitch .agegrp{display:grid;gap:12px;justify-items:start;min-width:0}body.stitch .agegrp .agerow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}body.stitch .agegrp #ageout{justify-self:stretch}
+body.stitch #useage{background:var(--ink);color:var(--on);border-color:var(--ink);padding:12px 24px;font-size:16px}
+body.stitch .hubico svg.sm text{font-size:11px;font-weight:400}body.stitch .hub .hubtile.wide{align-content:center}
+
+/* Round 13: more ASCII. Each page's photo is redrawn in typed characters behind everything; page titles are block letters made of #; a line under the chips says why the chamber uses these characters. */
+#abg{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;opacity:.6}
+body.playing #abg{display:none}
+body.stitch::before{filter:blur(14px) saturate(1.2) brightness(.34)}
+body.stitch canvas.atitle{display:block;width:auto;max-width:100%;margin:48px 0 20px}
+body.stitch .srh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);margin:0}
+body.stitch .ramp{margin:0 0 8px;font:400 14px/1.5 var(--display);color:var(--mute);display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+body.stitch .ramp span{font:400 16px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.35em}body.stitch .ramp i{font-style:normal}
+body.act .ramp{display:none}
+body[data-bg=chamber] #abg{opacity:.34;-webkit-mask-image:linear-gradient(100deg,rgba(0,0,0,.35) 0,rgba(0,0,0,.35) 38%,#000 70%);mask-image:linear-gradient(100deg,rgba(0,0,0,.35) 0,rgba(0,0,0,.35) 38%,#000 70%)}
+body.stitch :is(#take,.lede,.subnav,.ramp,.caption,.gen,.ticks,.backlink,.hsrc){text-shadow:0 1px 14px rgba(8,11,16,.95),0 0 3px rgba(8,11,16,.6)}
+body.stitch :is(.side,.hblock,.block,.srcgroup) :is(.lede,.subnav,.ramp,.caption,.gen,.backlink){text-shadow:none}
+
+/* Big titles are serif (Sydney, Nov 17): analog serif and grain against the sans UI and the ASCII pictures. Typed characters are never used as lettering. */
+body.stitch .sec.big{font:400 clamp(44px,6vw,76px)/1 var(--serif);letter-spacing:-.01em;margin:48px 0 16px;text-shadow:0 1px 18px rgba(8,11,16,.8)}
+body.stitch #take{font:400 clamp(30px,3.4vw,46px)/1.1 var(--serif);letter-spacing:-.005em}
+body.stitch #take em{font-style:italic}
+body.stitch .hub .hubmain b{font:400 44px/1 var(--serif);letter-spacing:-.01em}
+@media(max-width:760px){body.stitch .hub .hubmain b{font-size:38px}}
+
+/* backdrop strength now lives in paintBg (four opacity steps in a swirl, strongest at the edges) */
+#abg{opacity:1}body[data-bg=chamber] #abg{opacity:.8;-webkit-mask-image:none;mask-image:none}
+
+/* Round 14 (Nov 17): liquid glass. Play cards are clear glass on the photo (light ink again); text-heavy panels stay light for reading but are a little clearer. Both get a shiny rim: a gradient hairline that is bright at the top-left and bottom-right corners. */
+body.stitch .hub .hubmain,body.stitch .hub .hubtile{--ink:#f4f1e8;--mute:#c9cacb;--soft:rgba(244,241,232,.2);--ik:244,241,232;--on:#10151b;color:var(--ink);position:relative;
+  background:linear-gradient(145deg,rgba(255,255,255,.2),rgba(255,255,255,.06) 42%,rgba(255,255,255,.12));-webkit-backdrop-filter:blur(26px) saturate(1.9) brightness(1.08);backdrop-filter:blur(26px) saturate(1.9) brightness(1.08);border:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(255,255,255,.14),inset 0 0 28px rgba(255,255,255,.07),0 28px 64px rgba(0,0,0,.38)}
+body.stitch .hub .hubmain::before,body.stitch .hub .hubtile::before,body.stitch :is(#v-how,#v-mini) .hblock::before,body.stitch #v-about>.block::before,body.stitch #v-sources .srcgroup::before,body.stitch #v-sources>.block::before,body.stitch.act .side::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(255,255,255,.18) 22%,rgba(255,255,255,.05) 55%,rgba(255,255,255,.3) 82%,rgba(255,255,255,.85));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+/* a soft highlight across the top of each Play card, like light on a curved surface */
+body.stitch .hub .hubmain::after,body.stitch .hub .hubtile::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(120% 60% at 12% -10%,rgba(255,255,255,.22),transparent 60%)}
+body.stitch .hub .hubscreen,body.stitch .hub .hubico{box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),inset 0 2px 12px rgba(0,0,0,.5)}
+body.stitch .hub .hubico{background:rgba(8,11,16,.58)}
+body.stitch .hub .hubmain i{background:var(--ink);color:var(--on)}
+body.stitch .hub .hubtile b,body.stitch .hub .hubmain b,body.stitch .hub .hd,body.stitch .hub .hk{text-shadow:0 1px 12px rgba(0,0,0,.35)}
+body.stitch :is(#v-how,#v-mini) .hblock,body.stitch #v-about>.block,body.stitch #v-sources .srcgroup,body.stitch #v-sources>.block{position:relative;background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(246,244,238,.74) 55%,rgba(255,255,255,.84));border:0;box-shadow:inset 0 1px 0 #fff,inset 0 0 32px rgba(255,255,255,.35),0 32px 80px rgba(0,0,0,.3)}
+body.stitch.act .side{background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(246,244,238,.74) 55%,rgba(255,255,255,.84));border:0;box-shadow:inset 0 1px 0 #fff,inset 0 0 32px rgba(255,255,255,.35),0 32px 80px rgba(0,0,0,.3)}
+@media(max-width:899px){body.stitch.act .side{position:relative}}
+
+/* the back link inside a glass panel is a plain quiet link: no pill, no on-photo shadow */
+body.stitch .side .backlink,body.stitch :is(.hblock,.block) .backlink{text-shadow:none!important;border:0;border-radius:0;padding:0;background:none;color:var(--mute);margin:8px 0 12px}
+body.stitch .side .backlink:hover{color:var(--ink);background:none}
+
+/* Generations tab, condensed (Nov 17): the two hero portraits are gone; "born before" sits in a narrow left column beside the event card, so the tab fits about one screen. */
+body.stitch #hero{display:none!important}
+body.stitch #young>.take{margin-bottom:16px}
+body.stitch #young .dyk{grid-template-columns:minmax(0,180px) minmax(0,1fr);min-height:0;gap:16px 24px}
+body.stitch #young .dyk .yr{font-size:48px;margin:4px 0}body.stitch #young .dyk .fact{font-size:18px;margin-bottom:12px}body.stitch #young .dyk .then{font-size:15px}
+body.stitch #young .dyk .tile{font-size:40px}
+body.stitch #young .gfact{padding:20px;gap:12px}
+body.stitch #young .bbtxt b#bbn{font-size:48px}body.stitch #young .bbtxt span{font-size:15px;margin-top:4px}
+body.stitch #young details.more{margin-top:8px}
+@media(min-width:1000px){
+  body.stitch #young:not([hidden]){display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:12px 24px;align-items:start}
+  body.stitch #young>:is(h2,.take,details){grid-column:1/-1}
+  body.stitch #young>.bb{grid-column:1;grid-row:3/5;grid-template-columns:minmax(0,1fr);gap:12px;margin:0;padding:20px}
+  body.stitch #young>.gtlbar{grid-column:2;grid-row:3;margin:0}
+  body.stitch #young>.gfact{grid-column:2;grid-row:4;margin:0}
+}
+@media(max-width:560px){body.stitch #young .dyk{grid-template-columns:minmax(0,1fr)}body.stitch #young .dyk .pic{max-width:160px}}
+
+/* Members list filters: one quiet row of selects beside the search */
+body.stitch .lfilt{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 4px}
+body.stitch .lfilt select,body.stitch #q{font:400 14px/1.4 var(--display);color:var(--ink);background:rgba(255,255,255,.55);border:1px solid var(--soft);border-radius:999px;padding:8px 16px}
+body.stitch .lfilt select{padding-right:28px;cursor:pointer}
+body.stitch .lfilt select:focus-visible,body.stitch #q:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+body.stitch #lfilt select{border-radius:999px;-webkit-appearance:none;appearance:none;background:rgba(255,255,255,.55) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2312161c' stroke-width='1.4'/%3E%3C/svg%3E") no-repeat right 12px center}
+</style>
+
+<canvas id="abg" aria-hidden="true"></canvas>
+<div class="wrap">
+<header class="top">
+  <div class="brand">
+    <h1>Wait Your <em>Turn</em></h1>
+    <nav class="nav" aria-label="Views"><button data-view="chamber" aria-current="page">Chamber</button><button data-view="play" aria-current="false">Play</button><button data-view="how" aria-current="false">How Congress works</button><button data-view="about" aria-current="false">About this site</button></nav>
+  </div>
+  <div class="vs" id="vs"></div>
+</header>
+
+<div id="v-cham">
+<section class="stage" id="v-chamber" data-tab="Today" aria-label="Chamber">
+  <p class="take" id="take"></p>
+  <div class="stagebar">
+    <div class="view gen" role="group" aria-label="Generation" id="genbar"></div>
+    <details class="filt" id="filt"><summary id="filtsum">Filter</summary>
+      <div class="pop">
+        <div class="view" role="group" aria-label="Chamber view"><span class="mono">Chamber</span><button data-v="all" aria-pressed="true">Both</button><button data-v="H" aria-pressed="false">House</button><button data-v="S" aria-pressed="false">Senate</button></div>
+        <div class="view party" role="group" aria-label="Party" id="partybar"><span class="mono">Party</span><button data-p="" aria-pressed="true">All</button><button data-p="D" aria-pressed="false">Democrat</button><button data-p="R" aria-pressed="false">Republican</button><button data-p="I" aria-pressed="false" title="Independents, including those who caucus with Democrats">Independent</button></div>
+        <ul>
+          <li>Seats run left to right by voting record. This is not the real seating plan.</li>
+          <li>The House is the outer arc and the Senate the inner one.</li>
+          <li>Each generation has its own character. Its color runs from its oldest members to its youngest.</li>
+          <li>A dashed outline is an empty seat, or a member whose answer is unknown for your filter.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+  <p class="ramp" id="ramp"></p>
+  <div class="room"><div class="cvwrap">
+    <canvas id="cv" aria-label="The chamber: one typed character for each member. A text list of all members is on the Members tab." role="img"></canvas><canvas id="ov"></canvas>
+    <p class="count" id="fit" aria-live="polite"></p>
+  </div>
+    <div class="card" id="card" hidden></div>
+  </div>
+  <div class="scrub" id="scrub">
+    <label class="mono" for="cong">Congress</label>
+    <input id="cong" type="range" min="115" max="119" step="any" value="119" aria-valuetext="119th Congress, 2025">
+    <div class="ticks" id="ticks"></div>
+  </div>
+  <p class="caption" id="caption" aria-live="polite"></p>
+</section>
+<div id="v-about">
+  <div class="hero" id="hero">
+    <div class="duo"><figure><canvas id="cutY" aria-hidden="true"></canvas><figcaption id="capY"></figcaption></figure><figure><canvas id="cutO" aria-hidden="true"></canvas><figcaption id="capO"></figcaption></figure></div>
+    <div>
+      <p class="lede">Every character in the chamber is one member on opening day, January 3, 2025. Its shape and color are that member's generation. Move over a portrait to light it up.</p>
+      <ul class="stats" id="stats"></ul>
+    </div>
+  </div>
+  <section class="block" id="history" aria-labelledby="histh" data-tab="Since 1789">
+    <h2 class="sec" id="histh">Every Congress since 1789</h2>
+    <p class="take" id="histtake"></p>
+    <div class="hchart" id="hchart"><div class="htip" id="htip" hidden></div></div>
+    <div class="morerow"><details class="more"><summary>About this chart</summary><p>Each column is one Congress, measured on the day it first convened (January 3 for the 115th to 119th, the Congresses in the chamber, shaded). Voting members only; territorial delegates are left out until statehood. Birth dates are missing for up to a third of members in the earliest Congresses, so those medians use known dates only. In older records a member who filled a vacancy is listed for the whole Congress, so a few seats count two people. Congress grew from 89 to 535 voting members, so counts before 1913 are not directly comparable.</p></details><details class="htable more"><summary>Show as a table</summary><div id="htable"></div></details></div>
+  </section>
+  <section class="block" id="young" aria-labelledby="youngh" data-tab="Generations" data-with="hero">
+    <h2 class="sec" id="youngh">What was happening when they were young</h2>
+    <p class="take" id="youngtake"></p>
+    <div class="bb" id="older"><div class="bbtxt"><b id="bbn"></b><span id="bbt"></span></div><div class="bbdots" id="bbdots" aria-hidden="true"></div><div class="view bbbar" role="group" aria-label="Born before" id="bbbar"></div></div>
+    <div class="view gen gtlbar" role="group" aria-label="Pick a generation" id="gtlbar"></div>
+    <div class="gfact"><div class="gmeta" id="gtlmeta"></div><div class="dyk" id="gtlfact" aria-live="polite"></div>
+      <div class="gmnav"><button id="gtlprev" aria-label="Previous event">←</button><div class="gmdots" id="gtldots"></div><button id="gtlnext" aria-label="Next event">→</button></div></div>
+    <details class="more"><summary>All events as a list</summary><div class="gtl" id="gtl"></div></details>
+    <details class="more"><summary>About these cards</summary><p>Move over a photo to light it up. Generation years follow Pew Research Center. Member counts and birth years are for the 119th Congress on January 3, 2025. Each event links to its source.</p></details>
+  </section>
+  <section class="block" id="members" data-tab="Members">
+    <div class="listhead"><h2 class="sec" id="listtitle">All members</h2><input type="search" id="q" placeholder="Search name or state" aria-label="Search members by name or state"></div>
+    <div class="lfilt" id="lfilt"><select id="lf-ch" aria-label="Chamber"><option value="">House and Senate</option><option value="H">House</option><option value="S">Senate</option></select><select id="lf-g" aria-label="Generation"><option value="">All generations</option></select><select id="lf-p" aria-label="Party"><option value="">All parties</option><option value="D">Democrat</option><option value="R">Republican</option><option value="I">Independent</option></select><select id="lf-s" aria-label="Sort"><option value="y">Youngest first</option><option value="o">Oldest first</option><option value="a">A to Z</option></select></div>
+    <p class="listnote" id="listnote"></p>
+    <div class="list" id="list"></div>
+  </section>
+</div>
+</div>
+
+<dialog class="gmodal" id="gmodal" aria-labelledby="gmh">
+  <div class="gmtop"><div><h2 id="gmh"></h2><div class="gmeta" id="gmmeta"></div></div><button class="x" id="gmx" aria-label="Close">×</button></div>
+  <div class="dyk" id="dyk" aria-live="polite"></div>
+  <div class="gmnav"><button id="gmprev" aria-label="Previous fact">←</button><div class="gmdots" id="gmdots"></div><button id="gmnext" aria-label="Next fact">→</button></div>
+  <button class="gmgo" id="gmgo">See them in the chamber</button>
+</dialog>
+<!--GAME_HTML-->
+
+<section id="v-hub" aria-label="Play" hidden>
+  <h2 class="sec big">Play</h2>
+  <p class="lede">One story game and three quick things to try.</p>
+  <div class="hub">
+    <button class="hubmain" data-go="game"><span class="hubscreen"><canvas id="hubcv" aria-hidden="true"></canvas></span><span class="hk">Story game</span><b>Wait Your Turn</b><span class="hd">Pick a seat in 2017 and wait through four real elections.</span><i>Play</i></button>
+    <button class="hubtile wide" data-go="act:t-who"><span class="hubico" id="ico-who" aria-hidden="true"></span><b>Who's like you?</b><span class="hd">Your age, gender, race, religion and more. See who in Congress matches.</span></button>
+    <button class="hubtile" data-go="act:t-iss"><span class="hubico" id="ico-iss" aria-hidden="true"></span><b>How would you vote?</b><span class="hd">8 real votes. See who voted like you.</span></button>
+    <button class="hubtile" data-go="mini:h-run"><span class="hubico" id="ico-run" aria-hidden="true"></span><b>Could you run?</b><span class="hd">What you are old enough for, and when.</span></button>
+  </div>
+</section>
+<section id="v-mini" aria-label="Activity" hidden>
+  <button class="backlink" data-go="play">← All activities</button>
+  <section class="hblock" id="h-run" aria-labelledby="h-run-t">
+    <div class="hhead"><div><h2 class="sec" id="h-run-t">Could you run?</h2><p class="kick">Put in your birth year and see what you're old enough for.</p></div></div>
+    <div class="runin">
+      <label>Born in <input id="runby" type="number" min="1920" max="2026" value="2004"></label>
+      <label>Citizen <select id="runcit"><option value="born">from birth</option><option value="nat">naturalized</option></select></label>
+      <label id="runcywrap" hidden>since <input id="runcy" type="number" min="1940" max="2026" value="2015"></label>
+    </div>
+    <ul class="runtiles" id="runtiles"></ul>
+    <div class="agestrip" id="agestrip"></div>
+    <p class="hcap" id="howtake"></p>
+  </section>
+</section>
+<section id="v-how" aria-label="How Congress works" hidden>
+  <h2 class="sec big">How Congress works</h2>
+  <p class="lede">How the two chambers differ, who is up for election, and how a bill becomes law.</p>
+
+
+  <section class="hblock" id="h-two" aria-labelledby="h-two-t">
+    <div class="hhead"><span class="hnum">01</span><div><h2 class="sec" id="h-two-t">Two chambers, one Congress</h2><p class="kick">A bill has to pass both.</p></div></div>
+    <div class="chcards">
+      <article class="chcard"><h3>House</h3><div class="dotgrid" id="hdots" aria-hidden="true"></div>
+        <ul class="facts"><li><b>435</b><span>Seats, split by population</span></li><li><b>2 years</b><span>Term</span></li><li><b>25</b><span>Minimum age</span></li><li><b>7 years</b><span>Citizen for at least</span></li></ul>
+        <div class="term" aria-label="Three two-year House terms in six years"><i></i><i></i><i></i></div><span class="termlab">6 years = 3 House elections</span></article>
+      <article class="chcard"><h3>Senate</h3><div class="dotgrid s" id="sdots" aria-hidden="true"></div>
+        <ul class="facts"><li><b>100</b><span>Seats, 2 per state</span></li><li><b>6 years</b><span>Term</span></li><li><b>30</b><span>Minimum age</span></li><li><b>9 years</b><span>Citizen for at least</span></li></ul>
+        <div class="term" aria-label="One six-year Senate term"><i></i></div><span class="termlab">6 years = 1 Senate election</span></article>
+    </div>
+    <p class="punch">No term limit. No age limit. <span>For either one.</span></p>
+  </section>
+
+  <section class="hblock" id="h-ballot" aria-labelledby="h-ballot-t">
+    <div class="hhead"><span class="hnum">02</span><div><h2 class="sec" id="h-ballot-t">Who's on the ballot?</h2><p class="kick">Every House seat, every two years. The Senate goes a third at a time.</p></div></div>
+    <div class="yrbar" role="group" aria-label="Election year"><button data-y="2026" aria-pressed="true">2026</button><button data-y="2028" aria-pressed="false">2028</button><button data-y="2030" aria-pressed="false">2030</button></div>
+    <div class="ballot"><div class="bnum"><b id="bnum">470</b><span id="bsub">seats up</span></div><div class="bvis" id="bvis"></div></div>
+  </section>
+
+  <section class="hblock" id="h-bill" aria-labelledby="h-bill-t">
+    <div class="hhead"><span class="hnum">03</span><div><h2 class="sec" id="h-bill-t">From bill to law</h2><p class="kick">Step through it. Each dot is one vote.</p></div></div>
+    <ol class="steps" id="steps"></ol>
+    <div class="stepcard" id="stepcard" aria-live="polite"></div>
+  </section>
+
+  <section class="hblock" id="h-tf" aria-labelledby="h-tf-t">
+    <div class="hhead"><span class="hnum">04</span><div><h2 class="sec" id="h-tf-t">True or false?</h2><p class="kick">Guess first, then tap the card.</p></div></div>
+    <div class="tfgrid" id="tfgrid"></div>
+  </section>
+  <p class="hsrc">From the U.S. Constitution (Article I; Amendments 17, 22, 26), <i>U.S. Term Limits v. Thornton</i> (1995), 2 U.S.C. § 7, the U.S. Senate, and unitedstates/congress-legislators. Links are under <a href="#" id="howsrc">About this site</a>.</p>
+</section>
+
+
+<section id="v-sources" aria-label="About this site" hidden>
+  <h2 class="sec big">About this site</h2>
+  <p class="lede">How to read the chamber, how the numbers were made, and where everything comes from.</p>
+  <section class="block" data-tab="How to read">
+    <h2 class="sec">How to read the chamber</h2>
+    <div class="cards">
+      <article class="kcard">
+        <svg class="vis" viewBox="0 0 200 104" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-dasharray="0 11"><path d="M14 92A86 86 0 0 1 186 92" stroke="#87a0ff" stroke-width="8"/><path d="M30 92A70 70 0 0 1 170 92" stroke="#ffb552" stroke-width="8"/><path d="M68 92A32 32 0 0 1 132 92" stroke="#7be0a1" stroke-width="6" stroke-dasharray="0 8"/></g><text x="6" y="103">← left</text><text x="194" y="103" text-anchor="end">right →</text><text x="100" y="103" text-anchor="middle">Senate</text></svg>
+        <h3>Where each seat sits</h3>
+        <p>Seats are ordered left to right by voting record, House outside and Senate inside. It is not the real seating plan.</p>
+      </article>
+      <article class="kcard">
+        <div class="vis gens" id="gencard"></div>
+        <h3>Character and color are generation</h3>
+        <p>Each generation has its own character. Its color runs from its oldest members to its youngest.</p>
+      </article>
+      <article class="kcard">
+        <div class="vis sw"><span><i class="gl" style="color:#ffb552">x</i>Lit</span><span><i class="gl dim">x</i>Dim</span><span><i class="dash"></i>Empty</span></div>
+        <h3>Lit and dim</h3>
+        <p>Lit seats match the view, generation and tool you have open. Dim seats do not. Dashed ovals are empty seats. A seat with a dashed outline is unknown for your filter: not on the source list for a trait, or too few shared votes to compare in the quiz. Unknown is never counted as a no. For race, members on no list are drawn dim, but the count still lists them as unknown.</p>
+      </article>
+      <article class="kcard">
+        <div class="vis stamp"><b>Jan 3</b><span>opening day</span></div>
+        <h3>Age on opening day</h3>
+        <p>Age is measured on January 3 of the first year of each Congress.</p>
+      </article>
+      <article class="kcard wide">
+        <div class="tag">Who's like you?</div>
+        <h3>What the trait labels mean</h3>
+        <p>Blank means the sources don't say. It never means "no."</p><details class="more"><summary>Details</summary><p>Race and ethnicity labels come from Wikipedia lists of members, not from self-identification, and a member who is not listed is unknown, not White. Religion is self-reported and compiled by Pew Research Center. Immigrant background counts come from Pew and are minimums. A blank means the sources do not say. No filter is based on how a portrait looks.</p></details>
+      </article>
+      <article class="kcard wide">
+        <div class="tag">How would you vote?</div>
+        <h3>How the issue quiz matches</h3>
+        <p>8 real votes. Some split by party, so matches partly sort by party.</p><details class="more"><summary>Details</summary><p>The issue quiz uses 8 roll-call votes from the 119th Congress, picked because they are easy to explain and cover different topics. Four split mostly by party, so matches partly sort by party. That is a property of the votes, not a recommendation. Votes are matched to the same issue in each chamber, which sometimes meant two different but parallel resolutions.</p></details>
+      </article>
+    </div>
+  </section>
+  <section class="block" data-tab="Method">
+    <h2 class="sec">How the numbers were made</h2>
+    <dl class="method">
+      <dt>Who is counted</dt><dd>Every member seated on January 3 of each Congress, from the 115th (2017) to the 119th (2025). The roster is from unitedstates/congress-legislators.</dd>
+      <dt>Age</dt><dd>Measured on January 3 of that Congress's first year. The median US age is from Census estimates and exists only for 2020 to 2025.</dd>
+      <dt>Generations</dt><dd>Birth years follow Pew Research Center.</dd>
+      <dt>Seat order</dt><dd>Left to right by voting record (Voteview DW-NOMINATE). It is not the real seating plan.</dd>
+      <dt>Unknown is not no</dt><dd>A missing religion or immigrant value is shown as unknown, never as a no. Race labels come from Wikipedia lists, not from members themselves, and a member on no list is not counted as White. Immigrant counts are minimums.</dd>
+      <dt>Since 1789</dt><dd>Age is measured on the day each Congress first convened. Voting members only. Birth dates are missing for up to a third of the earliest members, and Congress grew from 89 to 535 members, so early counts are not directly comparable.</dd>
+      <dt>The 8 votes</dt><dd>Agreement is counted only over votes both you and a member cast. Missed votes are skipped. Matches are never ranked.</dd>
+      <dt>The game</dt><dd>Members, ages and elections are real. The character, the pigeon and the dialogue are made up. It never gives odds.</dd>
+      <dt>Known gaps</dt><dd>Six members have no portrait. The chamber, portraits and traits cover 2017 to 2025 only.</dd>
+    </dl>
+  </section>
+  <div class="srcgrid" data-tab="Sources">
+    <section class="srcgroup"><h3>How Congress works</h3><ol class="cite">
+      <li>U.S. Constitution, Article I, Sections 2, 3 and 7 (seats, terms, qualifications, vacancies, vetoes). <a href="https://www.law.cornell.edu/constitution/articlei" target="_blank" rel="noopener">Cornell Law School, Legal Information Institute</a>; full text at the <a href="https://www.archives.gov/founding-docs/constitution-transcript" target="_blank" rel="noopener">National Archives</a>.</li>
+      <li>17th Amendment (1913, direct election of senators), 22nd Amendment (1951, presidential term limit), 26th Amendment (1971, voting age 18). <a href="https://www.law.cornell.edu/constitution/amendmentxvii" target="_blank" rel="noopener">17th</a>, <a href="https://www.law.cornell.edu/constitution/amendmentxxii" target="_blank" rel="noopener">22nd</a>, <a href="https://www.law.cornell.edu/constitution/amendmentxxvi" target="_blank" rel="noopener">26th</a> (LII); <a href="https://www.archives.gov/founding-docs/amendments-11-27" target="_blank" rel="noopener">Amendments 11–27</a> (National Archives).</li>
+      <li><i>U.S. Term Limits, Inc. v. Thornton</i>, 514 U.S. 779 (1995). <a href="https://www.law.cornell.edu/supremecourt/text/514/779" target="_blank" rel="noopener">LII</a>.</li>
+      <li>Election day: 2 U.S.C. § 7. <a href="https://www.law.cornell.edu/uscode/text/2/7" target="_blank" rel="noopener">LII</a>.</li>
+      <li>Cloture and filibusters. <a href="https://www.senate.gov/about/powers-procedures/filibusters-cloture.htm" target="_blank" rel="noopener">U.S. Senate</a>.</li>
+      <li>Senate seats up in 2026 (33 regular, 2 special for Ohio and Florida): term end dates in unitedstates/congress-legislators; see also <a href="https://en.wikipedia.org/wiki/2026_United_States_Senate_elections" target="_blank" rel="noopener">2026 United States Senate elections</a> (Wikipedia).</li>
+    </ol></section>
+    <section class="srcgroup"><h3>Generation timeline</h3><ol class="cite" id="tlcite"></ol></section>
+    <section class="srcgroup"><h3>Background photos</h3><ol class="cite"><li>Chamber page: the U.S. Capitol at sunrise. Photographer and license to be added.</li><li>Play: Martin Falbisoner. <i>Capitol at Dusk 2</i>. CC BY-SA 3.0. <a href="https://commons.wikimedia.org/wiki/File:Capitol_at_Dusk_2.jpg">Wikimedia Commons</a></li><li>How Congress works: United States House of Representatives. <i>United States House of Representatives chamber</i>. Public domain. <a href="https://commons.wikimedia.org/wiki/File:United_States_House_of_Representatives_chamber.jpg">Wikimedia Commons</a></li><li>About this site: Bradley Weber. <i>National Mall, Reflecting Pool</i>. CC BY 2.0. <a href="https://commons.wikimedia.org/wiki/File:National_Mall_-_Reflecting_Pool_(45885661671).jpg">Wikimedia Commons</a></li><li>All are shown blurred, darkened and with grain added.</li><li>In the game: United States House of Representatives. <i>United States House of Representatives chamber</i>. Public domain. <a href="https://commons.wikimedia.org/wiki/File:United_States_House_of_Representatives_chamber.jpg">Wikimedia Commons</a></li></ol></section>
+    <section class="srcgroup"><h3>Generation photos</h3><p class="listnote">Shown as halftones in the generation cards. All from Wikimedia Commons under the license listed.</p><ol class="cite" id="fimgcite"></ol></section>
+    <section class="srcgroup"><h3>Members and portraits</h3><ol class="cite">
+      <li>The @unitedstates project. <i>congress-legislators</i>: legislators-current.yaml and legislators-historical.yaml. GitHub. <a href="https://github.com/unitedstates/congress-legislators">github.com/unitedstates/congress-legislators</a></li>
+      <li>The @unitedstates project. <i>images</i>: official congressional portraits, public domain (225×275). GitHub. <a href="https://github.com/unitedstates/images">github.com/unitedstates/images</a></li>
+    </ol></section>
+    <section class="srcgroup"><h3>What members did before Congress (Play)</h3><ol class="cite">
+      <li>Congressional Research Service. <i>Membership of the 119th Congress: A Profile</i>. Report R48535, updated August 4, 2025. Counts of prior jobs and offices, as members list them in their CQ Member Profiles. Read through EveryCRSReport, because Congress.gov blocks scripts. <a href="https://www.everycrsreport.com/files/2025-08-04_R48535_d135ab24cff65e3e05f84deb42f69a1bd799e5d0.html">everycrsreport.com</a></li>
+    </ol></section>
+    <section class="srcgroup"><h3>Voting record and roll calls</h3><ol class="cite">
+      <li>Lewis, Jeffrey B., Keith Poole, Howard Rosenthal, Adam Boche, Aaron Rudkin, and Luke Sonnet. <i>Voteview: Congressional Roll-Call Votes Database</i>. DW-NOMINATE scores, member files and 119th Congress roll-call votes. <a href="https://voteview.com/data">voteview.com/data</a></li>
+    </ol></section>
+    <section class="srcgroup"><h3>Population</h3><ol class="cite">
+      <li>U.S. Census Bureau. <i>Population Estimates Program, Vintage 2025</i>: national population by age and sex. <a href="https://www.census.gov/programs-surveys/popest.html">census.gov/programs-surveys/popest.html</a></li>
+    </ol></section>
+    <section class="srcgroup"><h3>Religion</h3><ol class="cite">
+      <li>Pew Research Center. “The Religious Composition of the 119th Congress” (Faith on the Hill). January 2, 2025. <a href="https://www.pewresearch.org/religion/2025/01/02/faith-on-the-hill-2025/">pewresearch.org</a></li>
+      <li>Pew Research Center. Faith on the Hill editions for the 117th (2021) and 118th (2023) Congresses.</li>
+    </ol></section>
+    <section class="srcgroup"><h3>Immigrant background</h3><ol class="cite">
+      <li>Pew Research Center. Counts of immigrants and children of immigrants in the 117th to 119th Congresses.</li>
+    </ol></section>
+    <section class="srcgroup"><h3>Race and ethnicity</h3><ol class="cite">
+      <li>Wikipedia. “<a href="https://en.wikipedia.org/wiki/List_of_African-American_United_States_representatives">List of African-American United States representatives</a>.”</li>
+      <li>Wikipedia. “<a href="https://en.wikipedia.org/wiki/List_of_African-American_United_States_senators">List of African-American United States senators</a>.”</li>
+      <li>Wikipedia. “<a href="https://en.wikipedia.org/wiki/List_of_Hispanic_and_Latino_Americans_in_the_United_States_Congress">List of Hispanic and Latino Americans in the United States Congress</a>.”</li>
+      <li>Wikipedia. “<a href="https://en.wikipedia.org/wiki/List_of_Asian_Americans_and_Pacific_Islands_Americans_in_the_United_States_Congress">List of Asian Americans and Pacific Islands Americans in the United States Congress</a>.”</li>
+      <li>Wikipedia. “<a href="https://en.wikipedia.org/wiki/List_of_Native_Americans_in_the_United_States_Congress">List of Native Americans in the United States Congress</a>.”</li>
+    </ol></section>
+  </div>
+  <section class="block" data-tab="The 8 votes"><h3 class="sub">The 8 quiz votes</h3><p class="listnote">Each links to its roll call on Voteview.</p><div class="vtable" id="vtable"></div></section>
+</section>
+</div>
+
+<aside class="side" aria-label="Explore tools">
+  <div class="rail">
+    <button class="open" data-tab="" aria-label="Open the tools panel">◀</button>
+    <button class="tool" data-tab="t-who">Who's like you?</button>
+    <button class="tool" data-tab="t-iss">Issues</button>
+  </div>
+  <div class="drawer">
+    <button class="backlink" data-go="play">← All activities</button>
+    <div class="dhead">
+      <div class="row">
+        <div class="picker">
+          <button id="toolpick" aria-haspopup="true" aria-expanded="false" aria-controls="toolmenu"><span class="mono">Tool</span><b id="toolname">Your age</b><i aria-hidden="true">▾</i></button>
+          <div class="toolmenu" id="toolmenu" role="menu" aria-label="Choose a tool" hidden>
+            <button role="menuitemradio" id="t-who" aria-checked="false" aria-controls="p-who"><b>Who's like you?</b><span>Light up members by gender, race, religion and more</span></button>
+            <button role="menuitemradio" id="t-iss" aria-checked="false" aria-controls="p-iss"><b>How would you vote?</b><span>8 real votes</span></button>
+          </div>
+        </div>
+        <button class="x" id="closeside" aria-label="Close the tools panel">×</button>
+      </div>
+      <span id="active" class="mono"></span>
+    </div>
+    <div class="dbody">
+      <div class="pane" id="p-who" role="region" aria-labelledby="t-who" hidden>
+        <h2>Who's like you?</h2>
+        <p class="hint">Start with your age, then tap any traits. Each one you use narrows the chamber.</p>
+        <fieldset class="agegrp"><legend>Age</legend>
+          <div class="agerow"><label for="by">Born in</label><input id="by" type="number" min="1900" max="2026" value="2004" style="width:92px">
+          <label for="band">within</label><select id="band"><option>2</option><option selected>5</option><option>10</option></select><span>years</span></div>
+          <button id="useage" aria-pressed="false">Light up members my age</button>
+          <div id="ageout" class="wbox"></div>
+        </fieldset>
+        <div id="attrs"></div>
+        <button id="clearattrs" style="justify-self:start">Clear all</button>
+      </div>
+      <div class="pane" id="p-iss" role="region" aria-labelledby="t-iss" hidden>
+        <h2>How would you have voted?</h2>
+        <p class="hint">8 real votes. Answer as you go and the chamber keeps whoever voted like you.</p>
+        <div class="qhead"><div class="qdots" id="qdots" role="group" aria-label="Jump to a vote"></div><div class="prog" id="prog" aria-live="polite"></div></div>
+        <div class="qcard" id="qcard"></div>
+        <div id="iss-status" class="wbox"></div>
+        <div class="seg" role="group" aria-label="How close a match" id="thr"><span class="mono">Match</span><button data-t="0" aria-pressed="true">Every vote</button><button data-t="1" aria-pressed="false">All but 1</button><button data-t="2" aria-pressed="false">All but 2</button></div>
+        <details class="how"><summary>How matching works</summary><p>Four of these votes split mostly by party (overdraft fees, Canada tariffs, Iran, Arctic oil), so matches partly sort by party. The other four drew dozens of members across party lines. Members stay lit when they voted the same way as you on the votes you answered. "All but one" allows one difference once you have 3 votes in common; "all but two" allows two once you have 5. Votes a member missed are skipped, never counted as disagreement; a member who missed too many to compare gets a dashed outline. Matches are not ranked. "What it does" is based on each bill's summary by the Congressional Research Service, Congress's nonpartisan research office.</p></details>
+        <button id="clearvotes" style="justify-self:start">Clear answers</button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<script id="data" type="application/json">/*DATA*/</script>
+<script>
+const DB=JSON.parse(document.getElementById('data').textContent);
+const GEN=["Gen Z (1997+)","Millennial (1981–96)","Gen X (1965–80)","Baby boomer (1946–64)","Silent and older (≤1945)"];
+const GC=["#b4edff","#7be0a1","#ffb552","#87a0ff","#ff83bc"],GD=GC.map(()=>"#121212"); // chip color, dot color (always black so portraits never read as negatives)
+// ASCII look: each generation has one character (denser for older generations) and an ombre of two colors; a member's color sits along the ombre by birth year, oldest first.
+const GR=[['#8fe3ff','#d8f6ff'],['#3fd0a8','#b6f09a'],['#ff8a3d','#ffe066'],['#8f7bff','#7fc4ff'],['#ff5fa2','#ffa6d6']],GY=[[1997,2004],[1981,1996],[1965,1980],[1946,1964],[1930,1945]],GLYPH=['.','+','x','#','@'],RAMP=' .:-=+*#%@';
+const hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),mix=(g,by)=>{const [a,b]=GR[g].map(hx),t=Math.max(0,Math.min(1,(by-GY[g][0])/(GY[g][1]-GY[g][0])));return`rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*t))})`};
+const $=id=>document.getElementById(id);
+const gi=by=>by>=1997?0:by>=1981?1:by>=1965?2:by>=1946?3:4;
+const med=a=>{const s=[...a].sort((x,y)=>x-y),n=s.length;return n?(n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2):0};
+const startYear=c=>1789+2*(c-1);
+/* ---------- portraits: 24x30 luminance grids ---------- */
+const GRID={},GRID2={};
+Object.entries(DB.img).forEach(([k,b])=>{const s=atob(b),g=new Uint8Array(720);for(let i=0;i<720;i++)g[i]=s.charCodeAt(i);GRID[k]=g;
+  const h=new Uint8Array(180);for(let y=0;y<15;y++)for(let x=0;x<12;x++){let t=0;for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++)t+=g[(2*y+dy)*24+2*x+dx];h[y*12+x]=t/4}GRID2[k]=h});
+function halftone(ctx,grid,cols,rows,x,y,w,h,chip,dot,opts={}){
+  ctx.save();ctx.beginPath();ctx.ellipse(x+w/2,y+h/2,w/2,h/2,0,0,7);ctx.fillStyle=chip;ctx.fill();ctx.clip();
+  if(grid){const px=w/cols,py=h/rows,rmax=Math.min(px,py)*.62;ctx.fillStyle=dot;ctx.beginPath();
+    for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){const d=1-grid[j*cols+i]/255,r=rmax*Math.sqrt(d)*(opts.gain||1);if(r<.18)continue;
+      const cx=x+(i+.5)*px+((j&1)?px*.18:0),cy=y+(j+.5)*py;ctx.moveTo(cx+r,cy);ctx.arc(cx,cy,r,0,7)}ctx.fill()}
+  else{ctx.fillStyle=dot;ctx.globalAlpha*=.5;ctx.beginPath();ctx.arc(x+w/2,y+h*.38,w*.2,0,7);ctx.ellipse(x+w/2,y+h*1.0,w*.4,h*.34,0,0,7);ctx.fill()}
+  ctx.restore()}
+/* ---------- layout ---------- */
+const CX=500,CY=495,AR=.535; // canvas height = width*AR
+function arcSeats(total,r0,r1,rows){
+  const rs=[...Array(rows)].map((_,i)=>r0+(r1-r0)*i/(rows-1)),sum=rs.reduce((a,b)=>a+b,0);
+  const n=rs.map(r=>Math.round(total*r/sum));n[rows-1]+=total-n.reduce((a,b)=>a+b,0);
+  const pts=[];rs.forEach((r,i)=>{for(let j=0;j<n[i];j++){const t=Math.PI*j/(n[i]-1);pts.push({t,r,x:CX-r*Math.cos(t),y:CY-r*Math.sin(t)})}});
+  return pts.sort((a,b)=>a.t-b.t||a.r-b.r);
+}
+const SEATS={H:arcSeats(435,225,470,10),S:arcSeats(100,92,168,4)},DIM={H:[22,27],S:[13,16]};
+const NOMDEF={D:-.4,R:.5,I:0};
+function roster(c){
+  const out={H:[],S:[]};
+  DB.data[c].forEach(r=>{const m={bg:r[0],name:r[1],ch:r[2],st:r[3],p:r[4],age:r[5],by:r[6],nom:r[7]??NOMDEF[r[4]],g:gi(r[6]),yrs:r[8]};
+    const e=c===119&&DB.ext[m.bg];if(e){m.gender=e[0];m.rel=e[1];m.race=e[2];m.imm=e[3];m.v=e[4]}out[m.ch].push(m)});
+  ["H","S"].forEach(k=>{out[k].sort((a,b)=>a.nom-b.nom);while(out[k].length<SEATS[k].length)out[k].push(null)});
+  return out;
+}
+const ROSTERS={};[115,116,117,118,119].forEach(c=>ROSTERS[c]=roster(c));
+const cells=[];["H","S"].forEach(k=>SEATS[k].forEach((s,i)=>cells.push({k,i,x:s.x,y:s.y,w:DIM[k][0],h:DIM[k][1],m:null,st:'on',a:1,n:0,ta:1,tn:0})));
+/* ---------- state ---------- */
+const S={c:119,tab:null,gen:null,by:2004,useAge:false,band:5,attrs:{},ans:{},thr:0,sel:null,hov:null,view:'all',party:null};
+const ATTR=[
+ {k:'party',t:'Party',get:m=>({D:'Democrat',R:'Republican',I:'Independent'})[m.p],opts:['Democrat','Republican','Independent']},
+ {k:'gender',t:'Gender in roster data',get:m=>m.gender==='F'?'Women':'Men',opts:['Women','Men']},
+ {k:'gen',t:'Generation',get:m=>GEN[m.g],opts:GEN},
+ {k:'lean',t:'Voting record',get:m=>m.nom<-.25?'Left of center':m.nom>.25?'Right of center':'Near center',opts:['Left of center','Near center','Right of center']},
+ {k:'rel',unk:'empty',t:'Religion (self-reported)',get:m=>m.rel,opts:['Protestant','Catholic','Jewish','Mormon','Orthodox Christian','Muslim','Hindu','Buddhist','Unitarian Universalist','Unaffiliated / humanist']},
+ {k:'race',unk:'quiet',t:'Race or ethnicity, as listed in sources',get:m=>m.race,opts:['Black or African American','Hispanic or Latino','Asian American / Pacific Islander','Native American']},
+ {k:'imm',unk:'empty',t:'Immigrant background (Pew)',get:m=>m.imm,opts:['Immigrant (foreign-born)','Child of an immigrant']}
+];
+const nAns=()=>Object.keys(S.ans).length;
+function status(m){
+  if(!m)return'vac';
+  if(S.view!=='all'&&m.ch!==S.view)return'off';
+  if(S.gen!==null&&m.g!==S.gen)return'off';
+  if(S.party&&m.p!==S.party)return'off';
+  // only the open tool filters; the other tools keep their inputs but stand down until reopened
+  if(S.tab==='t-who'&&S.useAge){const a=startYear(S.c)-S.by;if(Math.abs(m.age-a)>S.band)return'off'}
+  if(S.c===119&&m.v!==undefined){
+    // a known non-match dims the seat (for race, being on a different list counts as known); a missing value is unknown, never a no
+    // race unknowns ('nq') are counted as unknown but drawn like dim seats, since most members are on no race list
+    if(S.tab==='t-who'){let unk=false,quiet=false;for(const A of ATTR){const sel=S.attrs[A.k];if(sel&&sel.size){const v=A.get(m);const vs=(Array.isArray(v)?v:[v]).filter(Boolean);if(vs.some(x=>sel.has(x)))continue;
+      if(A.unk&&!vs.length){if(A.unk==='quiet')quiet=true;else unk=true;continue}return'off'}}if(unk)return'na';if(quiet)return'nq'}
+    // filters from the first answer; needs the member to have cast min(answers,3) of them, else unknown
+    if(S.tab==='t-iss'&&nAns()){let cmp=0,ag=0;for(const n in S.ans){const mv=m.v[n-1];if(mv!=='-'){cmp++;if(mv===S.ans[n])ag++}}
+      if(cmp<Math.min(nAns(),3))return'na';if(cmp-ag>Math.min(S.thr,(cmp-1)>>1))return'off'}
+  }
+  return'on';
+}
+const fmt=(x,d=1)=>x.toFixed(d);
+/* ---------- canvas ---------- */
+const cv=$('cv'),ov=$('ov'),ctx=cv.getContext('2d'),octx=ov.getContext('2d');let K=1,DPR=1;
+/* On wide but short screens, shrink the chamber so the page top, the chamber, the scrubber and the caption all fit in the viewport. Phones (under 640px) keep the full width. */
+function size(){const wrap=cv.parentElement;wrap.style.maxWidth='';const col=wrap.clientWidth;if(!col)return;
+  const top=cv.getBoundingClientRect().top+scrollY,below=$('caption').getBoundingClientRect().bottom-$('scrub').getBoundingClientRect().top+12;
+  const fitW=(innerHeight-top-below-20-24)/AR; /* 88 leaves the tool tabs under the chamber peeking into view */ // 20 = body bottom padding
+  wrap.style.maxWidth=col>=640&&fitW<col?Math.max(640,fitW)+'px':'';
+  const w=wrap.clientWidth;DPR=devicePixelRatio||1;const h=w*AR;
+  [cv,ov].forEach(c=>{c.width=Math.round(w*DPR);c.height=Math.round(h*DPR);c.style.height=h+'px'});K=w/1000*DPR;draw();placeCard()}
+const SEATPX={H:29,S:20};
+function draw(){
+  ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);ctx.setTransform(K,0,0,K,0,0);ctx.textAlign='center';ctx.textBaseline='middle';let fk;
+  cells.forEach(c=>{const m=c.m;
+    if(!m){ctx.save();ctx.setLineDash([2,2]);ctx.strokeStyle='rgba(244,241,232,.4)';ctx.lineWidth=.8;ctx.beginPath();ctx.ellipse(c.x,c.y,c.w/2,c.h/2,0,0,7);ctx.stroke();ctx.restore();return}
+    if(c.k!==fk){fk=c.k;ctx.font=`400 ${SEATPX[c.k]}px "IBM Plex Mono",monospace`}
+    // every seat is one typed character. a = lit amount, n = "unknown" amount; both ease between 0 and 1 so seats cross-fade
+    const ch=GLYPH[m.g];
+    if(c.a<1){ctx.globalAlpha=.16*(1-c.a);ctx.fillStyle='#f4f1e8';ctx.fillText(ch,c.x,c.y)}
+    if(c.n>0){ctx.globalAlpha=c.n*.8;ctx.save();ctx.setLineDash([2,2]);ctx.strokeStyle='#f4f1e8';ctx.lineWidth=.9;ctx.beginPath();ctx.ellipse(c.x,c.y,c.w/2,c.h/2,0,0,7);ctx.stroke();ctx.restore()}
+    if(c.a>0){ctx.globalAlpha=c.a;ctx.fillStyle=mix(m.g,m.by);ctx.fillText(ch,c.x,c.y)}
+    ctx.globalAlpha=1});
+  mark();
+}
+
+const RM=matchMedia('(prefers-reduced-motion: reduce)');let anim=0;
+function fade(){
+  cancelAnimationFrame(anim);
+  if(RM.matches){cells.forEach(c=>{c.a=c.ta;c.n=c.tn});draw();return}
+  cells.forEach(c=>{c.a0=c.a;c.n0=c.n});const t0=performance.now();
+  const step=now=>{const p=Math.min(1,(now-t0)/300),e=p<.5?2*p*p:1-(-2*p+2)**2/2;
+    cells.forEach(c=>{c.a=c.a0+(c.ta-c.a0)*e;c.n=c.n0+(c.tn-c.n0)*e});draw();if(p<1)anim=requestAnimationFrame(step)};
+  anim=requestAnimationFrame(step);
+}
+function mark(){
+  octx.setTransform(1,0,0,1,0,0);octx.clearRect(0,0,ov.width,ov.height);octx.setTransform(K,0,0,K,0,0);
+  [[S.hov,1.6],[S.sel,2.6]].forEach(([id,lw])=>{if(!id)return;const c=cells.find(c=>c.m&&c.m.bg===id);if(!c)return;
+    const h=SEATPX[c.k]*.62;octx.strokeStyle='#f4f1e8';octx.lineWidth=lw*.6;octx.strokeRect(c.x-h,c.y-h,2*h,2*h)});
+}
+function hit(e){const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*1000,y=(e.clientY-r.top)/r.width*1000;let best=null,bd=1.15;
+  cells.forEach(c=>{if(!c.m)return;const d=((x-c.x)/(c.w/2))**2+((y-c.y)/(c.h/2))**2;if(d<bd){bd=d;best=c}});return best&&best.m}
+function render(){
+  const R=ROSTERS[S.c];let lit=0,total=0,unk=0,ages=[],litAges=[];
+  cells.forEach(c=>{const m=R[c.k][c.i];c.m=m;c.st=status(m);c.ta=+(c.st==='on');c.tn=+(c.st==='na');
+    if(m&&(S.view==='all'||m.ch===S.view)){total++;ages.push(m.age)}
+    if(m&&c.st==='on'){lit++;litAges.push(m.age)}if(m&&(c.st==='na'||c.st==='nq'))unk++});
+  const u30=ages.filter(a=>a<30).length,u40=ages.filter(a=>a<40).length,o70=ages.filter(a=>a>=70).length;
+  $('stats').innerHTML=`<li><b>${fmt(med(ages))}</b><span>median member age · ${S.c}th Congress, ${startYear(S.c)}</span></li><li><b>${u40}</b><span>members under 40 (${u30} under 30)</span></li><li><b>${o70}</b><span>members aged 70 or older</span></li>`;
+  $('fit').innerHTML=`${lit} <small><span>of ${total}</span> <span>seats lit</span>${unk?` <span>· ${unk} unknown</span>`:''}</small>`;
+  const act=[];if(S.tab==='t-who'&&S.useAge)act.push('age');if(S.c===119){if(S.tab==='t-who'&&Object.values(S.attrs).some(s=>s.size))act.push('traits');if(S.tab==='t-iss'&&nAns())act.push('issues')}
+  $('active').textContent=act.length?'filters: '+act.join(' + '):'no filters';
+  const on={'t-who':S.useAge||act.includes('traits'),'t-iss':act.includes('issues')};
+  document.querySelectorAll('.tool[data-tab]').forEach(b=>b.classList.toggle('on',on[b.dataset.tab]));document.querySelectorAll('#toolmenu button').forEach(b=>b.classList.toggle('on',!!on[b.id]));
+  const all=[...R.H,...R.S].filter(Boolean).sort((a,b)=>a.age-b.age),st={};cells.forEach(c=>{if(c.m)st[c.m.bg]=c.st});
+  S.all=[...R.H,...R.S].filter(Boolean);listR();
+  S.litAges=litAges;S.allAges=ages;story();drawHist();ageOut(R);notes();fade();card(S.sel?findM(S.sel):S.hov?findM(S.hov):null);
+}
+function ageOut(R){
+  const a=startYear(S.c)-S.by,all=[...R.H,...R.S].filter(Boolean);
+  if(a<0){$('ageout').innerHTML=`<div class="wbig"><b>—</b><span>You weren't born yet on January 3, ${startYear(S.c)}.</span></div>`;return}
+  const near=all.filter(m=>Math.abs(m.age-a)<=S.band).length,younger=all.filter(m=>m.age<a-S.band).length,older=all.length-near-younger,N=all.length;
+  const y=[...all].sort((p,q)=>p.age-q.age)[0],seg=(n,c,l)=>n?`<i style="flex:${n};background:${c}" title="${n} ${l}"></i>`:'';
+  $('ageout').innerHTML=`<div class="wbig"><b>${a}</b><span>your age on January 3, ${startYear(S.c)}</span></div>
+    <div class="wbar">${seg(younger,'#87a0ff','younger')}${seg(near,'#ffb552','near you')}${seg(older,'#12161c','older')}</div>
+    <div class="wleg"><span><i style="background:#87a0ff"></i>${younger} younger</span><span><i style="background:#ffb552"></i>${near} within ${S.band} yrs</span><span><i style="background:#12161c"></i>${older} older</span></div>
+    ${younger?'':`<p class="wnote">Youngest member: <b>${y.name}, ${y.yrs}</b></p>`}`;
+}
+function notes(){
+  const off=S.c!==119;
+  document.querySelectorAll('.only119').forEach(n=>n.hidden=!off);
+  const race=S.attrs.race&&S.attrs.race.size;
+  const loud=['rel','imm'].some(k=>S.attrs[k]&&S.attrs[k].size),w=[];
+  if(loud)w.push('Dashed seats are unknown for a trait you picked (not on the source list), not a no.');
+  if(race)w.push('Members on no race list are unknown, not a no. They are drawn dim so the chamber stays readable, but the count lists them as unknown.');
+  $('who-status').textContent=S.c===119?w.join(' '):'';
+  const k=nAns(),L=S.litAges||[];
+  const lv=Math.min(S.thr,(k-1)>>1),how=lv?`on all but at most ${lv===1?'one':'two'} of the ${k} votes`:k>1?`on all ${k} votes`:'on the vote';
+  $('iss-status').innerHTML=off?'<p class="wnote">Switch the timeline to the 119th Congress to use the quiz.</p>':!k?'<p class="wnote">Pick an answer and the chamber starts to dim.</p>':
+    `<div class="wbig"><b>${L.length}</b><span>members voted like you ${how}</span></div>`+(L.length?`<p class="wnote">Their median age: <b>${fmt(med(L))}</b> · everyone: ${fmt(med(S.allAges))}</p>`:(k>=3&&S.thr<2?`<p class="wnote">Try "All but ${S.thr?'2':'1'}".</p>`:''))+'<p class="wnote dim">Dashed = missed too many of these votes to compare.</p>';
+}
+/* ---------- hero collage ---------- */
+function hero(){
+  const all=DB.data[119].filter(r=>GRID[r[0]]).sort((a,b)=>a[5]-b[5]),y=all[0],o=all[all.length-1];
+  face($('cutY'),{bg:y[0],g:gi(y[6])},'heroY');face($('cutO'),{bg:o[0],g:gi(o[6])},'heroO');
+  $('capY').innerHTML=`<b>${y[1]}</b><span>Youngest member, ${fmt(y[5],0)}</span>`;$('capO').innerHTML=`<b>${o[1]}</b><span>Oldest member, ${fmt(o[5],0)}</span>`;
+}
+/* ---------- headline numbers, takeaway and change since the last Congress (whole chamber, ignores filters) ---------- */
+const CS=Object.keys(DB.data).map(Number).sort((a,b)=>a-b);
+const AGES=Object.fromEntries(CS.map(c=>[c,DB.data[c].map(r=>r[5])])),O70=c=>AGES[c].filter(a=>a>=70).length;
+function story(){
+  const c=S.c,yr=startYear(c),md=med(AGES[c]),pop=DB.pop[yr],c0=CS[0],y0=startYear(c0),meds=CS.map(x=>med(AGES[x]));
+  $('vs').innerHTML=`<div><b>${fmt(md)}</b><span>median age of Congress, ${yr}</span></div><div><b>${pop!=null?pop:'—'}</b><span>${pop!=null?`median age of all US residents, ${yr}`:`US median for ${yr} not in our Census table`}</span></div>`;
+  const n=O70(c),n0=O70(c0);
+  $('take').innerHTML=`<b>${n}</b> members of Congress were 70 or older in ${yr}.`+(c===c0?'':` <span>${n>=n0?'Up':'Down'} from ${n0} in ${y0}.</span>`);
+  genBar();
+  if(c===c0){$('caption').textContent=`Median age ${fmt(md)}. Drag the timeline to compare Congresses, or tap a seat to see who it is.`;return}
+  const p=c-1,py=startYear(p),d70=n-O70(p),dm=md-med(AGES[p]),prev=new Set(DB.data[p].map(r=>r[0])),nw=DB.data[c].filter(r=>!prev.has(r[0])).length,sg=x=>x>0?'+':x<0?'−':'±';
+  $('caption').innerHTML=`Median age ${fmt(md)}. Since ${py}: <b>${sg(d70)}${Math.abs(d70)}</b> aged 70 or older and <b>${nw}</b> new members.`;
+}
+/* ---------- panels ---------- */
+function buildAttrs(){
+  $('attrs').innerHTML=ATTR.map(A=>`<fieldset><legend>${A.t}</legend><div class="chips">${A.opts.map(o=>`<button class="chip" data-k="${A.k}" data-o="${o}" aria-pressed="false">${o}</button>`).join('')}</div></fieldset>`).join('')+'<div class="fnote" id="who-status"></div><div class="fnote only119" hidden>Traits describe the 119th Congress only. Switch the timeline to 119.</div>';
+  $('attrs').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;const k=b.dataset.k,o=b.dataset.o;(S.attrs[k]=S.attrs[k]||new Set());S.attrs[k].has(o)?S.attrs[k].delete(o):S.attrs[k].add(o);b.setAttribute('aria-pressed',S.attrs[k].has(o));render()};
+  $('clearattrs').onclick=()=>{S.useAge=false;$('useage').setAttribute('aria-pressed','false');$('useage').textContent='Light up members my age';S.attrs={};document.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed','false'));render()};
+}
+const fdate=iso=>new Date(iso+'T00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
+const tally=t=>{const[y,n]=t.split('-');return`${y}–${n}${y===n?', Vice President broke the tie':''}`};
+let qi=0;
+function showQ(){
+  const v=DB.votes[qi],a=S.ans[v.n],N=DB.votes.length;
+  $('qcard').innerHTML=`<div class="meta">Vote ${qi+1} of ${N} · ${v.area} · ${v.t}</div><h3>${v.q}</h3>
+    <p class="what"><span>What it does</span>${v.what}</p>
+    <div class="src">${v.bill} · <a href="${v.url}" target="_blank" rel="noopener">Official summary on Congress.gov</a>${v.url2?` · <a href="${v.url2}" target="_blank" rel="noopener">Senate version</a>`:''}</div>
+    <div class="opts"><button data-a="Y" aria-pressed="${a==='Y'}"><b>Yes</b> ${v.y}</button><button data-a="N" aria-pressed="${a==='N'}"><b>No</b> ${v.no}</button></div>
+    <div class="happened">What happened: House ${tally(v.ht)} (${fdate(v.hd)}) · Senate ${tally(v.st)} (${fdate(v.sd)})${v.law?' · Became law':''}</div>
+    <div class="nav"><button data-go="-1" ${qi?'':'disabled'}>← Back</button><button class="skip" data-go="1">${a?'Next':'Skip'}</button><button data-go="1" ${qi<N-1?'':'disabled'}>Next →</button></div>`;
+  $('qdots').innerHTML=DB.votes.map((x,i)=>`<button class="${S.ans[x.n]?'ans':''}" aria-current="${i===qi}" data-i="${i}" title="${x.t}" aria-label="Vote ${i+1}: ${x.t}${S.ans[x.n]?', answered':''}">${i+1}</button>`).join('');
+  const k=nAns();
+  $('prog').innerHTML=`<span><b>${k} of ${N}</b> answered</span>`;
+}
+function goQ(i){qi=Math.max(0,Math.min(DB.votes.length-1,i));showQ()}
+function buildVotes(){
+  showQ();
+  // answering moves on to the next unanswered vote, so people can click straight through
+  $('qcard').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.go){goQ(qi+ +b.dataset.go);return}
+    const n=DB.votes[qi].n,a=b.dataset.a;if(S.ans[n]===a)delete S.ans[n];else S.ans[n]=a;render();showQ();
+    if(S.ans[n]){const nx=DB.votes.findIndex((v,i)=>i>qi&&!S.ans[v.n]);if(nx>=0)setTimeout(()=>goQ(nx),RM.matches?0:260)}};
+  $('qdots').onclick=e=>{const b=e.target.closest('button');if(b)goQ(+b.dataset.i)};
+  $('clearvotes').onclick=()=>{S.ans={};render();goQ(0)};
+  $('thr').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.thr=+b.dataset.t;$('thr').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));render()};
+}
+/* ---------- sidebar, views, key ---------- */
+function selectTab(id){const ch=S.tab!==id;S.tab=id;document.querySelectorAll('#toolmenu button').forEach(x=>{const on=x.id===id;x.setAttribute('aria-checked',on);$(x.getAttribute('aria-controls')).hidden=!on;if(on)$('toolname').textContent=x.querySelector('b').textContent});if(ch)render()}
+function toolMenu(open){$('toolmenu').hidden=!open;$('toolpick').setAttribute('aria-expanded',open);if(open)$('toolmenu').querySelector('[aria-checked=true]').focus()}
+$('toolpick').onclick=()=>toolMenu($('toolmenu').hidden);
+document.querySelectorAll('#toolmenu button').forEach(b=>b.onclick=()=>{selectTab(b.id);toolMenu(false);$('toolpick').focus()});
+$('toolmenu').onkeydown=e=>{const it=[...$('toolmenu').querySelectorAll('button')],i=it.indexOf(document.activeElement);
+  if(e.key==='Escape'){toolMenu(false);$('toolpick').focus()}else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();it[(i+(e.key==='ArrowDown'?1:it.length-1))%it.length].focus()}};
+addEventListener('click',e=>{if(!$('toolmenu').hidden&&!e.target.closest('.picker'))toolMenu(false)});
+/* On phones the tools open as a bottom sheet sized to the space under the chamber, with the chamber scrolled to the top, so the sheet never covers it. */
+const PHONE=matchMedia('(max-width:760px)');
+function fitSheet(){if(!PHONE.matches||!document.body.classList.contains('side-open'))return;
+  document.documentElement.style.setProperty('--sheet',(innerHeight-cv.clientHeight-16)+'px');scrollTo({top:cv.getBoundingClientRect().top+scrollY-8})}
+addEventListener('resize',fitSheet);
+document.querySelectorAll('.rail button,.tools button').forEach(b=>b.onclick=()=>{if(b.dataset.tab)selectTab(b.dataset.tab);document.body.classList.add('side-open');fitSheet();$('toolpick').focus()});
+$('closeside').onclick=()=>{document.body.classList.remove('side-open');0};
+const BGS={play:'Capitol_at_Dusk_2.jpg',how:'United_States_House_of_Representatives_chamber.jpg',about:'National Mall - Reflecting Pool (45885661671).jpg'},cpurl=f=>`url("https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=1600")`;
+/* Direct Wikimedia addresses (they allow canvas reading, which the ASCII backdrop needs) */
+const BGU={play:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Capitol_at_Dusk_2.jpg/1280px-Capitol_at_Dusk_2.jpg',how:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/United_States_House_of_Representatives_chamber.jpg/1280px-United_States_House_of_Representatives_chamber.jpg',about:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/National_Mall_-_Reflecting_Pool_%2845885661671%29.jpg/1280px-National_Mall_-_Reflecting_Pool_%2845885661671%29.jpg'};
+/* ASCII backdrop: the page's photo redrawn as typed characters, in the photo's own colors, over the blurred photo. Brighter areas get denser characters. A picture only, never information. */
+const ABG={img:{},cur:null};
+function asciiBg(src){ABG.cur=src;if(!src){paintBg();return}let im=ABG.img[src];if(!im){im=ABG.img[src]=new Image();im.crossOrigin='anonymous';im.onload=()=>{if(ABG.cur===src)paintBg()};im.src=src}else if(im.complete)paintBg()}
+function paintBg(){const cv=$('abg'),im=ABG.img[ABG.cur],W=innerWidth,H=innerHeight,d=Math.min(devicePixelRatio||1,2);cv.width=W*d;cv.height=H*d;const x=cv.getContext('2d');x.scale(d,d);if(!im||!im.naturalWidth)return;
+  const cw=W<700?8:10,ch=cw*1.6,cols=Math.ceil(W/cw),rows=Math.ceil(H/ch),o=document.createElement('canvas');o.width=cols;o.height=rows;const ox=o.getContext('2d',{willReadFrequently:true});
+  const k=Math.max(W/im.naturalWidth,H/im.naturalHeight),sw=W/k,sh=H/k;ox.drawImage(im,(im.naturalWidth-sw)*.62,(im.naturalHeight-sh)*.4,sw,sh,0,0,cols,rows);
+  let px;try{px=ox.getImageData(0,0,cols,rows).data}catch(e){return}
+  const R=' ..:-=+x#%@';x.font=`300 ${cw*1.45}px "IBM Plex Mono",ui-monospace,monospace`;x.textBaseline='top';
+  /* Opacity comes in four steps, from barely there to clear. A slow swirl decides the step, and it is strongest toward the edges of the page, so the middle stays quiet. */
+  const A=[.018,.06,.15,.34];
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const i=(r*cols+c)*4,l=Math.pow((px[i]*.3+px[i+1]*.59+px[i+2]*.11)/255,1.5),g=R[Math.min(R.length-1,Math.floor(l*1.6*R.length))];if(g===' ')continue;
+    /* f is a warped field; taking sin of it draws flowing ribbons, like contour lines */
+    const nx=c/cols,ny=r/rows,asp=W/H,ux=nx*asp,f=ux*1.5+ny*1.1+Math.sin(ny*4.2+ux*1.3)*.75+Math.cos(ux*2.6-ny*1.9)*.6,band=Math.pow(Math.sin(f*6.2)*.5+.5,1.6),edge=Math.min(1,Math.pow(1-Math.min(nx,1-nx,ny*1.15,1-ny)*2,2)*1.4),v=band*(.3+edge*.7)+edge*.12;
+    const a=A[v<.2?0:v<.42?1:v<.68?2:3]*(.7+l*.4);
+    x.fillStyle=`rgba(${Math.min(255,px[i]*1.3+50|0)},${Math.min(255,px[i+1]*1.3+50|0)},${Math.min(255,px[i+2]*1.3+50|0)},${a.toFixed(3)})`;x.fillText(g,c*cw,r*ch)}}
+let abgT;addEventListener('resize',()=>{clearTimeout(abgT);abgT=setTimeout(()=>{paintBg()},200)});
+/* Views: chamber, play (the hub), game, act (one activity beside the chamber), mini (an activity with no chamber), how, about. Each menu item has its own background photo. */
+function showView(v,arg){const B=document.body,top={game:'play',act:'play',mini:'play'}[v]||v;B.classList.add('stitch');B.classList.toggle('playing',v==='game');B.classList.toggle('act',v==='act');B.classList.toggle('about',v!=='act');
+  const show={'v-cham':v==='chamber'||v==='act','v-hub':v==='play','v-play':v==='game','v-mini':v==='mini','v-how':v==='how','v-sources':v==='about'};for(const k in show)$(k).hidden=!show[k];
+  const src=BGU[top]||DB.bg;B.style.setProperty('--sbg',`url("${src}")`);B.dataset.bg=top;asciiBg(v==='game'?null:src);
+  if(v==='game')GAME.enter();if(v==='play')GAME.preview($('hubcv'));
+  if(v==='mini')$('h-run').hidden=false;
+  if(v==='act'){chGo(0);selectTab(arg)}else if(S.tab){S.tab=null} /* activities filter only while open */
+  document.querySelectorAll('.nav button').forEach(b=>b.setAttribute('aria-current',b.dataset.view===top?'page':'false'));render();size();scrollTo(0,0)}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;const [v,arg]=b.dataset.go.split(':');showView(v,arg)});
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
+$('useage').onclick=e=>{S.useAge=!S.useAge;e.target.setAttribute('aria-pressed',S.useAge);e.target.textContent=S.useAge?'Showing members my age':'Light up members my age';render()};
+$('by').oninput=e=>{const v=+e.target.value;if(v>=1900&&v<=2026){S.by=v;render()}};
+$('band').onchange=e=>{S.band=+e.target.value;render()};
+document.querySelectorAll('.view:not(.gen):not(.party) button').forEach(b=>b.onclick=()=>{S.view=b.dataset.v;document.querySelectorAll('.view:not(.gen):not(.party) button').forEach(x=>x.setAttribute('aria-pressed',x===b));render()});
+/* Scrubber: dragging follows the pointer and switches Congress at the halfway point; on release, a click on the track, a tick or a key press, the knob eases to the nearest Congress. */
+const CONG=$('cong');let sAnim=0;
+function setC(c){if(c===S.c)return;S.c=c;S.sel=null;CONG.setAttribute('aria-valuetext',`${c}th Congress, ${startYear(c)}`);render();card(null)}
+function slideTo(t){t=Math.max(115,Math.min(119,t));cancelAnimationFrame(sAnim);const v0=+CONG.value;
+  if(RM.matches||Math.abs(t-v0)<.002){CONG.value=t;setC(t);return}
+  const d=Math.min(520,220+Math.abs(t-v0)*90),t0=performance.now();
+  const step=n=>{const p=Math.min(1,(n-t0)/d),e=p<.5?4*p*p*p:1-(-2*p+2)**3/2,v=v0+(t-v0)*e;CONG.value=v;setC(Math.round(v));if(p<1)sAnim=requestAnimationFrame(step)};
+  sAnim=requestAnimationFrame(step)}
+CONG.oninput=()=>{cancelAnimationFrame(sAnim);setC(Math.round(+CONG.value))};
+CONG.onchange=()=>slideTo(Math.round(+CONG.value));
+CONG.addEventListener('pointerdown',e=>{const r=CONG.getBoundingClientRect(),R=14,f=(+CONG.value-115)/4,kx=r.left+R+f*(r.width-2*R);
+  if(Math.abs(e.clientX-kx)<=R+4)return; // on the knob: native drag
+  e.preventDefault();slideTo(Math.round(115+4*(e.clientX-r.left-R)/(r.width-2*R)))});
+CONG.addEventListener('keydown',e=>{const k={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1,PageDown:-1,PageUp:1}[e.key],c=Math.round(+CONG.value);
+  if(k||e.key==='Home'||e.key==='End'){e.preventDefault();slideTo(e.key==='Home'?115:e.key==='End'?119:c+k)}});
+/* ---------- card ---------- */
+function findM(id){for(const c of cells)if(c.m&&c.m.bg===id)return c.m;return null}
+// member portrait: characters from the 24x30 brightness grid, light on dark with the bright parts dense (a positive image). Moving the pointer or a finger over it lights the characters nearby in the member's generation ombre, fading out as a trail.
+const FS={},CW=7;let frun=0;
+/* ASCII portraits. Each canvas has its own state under a key, so several can glow at once (the member card, the two on About). */
+function face(cv,m,key='card',W=24,H=30,cw=CW,grid,gam=1.1){const d=devicePixelRatio||1,n=W*H;cv.width=W*cw*d;cv.height=H*cw*d;cv.getContext('2d').scale(d,d);
+  const id=m.bg||m.id,p=FS[key],f=FS[key]={cv,m,id,W,H,cw,ch:[],heat:p&&p.id===id&&p.heat.length===n?p.heat:new Float32Array(n)},g=grid||GRID[m.bg];
+  if(g){const so=[...g].sort((p,q)=>p-q),lo=so[n*.05|0],hi=so[n*.993|0]||255;f.ch=[...g].map(l=>RAMP[Math.min(9,Math.floor(Math.pow(Math.max(0,Math.min(1,(l-lo)/(hi-lo||1))),gam)*10))])}
+  cv.onpointermove=cv.onpointerdown=e=>glow(f,e);paintFace(f)}
+function paintFace(f){if(!f.cv.isConnected)return;const {W,H,cw}=f,n=W*H,x=f.cv.getContext('2d');x.clearRect(0,0,W*cw,H*cw);x.textAlign='center';x.textBaseline='middle';
+  if(!f.ch.length){x.font='400 14px Archivo,sans-serif';x.fillStyle='#b4b5b7';x.fillText('No portrait',W*cw/2,H*cw/2);return}
+  const [a,b]=GR[f.m.g].map(hx),T=[244,241,232],fs=Math.round(cw*1.3);
+  for(let i=0;i<n;i++){const c=f.ch[i],h=f.heat[i];if(c===' '&&h<.05)continue;const t=(i/W|0)/(H-1),col=a.map((v,k)=>v+(b[k]-v)*t).map((v,k)=>Math.round(T[k]+(v-T[k])*h));
+    x.font=`${h>.3?500:400} ${fs}px "IBM Plex Mono",monospace`;x.fillStyle=`rgb(${col})`;x.fillText(c===' '?'.':c,(i%W+.5)*cw,((i/W|0)+.5)*cw)}}
+function glow(f,e){const {W,H}=f,r=f.cv.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*W,py=(e.clientY-r.top)/r.height*H,R=W*.75;
+  for(let i=0;i<W*H;i++){const q=1-Math.hypot(i%W+.5-px,(i/W|0)+.5-py)/R;if(q>0)f.heat[i]=Math.max(f.heat[i],Math.min(1,q*2.2))}
+  if(!frun){frun=1;requestAnimationFrame(cool)}}
+function cool(){let any=0;const still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  for(const k in FS){const f=FS[k];let a=0;for(let i=0;i<f.heat.length;i++)if(f.heat[i]>0){f.heat[i]=Math.max(0,f.heat[i]-(still?.2:.018));a=1}if(a&&f.cv.isConnected){paintFace(f);any=1}}
+  if(any)requestAnimationFrame(cool);else frun=0}
+let cardM=null;
+function card(m){
+  const el=$('card');cardM=m;
+  const dflt=!m;if(!m){m=cells.map(c=>c.m).filter(Boolean).sort((a,b)=>a.by-b.by)[0];cardM=m}
+  if(!m){el.hidden=true;el.innerHTML='';return}
+  const pinned=S.sel===m.bg;el.classList.toggle('pinned',pinned);
+  el.innerHTML=`<canvas aria-hidden="true"></canvas><span class="nm">${m.name}</span><span class="m">${({D:'Democrat',R:'Republican',I:'Independent'})[m.p]} · ${m.ch==='H'?'House':'Senate'} · ${m.st}</span><span>Age ${fmt(m.age)} on opening day<br>${GEN[m.g]}</span><span></span>${dflt?'<span class="m hintline">The oldest member. Point at any seat to meet someone else.</span>':''}`;
+  face(el.querySelector('canvas'),m);
+  let h='';
+  if(m.v!==undefined){
+    const bits=[m.rel&&m.rel,m.race.length&&m.race.join(', '),m.imm].filter(Boolean);
+    h+=`<span class="m full">${bits.length?bits.join(' · '):'Religion, race and immigrant background not recorded in the sources'}</span>`;
+    if(S.tab==='t-iss'&&nAns()){let cmp=0,ag=0,rows='';
+      DB.votes.forEach(v=>{const mv=m.v[v.n-1],u=S.ans[v.n];if(!u)return;
+        let r=mv==='-'?'<span class="no">did not vote</span>':mv===u?'<span class="ok">agreed</span>':'<span class="no">differed</span>';
+        if(mv!=='-'){cmp++;if(mv===u)ag++}
+        rows+=`<tr><td>${v.t}</td><td>you ${u==='Y'?'Yes':'No'}</td><td>${mv==='-'?'—':mv==='Y'?'Yes':'No'}</td><td>${r}</td></tr>`});
+      h+=`<span class="full"><b>${ag} of ${cmp}</b> compared votes agreed</span><table class="full">${rows}</table>`}
+  }
+  el.insertAdjacentHTML('beforeend',h);
+  el.hidden=false;placeCard();
+}
+/* The member card sits in its own column beside the chamber (under it on phones). With nothing hovered or picked it shows the oldest member. */
+function placeCard(){const el=$('card');el.classList.remove('docked');el.style.left=el.style.top=el.style.maxHeight=''}
+$('card').onclick=e=>{if(e.target.closest('.x')){S.sel=null;card(null);mark()}};
+addEventListener('keydown',e=>{if(e.key!=='Escape')return;if($('filt').open)$('filt').open=false;else if(S.sel){S.sel=null;card(null);mark()}});
+cv.onmousemove=e=>{const m=hit(e);const id=m?m.bg:null;if(id!==S.hov){S.hov=id;mark();if(!S.sel)card(m)}};
+cv.onmouseleave=()=>{S.hov=null;mark();if(!S.sel)card(null)};
+cv.onclick=e=>{const m=hit(e);S.sel=m&&S.sel!==m.bg?m.bg:null;card(S.sel?m:null);mark()};
+$('list').onclick=e=>{const b=e.target.closest('button');if(!b)return;showView('chamber');chGo(0);S.sel=b.dataset.bg;card(findM(S.sel));mark()};
+/* ---------- legend, ticks ---------- */
+$('ticks').innerHTML=[115,116,117,118,119].map(c=>`<span data-c="${c}" title="${c}th Congress">${startYear(c)}</span>`).join('');
+$('ticks').onclick=e=>{const t=e.target.closest('[data-c]');if(t)slideTo(+t.dataset.c)};
+/* The Members list has its own filters (chamber, generation, party, sort, search); it does not follow the Today tab's filters. */
+function listR(){const q=$('q').value.trim().toLowerCase(),ch=$('lf-ch').value,g=$('lf-g').value,pp=$('lf-p').value,so=$('lf-s').value,all=S.all||[];
+  const rows=all.filter(m=>(!ch||m.ch===ch)&&(g===''||m.g===+g)&&(!pp||m.p===pp)&&(!q||`${m.name} ${m.p}-${m.st} ${m.ch==='H'?'house':'senate'}`.toLowerCase().includes(q))).sort(so==='a'?(a,b)=>a.name.localeCompare(b.name):so==='o'?(a,b)=>b.age-a.age:(a,b)=>a.age-b.age);
+  $('listtitle').textContent=`Members · ${S.c}th Congress`;
+  $('listnote').textContent=`${rows.length} of ${all.length} shown. Pick a name to find that member in the chamber.`;
+  $('list').innerHTML=rows.map(m=>`<button data-bg="${m.bg}"><i style="background:${GC[m.g]}"></i><span>${m.name} <small>${m.p}-${m.st} · ${m.ch==='H'?'House':'Senate'}</small></span><small>${fmt(m.age)}</small></button>`).join('')||'<p class="listnote">No one matches. Try clearing a filter.</p>'}
+function search(){listR()}
+$('lf-g').insertAdjacentHTML('beforeend',GEN.map((t,i)=>`<option value="${i}">${t}</option>`).join(''));
+document.querySelectorAll('#lfilt select').forEach(e=>e.onchange=listR);
+$('q').oninput=search;
+const GSHORT=['Gen Z','Millennial','Gen X','Boomer','Silent'];
+function genBar(){const cnt=[0,0,0,0,0];DB.data[S.c].forEach(r=>cnt[gi(r[6])]++);const el=$('genbar');el.classList.toggle('pick',S.gen!==null);
+  el.innerHTML=GSHORT.map((g,i)=>cnt[i]||S.gen===i?`<button data-g="${i}" aria-pressed="${S.gen===i}" title="${GEN[i]}"><i style="background:linear-gradient(135deg,${GR[i][0]},${GR[i][1]})">${GLYPH[i]}</i>${g} <small>${cnt[i]}</small></button>`:'').join('');
+  const f=[S.view==='H'?'House':S.view==='S'?'Senate':'',({D:'Democrat',R:'Republican',I:'Independent'})[S.party]||''].filter(Boolean);$('filtsum').textContent=f.length?'Filter: '+f.join(', '):'Filter'}
+$('partybar').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.party=b.dataset.p||null;$('partybar').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));render()};
+$('genbar').onclick=e=>{const b=e.target.closest('button');if(!b)return;const g=+b.dataset.g;S.gen=S.gen===g?null:g;render();/* chips only filter now; the events live on the Generations tab */const k=$('genbar').querySelector(`[data-g="${g}"]`);if(k)k.focus()};
+document.addEventListener('click',e=>{if(!$('filt').contains(e.target))$('filt').open=false});
+/* ---------- generation modal: did-you-know cards, opened from the generation chips; the filter stays on behind it ---------- */
+const FIMG={};Object.entries(DB.fimg).forEach(([k,v])=>{const s=atob(v.g),g=new Uint8Array(s.length);for(let i=0;i<s.length;i++)g[i]=s.charCodeAt(i);FIMG[k]={...v,g}});
+let gm={g:0,i:0,facts:[]};
+function htSquare(c,grid,chip){const x=c.getContext('2d'),W=c.width,n=56,p=W/n,rm=p*.6;x.fillStyle=chip;x.fillRect(0,0,W,W);x.fillStyle='#121212';x.beginPath();
+  for(let j=0;j<n;j++)for(let i=0;i<n;i++){const r=rm*Math.sqrt(1-grid[j*n+i]/255)*1.05;if(r<.25)continue;const cx=(i+.5)*p+((j&1)?p*.18:0),cy=(j+.5)*p;x.moveTo(cx+r,cy);x.arc(cx,cy,r,0,7)}x.fill()}
+function openGen(g){
+  const [a,b]=GYRS[g],ms=DB.data[119].filter(r=>r[6]>=a&&r[6]<=b);
+  gm={g,i:0,ms,facts:DB.tl.filter(f=>f[0]===g).sort((x,y)=>x[2]-y[2])};
+  $('gmh').innerHTML=`<i style="background:linear-gradient(135deg,${GR[g][0]},${GR[g][1]})"></i>${GLONG[g]}`;
+  $('gmmeta').innerHTML=`Born ${a}–${b} · ${ms.length} member${ms.length===1?'':'s'} in the 119th Congress · Did you know?`;
+  showFact();if(!$('gmodal').open)$('gmodal').showModal();
+}
+function showFact(){renderFact(gm,$('dyk'),$('gmdots'),'fact')}
+function renderFact(gm,box,dots,fk){
+  const f=gm.facts[gm.i],key=`${f[0]}-${f[1]}-${f[2]}`,im=FIMG[key],y=f[2],L=['Gen Z members','Millennials','Gen Xers','Boomers','Silent Generation members'][gm.g],ms=gm.ms;
+  const born=ms.filter(r=>r[6]<y),ages=born.map(r=>y-r[6]),old=ms.reduce((p,r)=>!p||r[6]<p[6]?r:p,null),same=ms.filter(r=>r[6]===y);
+  let then;
+  if(born.length===ms.length&&ms.length>1)then=`That year, the ${L} now in Congress turned <b>${Math.min(...ages)} to ${Math.max(...ages)}</b>.`;
+  else if(born.length===ms.length)then=`That year, <b>${old[1]}</b> turned <b>${y-old[6]}</b>.`;
+  else if(born.length)then=`${born.length*2<ms.length?'Only ':''}<b>${born.length} of the ${ms.length}</b> ${L} in Congress had been born. The oldest, <b>${old[1]}</b>, turned ${y-old[6]} that year.`;
+  else if(same.length)then=`<b>${same[0][1]}</b> was born that year.`;
+  else then=`None of the ${L} in Congress had been born yet. The oldest, <b>${old[1]}</b>, arrived ${old[6]-y} year${old[6]-y===1?'':'s'} later.`;
+  box.innerHTML=`<div class="pic">${im?'<canvas width="440" height="440" role="img" aria-label="Photo drawn in typed characters: '+im.file.replace(/\.[a-z]+$/i,'').replace(/"/g,'')+'"></canvas><div class="credit">Photo: '+im.artist+' · '+im.license+' · <a href="'+im.page+'" target="_blank" rel="noopener">Wikimedia Commons</a></div>':`<div class="tile" style="--c:linear-gradient(135deg,${GR[gm.g][0]},${GR[gm.g][1]})" aria-hidden="true">${y}</div><div class="credit">No free-to-use photo for this one.</div>`}</div>
+    <div><div class="tag">${f[1]==='born'?'When they were born':'When they turned 20'}</div><div class="yr">${y}</div><p class="fact">${f[3]}</p><p class="then">${then}</p><div class="src">Source: <a href="${f[5]}" target="_blank" rel="noopener">${f[4]}</a></div></div>`;
+  if(im)face(box.querySelector('canvas'),{id:key,g:gm.g},fk,56,56,6,im.g,2);
+  dots.innerHTML=gm.facts.map((_,i)=>`<button aria-label="Fact ${i+1} of ${gm.facts.length}" aria-current="${i===gm.i}" data-i="${i}"></button>`).join('');
+}
+{const seen=new Set();$('fimgcite').innerHTML=Object.values(DB.fimg).filter(v=>!seen.has(v.page)&&seen.add(v.page)).map(v=>`<li>${v.artist}. <i>${v.file}</i>. ${v.license}. <a href="${v.page}">Wikimedia Commons</a></li>`).join('')}
+const stepFact=d=>{gm.i=(gm.i+d+gm.facts.length)%gm.facts.length;showFact()};
+$('gmprev').onclick=()=>stepFact(-1);$('gmnext').onclick=()=>stepFact(1);
+$('gmdots').onclick=e=>{const b=e.target.closest('button');if(b){gm.i=+b.dataset.i;showFact()}};
+$('gmx').onclick=$('gmgo').onclick=()=>$('gmodal').close();
+$('gmodal').addEventListener('click',e=>{const r=$('gmodal').getBoundingClientRect();if(e.target===$('gmodal')&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))$('gmodal').close()});  // click on the backdrop, not the dialog's own padding
+$('gmodal').addEventListener('keydown',e=>{if(e.key==='ArrowRight')stepFact(1);else if(e.key==='ArrowLeft')stepFact(-1)});
+// How Congress works widgets
+(function(){
+  const ms=ROSTERS[119].H.concat(ROSTERS[119].S).filter(Boolean),NOW=new Date().getFullYear();
+  const yH=ms.slice().sort((a,b)=>a.age-b.age)[0],old=ms.slice().sort((a,b)=>b.age-a.age)[0];
+  $('howtake').innerHTML=`Each dot is a member of the 119th Congress on opening day, January 3, 2025. Youngest: <b>${yH.name}, ${yH.yrs}</b>. Oldest: <b>${old.name}, ${old.yrs}</b>.`;
+  // 01 age dot plot with a "you" line
+  const W=760,x0=15,x1=96,X=a=>(Math.max(x0,Math.min(x1,a))-x0)/(x1-x0)*W,st=7.2,r=3.3,top=40,cnt={};
+  ms.slice().sort((a,b)=>a.g-b.g).forEach(m=>(cnt[m.yrs]=cnt[m.yrs]||[]).push(m));
+  const hmax=Math.max(...Object.values(cnt).map(v=>v.length)),base=top+hmax*st+6,H=base+26;
+  let dots='';
+  Object.entries(cnt).forEach(([k,v])=>{dots+=`<g><title>Age ${k}: ${v.length} member${v.length>1?'s':''}</title><rect x="${X(+k)}" y="${top}" width="${X(16)-X(15)}" height="${base-top}" fill="#0000"/>`+v.map((m,i)=>`<text class="gl" x="${X(+k+.5)}" y="${base-6-i*st}" text-anchor="middle" dominant-baseline="central" style="fill:${GC[m.g]}">${GLYPH[m.g]}</text>`).join('')+'</g>'});
+  const rules=[[18,'Vote'],[25,'House'],[30,'Senate'],[35,'President']].map(([a,t],i)=>`<line x1="${X(a)}" x2="${X(a)}" y1="${20+(i%2)*12}" y2="${base}" style="stroke:var(--ink)" stroke-width="1" stroke-dasharray="3 3"/><text class="rl" x="${X(a)+4}" y="${28+(i%2)*12}">${t} ${a}</text>`).join('');
+  const ax=`<line x1="0" x2="${W}" y1="${base}" y2="${base}" style="stroke:var(--ink)"/>`+[20,30,40,50,60,70,80,90].map(a=>`<text x="${X(a)}" y="${base+16}" text-anchor="middle">${a}</text>`).join('');
+  function strip(you){
+    const yx=X(you+.5),lab=`You · ${you}`,anchor=yx>W-80?'end':'start';
+    $('agestrip').innerHTML=`<svg viewBox="-4 0 ${W+8} ${H}" role="img" aria-label="Ages of all ${ms.length} members of the 119th Congress, from ${yH.yrs} to ${old.yrs}, with your age, ${you}, marked."><line x1="${yx}" x2="${yx}" y1="2" y2="${base}" style="stroke:var(--ink)" stroke-width="3"/>${rules}${dots}${ax}<rect x="${anchor==='end'?yx-74:yx}" y="0" width="74" height="18" rx="9" fill="${'#f7c600'}" style="stroke:var(--ink)" stroke-width="1.5"/><text class="you" x="${anchor==='end'?yx-37:yx+37}" y="13" text-anchor="middle">${lab}</text></svg>`;
+  }
+  function run(){
+    const by=+$('runby').value,nat=$('runcit').value==='nat',cy=+$('runcy').value;$('runcywrap').hidden=!nat;
+    if(!(by>=1900&&by<=NOW))return;const age=NOW-by;
+    $('runtiles').innerHTML=[['Vote',18,0],['House',25,7],['Senate',30,9],['President',35,'nb']].map(([k,req,c])=>{
+      let yr=by+req;if(nat&&c>0)yr=Math.max(yr,cy+c);let s,yes=false;
+      if(c==='nb'&&nat)s='Must be born a citizen';
+      else if(yr<=NOW){yes=true;s=k==='Vote'?'You can vote':'You could run'}
+      else s=`In ${yr-NOW} year${yr-NOW>1?'s':''} · ${yr}`;
+      return`<li class="rrow ${yes?'yes':'no'}"><span class="ck" aria-hidden="true">${yes?'✓':''}</span><span class="nm">${k}<small>${req}+</small></span><span class="st">${s}</span><span class="bar"><i style="width:${Math.min(100,age/req*100)}%"></i></span></li>`}).join('');
+    strip(age);
+  }
+  ['runby','runcit','runcy'].forEach(id=>$(id).oninput=run);run();
+  // 02 seat dots
+  $('hdots').innerHTML='<i></i>'.repeat(435);$('sdots').innerHTML='<i></i>'.repeat(100);
+  // 03 ballot by year: Senate classes 1, 2, 3 hold 33, 33 and 34 seats
+  const BY={2026:{cls:2,sp:2,sub:'Tuesday, November 3, 2026. All 435 House seats, plus 33 Senate seats and 2 special elections (Ohio and Florida).'},
+    2028:{cls:3,sp:0,sub:'Tuesday, November 7, 2028. All 435 House seats and 34 Senate seats, the same day as the presidential election.'},
+    2030:{cls:1,sp:0,sub:'Tuesday, November 5, 2030. All 435 House seats and 33 Senate seats.'}};
+  function ballot(y){
+    const b=BY[y],on='#f7c600',off='#e9e7e2',sz=[33,33,34];let g='',n=435;
+    for(let i=0;i<435;i++)g+=`<text class="gl on" x="${6+(i%29)*14}" y="${26+Math.floor(i/29)*14}">#</text>`;
+    g+=`<text x="0" y="12">HOUSE · ALL 435</text>`;const sy=26+15*14+34;
+    [1,2,3].forEach((c,ci)=>{const x0=ci*150,lit=c===b.cls;g+=`<text x="${x0}" y="${sy-14}">SENATE ${c} · ${sz[ci]}</text>`;
+      for(let i=0;i<sz[ci];i++){const l=lit||(c===3&&i<b.sp);if(l)n++;g+=`<text class="gl${l?' on':''}" x="${x0+6+(i%10)*13}" y="${sy+Math.floor(i/10)*13}">${l?'#':'.'}</text>`}});
+    $('bvis').innerHTML=`<svg viewBox="-2 0 444 ${sy+50}" role="img" aria-label="${n} seats on the ballot in ${y}">${g}</svg>`;
+    $('bnum').textContent=n;$('bsub').textContent='seats on the ballot. '+b.sub;
+    document.querySelectorAll('.yrbar button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.y==y));
+  }
+  document.querySelectorAll('.yrbar button').forEach(x=>x.onclick=()=>ballot(x.dataset.y));ballot(2026);
+  // 04 bill to law
+  const vdots=(n,k,cols,lab,mark)=>{const rows=Math.ceil(n/cols),s=12;let g='';for(let i=0;i<n;i++)g+=`<text class="gl${i<k?' on':''}" x="${6+(i%cols)*s}" y="${22+Math.floor(i/cols)*s}">${i<k?'#':'.'}</text>`;
+    return`<svg viewBox="0 0 ${cols*s} ${rows*s+26}" role="img" aria-label="${lab}"><text x="0" y="11">${lab}</text>${g}</svg>`};
+  const ST=[
+    ['Introduce','Someone writes a bill','Any member of the House or Senate can introduce one. Bills that raise taxes have to start in the House.','','<div class="bill">H.R. 1</div>'],
+    ['House','The House votes','It needs a majority of the members voting. With every seat filled and everyone there, that is 218.','218<small> of 435</small>',vdots(435,218,29,'218 YES NEEDED')],
+    ['Senate','The Senate votes','Passing takes a majority, 51 of 100. But most bills first need 60 votes to end debate (stopping a filibuster), so 60 is the real bar.','60<small> of 100</small>',vdots(100,60,20,'60 TO END DEBATE')],
+    ['President','The President decides','Sign it, and it becomes law. Veto it, and it goes back to Congress.','','<div class="choice"><span>Sign ✓</span><span>Veto ✗</span></div>'],
+    ['Override','Congress can override a veto','Two-thirds of both chambers have to vote yes. It doesn\'t happen often.','290<small> + 67</small>',vdots(435,290,29,'HOUSE · 290 OF 435')+vdots(100,67,20,'SENATE · 67 OF 100')]];
+  let si=0;
+  function step(i){si=i;const[t,h,p,big,vis]=ST[i];
+    $('steps').innerHTML=ST.map((x,j)=>`<li><button data-i="${j}" class="${j<i?'done':''}" ${j===i?'aria-current="step"':''}><b>${j+1}</b>${x[0]}</button></li>`).join('');
+    $('stepcard').innerHTML=`<div><h3>${h}</h3><p>${p}</p>${big?`<div class="big">${big}</div>`:''}<div class="nav2"><button data-d="-1" ${i?'':'disabled'}>← Back</button><button data-d="1" ${i<ST.length-1?'':'disabled'}>Next →</button></div></div><div>${vis}</div>`}
+  $('steps').onclick=e=>{const b=e.target.closest('button');if(b)step(+b.dataset.i)};
+  $('stepcard').onclick=e=>{const b=e.target.closest('button[data-d]');if(b)step(si+ +b.dataset.d)};step(0);
+  // 05 true or false
+  const TF=[['Members of Congress have term limits.','False','They can serve as long as voters keep electing them. In 1995 the Supreme Court said states can\'t add limits.'],
+    ['There\'s a maximum age to serve in Congress.','False',`There's only a minimum. The oldest member on opening day was ${old.yrs}.`],
+    ['A House member has to live in the district they represent.','False','They only have to live in the state.'],
+    ['Voters have always elected their senators.','False','State legislatures picked them until the 17th Amendment in 1913.'],
+    ['The voting age has always been 18.','False','It was 21 until the 26th Amendment in 1971.'],
+    ['The President has a term limit.','True','Two terms, since the 22nd Amendment in 1951. Congress has none.']];
+  $('tfgrid').innerHTML=TF.map(([q,a,w])=>`<button class="tf" aria-pressed="false"><span class="q">${q}</span><span class="hint">Tap to reveal</span><span class="a"><b>${a}</b><span>${w}</span></span></button>`).join('');
+  $('tfgrid').onclick=e=>{const b=e.target.closest('.tf');if(b)b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true')};
+  $('howsrc').onclick=e=>{e.preventDefault();showView('about')};
+})();
+
+$('gencard').innerHTML=GEN.map((g,i)=>`<span><i style="background:linear-gradient(135deg,${GR[i][0]},${GR[i][1]})">${GLYPH[i]}</i>${g}</span>`).join('');
+/* ---------- what was happening when they were young ---------- */
+// generation index matches GEN (0 = Gen Z ... 4 = Silent); years are Pew's
+const GYRS=[[1997,2012],[1981,1996],[1965,1980],[1946,1964],[1928,1945]],GLONG=['Gen Z','Millennials','Gen X','Baby boomers','Silent Generation'];
+(function young(){
+  const R=DB.data[119],by=R.map(r=>r[6]),old=R.reduce((a,r)=>r[6]<a[6]?r:a),yng=R.reduce((a,r)=>r[6]>a[6]?r:a);
+  $('youngtake').innerHTML=`The oldest member, <b>${old[1]}</b>, was born in ${old[6]}. The youngest, <b>${yng[1]}</b>, was born in ${yng[6]}. That is ${yng[6]-old[6]} years apart, serving in the same Congress.`;
+  const EV=[[1945,'World War II ended'],[1969,'the Moon landing'],[1971,'18-year-olds could vote'],[1981,'MTV and the IBM PC']],mem=R.slice().sort((a,b)=>a[6]-b[6]);
+  $('bbdots').innerHTML=mem.map(r=>`<i data-y="${r[6]}" style="--c:${mix(gi(r[6]),r[6])}">${GLYPH[gi(r[6])]}</i>`).join('');
+  $('bbbar').innerHTML=EV.map(([y,t],i)=>`<button data-i="${i}" aria-pressed="${i===1}">${y}</button>`).join('');
+  const bb=i=>{const[y,t]=EV[i];$('bbn').textContent=by.filter(b=>b<y).length;$('bbt').innerHTML=`of ${R.length} members were born before <b>${t}</b> (${y}).`;
+    $('bbdots').querySelectorAll('i').forEach(d=>d.classList.toggle('on',+d.dataset.y<y));$('bbbar').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',+x.dataset.i===i))};
+  $('bbbar').onclick=e=>{const b=e.target.closest('button');if(b)bb(+b.dataset.i)};bb(1);
+  const li=f=>`<li><b>${f[2]}</b><span>${f[3]}<a href="${f[5]}" target="_blank" rel="noopener" aria-label="Source: ${f[4]}">source</a></span></li>`;
+  $('gtl').innerHTML=[4,3,2,1,0].map(g=>{const ms=R.filter(r=>r[6]>=GYRS[g][0]&&r[6]<=GYRS[g][1]).map(r=>r[6]),[a,b]=GYRS[g];
+    return`<article class="gcard" data-g="${g}" ${g===4?'':'hidden'}><div><h3><i style="background:${GC[g]}"></i>${GLONG[g]}</h3><div class="gmeta">Born ${a}–${b}<br>${ms.length} member${ms.length===1?'':'s'} in the 119th${ms.length?`, born ${Math.min(...ms)}${ms.length>1&&Math.max(...ms)!==Math.min(...ms)?'–'+Math.max(...ms):''}`:''}</div></div>
+      <div><h4>When they were born</h4><ul>${DB.tl.filter(f=>f[0]===g&&f[1]==='born').map(li).join('')}</ul></div>
+      <div><h4>When they turned 20 (${a+20}–${b+20})</h4><ul>${DB.tl.filter(f=>f[0]===g&&f[1]==='20').map(li).join('')}</ul></div></article>`}).join('');
+  $('gtlbar').innerHTML=[4,3,2,1,0].map(g=>`<button data-g="${g}" aria-pressed="${g===4}"><i style="background:linear-gradient(135deg,${GR[g][0]},${GR[g][1]})">${GLYPH[g]}</i>${GSHORT[g]}</button>`).join('');
+  const g2={i:0};function gen2(g){const [a,b]=GYRS[g];Object.assign(g2,{g,i:0,ms:DB.data[119].filter(r=>r[6]>=a&&r[6]<=b),facts:DB.tl.filter(f=>f[0]===g).sort((x,y)=>x[2]-y[2])});$('gtlmeta').textContent=`${GLONG[g]} · born ${a}–${b} · ${g2.ms.length} in the 119th Congress`;fact2()}
+  function fact2(){renderFact(g2,$('gtlfact'),$('gtldots'),'fact2')}
+  $('gtlprev').onclick=()=>{g2.i=(g2.i-1+g2.facts.length)%g2.facts.length;fact2()};$('gtlnext').onclick=()=>{g2.i=(g2.i+1)%g2.facts.length;fact2()};$('gtldots').onclick=e=>{const b=e.target.closest('button');if(b){g2.i=+b.dataset.i;fact2()}};gen2(4);
+  $('gtlbar').onclick=e=>{const b=e.target.closest('button');if(!b)return;gen2(+b.dataset.g);$('gtlbar').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));$('gtl').querySelectorAll('.gcard').forEach(c=>c.hidden=c.dataset.g!==b.dataset.g)};
+  const seen=new Set();
+  $('tlcite').innerHTML='<li>Pew Research Center. “Defining generations: Where Millennials end and Generation Z begins.” January 17, 2019. <a href="https://www.pewresearch.org/short-reads/2019/01/17/where-millennials-end-and-generation-z-begins/">pewresearch.org</a></li>'+
+    DB.tl.filter(f=>!seen.has(f[5])&&seen.add(f[5])).map(f=>`<li>${f[4]}. ${f[3]} (${f[2]}). <a href="${f[5]}">${f[5].replace(/^https:\/\/(www\.)?/,'').replace(/\/$/,'')}</a></li>`).join('');
+})();
+$('vtable').innerHTML=DB.votes.map(v=>`<div><small>${v.n}</small><span><b>${v.t}</b><br><small>${v.area} · <a href="${v.url}" target="_blank" rel="noopener">${v.bill}</a></small></span><a href="https://voteview.com/rollcall/RH119${String(v.hr).padStart(4,'0')}" target="_blank" rel="noopener">House roll ${v.hr} · ${v.hd}</a><a href="https://voteview.com/rollcall/RS119${String(v.sr).padStart(4,'0')}" target="_blank" rel="noopener">Senate roll ${v.sr} · ${v.sd}</a></div>`).join('');
+/* ---------- history strip: median age and members 70+ for every Congress (two panels, one shared x axis) ---------- */
+const HIST=DB.hist,ord=n=>n+(n%100>10&&n%100<14?'th':({1:'st',2:'nd',3:'rd'})[n%10]||'th'),hyr=h=>+h[1].slice(0,4),
+  hday=h=>new Date(h[1]+'T00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
+{const mx=HIST.reduce((a,h)=>h[4]>a[4]?h:a),m70=HIST.reduce((a,h)=>h[5]>a[5]?h:a),sh=h=>h[5]/h[3],ms=HIST.reduce((a,h)=>sh(h)>sh(a)?h:a);
+  $('histtake').innerHTML=`The ${ord(m70[0])} Congress (${hyr(m70)}) has the most members aged 70 or older of any Congress: <b>${m70[5]}</b>${ms===m70?`, also the largest share (${Math.round(100*sh(m70))}%)`:''}. The oldest median member was in the ${ord(mx[0])} (${hyr(mx)}), at ${fmt(mx[4])}.`;
+  $('htable').innerHTML='<table><thead><tr><th>Congress</th><th>Convened</th><th>Listed</th><th>Median age</th><th>Aged 70+</th><th>Birth dates known</th></tr></thead><tbody>'+HIST.slice().reverse().map(h=>`<tr><td>${ord(h[0])}</td><td>${hday(h)}</td><td>${h[2]}</td><td>${fmt(h[4])}</td><td>${h[5]}</td><td>${h[3]}</td></tr>`).join('')+'</tbody></table>'}
+let hi=null;
+function drawHist(){
+  const box=$('hchart'),W=box.clientWidth;if(!W)return;
+  const L=30,R=W<520?8:40,T=26,HA=W<520?130:170,G=34,HB=W<520?100:130,H=T+HA+G+HB+24,n=HIST.length,bw=(W-L-R)/n,X=i=>L+bw*(i+.5);
+  const ya=v=>T+HA*(1-(v-35)/30),top70=Math.ceil(Math.max(...HIST.map(h=>h[5]))/50)*50,yb=v=>T+HA+G+HB*(1-v/top70),base=T+HA+G+HB;
+  const i0=HIST.findIndex(h=>h[0]===CS[0]),i1=HIST.length-1,cur=HIST.findIndex(h=>h[0]===S.c);
+  let g=`<rect x="${X(i0)-bw/2}" y="${T-4}" width="${bw*(i1-i0+1)}" height="${base-T+4}" fill="#f7c600" opacity=".22"/>`;
+  g+=`<text class="ht1" x="${L}" y="${T-12}">Median age on opening day</text><text class="ht1" x="${L}" y="${T+HA+G-12}">Members aged 70 or older</text>`;
+  [40,50,60].forEach(v=>g+=`<line x1="${L}" x2="${W-R}" y1="${ya(v)}" y2="${ya(v)}" stroke="#e9e7e2"/><text x="${L-6}" y="${ya(v)+3.5}" text-anchor="end">${v}</text>`);
+  for(let v=0;v<=top70;v+=50)g+=`<line x1="${L}" x2="${W-R}" y1="${yb(v)}" y2="${yb(v)}" stroke="${v?'#e9e7e2':'#121212'}"/><text x="${L-6}" y="${yb(v)+3.5}" text-anchor="end">${v}</text>`;
+  g+=`<path d="${HIST.map((h,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+ya(h[4]).toFixed(1)).join('')}" fill="none" stroke="#121212" stroke-width="2" stroke-linejoin="round"/>`;
+  const gap=bw>4?Math.min(2,bw*.25):bw*.15;
+  HIST.forEach((h,i)=>{const y=yb(h[5]),w=bw-gap,inC=i>=i0;g+=`<path d="M${X(i)-w/2} ${base}V${y+Math.min(2,w/2)}q0 -${Math.min(2,w/2)} ${Math.min(2,w/2)} -${Math.min(2,w/2)}H${X(i)+w/2-Math.min(2,w/2)}q${Math.min(2,w/2)} 0 ${Math.min(2,w/2)} ${Math.min(2,w/2)}V${base}Z" fill="${inC?'#121212':'#a8a59d'}"/>`});
+  (W<520?[1800,1900,2000]:[1800,1850,1900,1950,2000]).forEach(y=>g+=`<text x="${X((y-1789)/2)}" y="${base+16}" text-anchor="middle">${y}</text>`); // one Congress every two years
+  const mx=HIST.reduce((a,h,i)=>h[4]>HIST[a][4]?i:a,0),last=HIST[i1];
+  g+=`<text class="lab" x="${X(0)}" y="${ya(Math.max(...HIST.slice(0,8).map(h=>h[4])))-9}">${HIST[0][4].toFixed(1)} in ${hyr(HIST[0])}</text>`;
+  g+=`<text class="lab" x="${X(mx)}" y="${ya(HIST[mx][4])-9}" text-anchor="end">${HIST[mx][4].toFixed(1)}</text>`;
+  g+=`<text class="lab" x="${X(i1)+(R>20?6:0)}" y="${yb(last[5])+(R>20?4:-6)}" text-anchor="${R>20?'start':'end'}">${last[5]}</text>`;
+  if(cur>=0)g+=`<circle cx="${X(cur)}" cy="${ya(HIST[cur][4])}" r="4.5" fill="#121212" stroke="#fdfcfa" stroke-width="2"/>`;
+  if(hi!==null)g+=`<line x1="${X(hi)}" x2="${X(hi)}" y1="${T-4}" y2="${base}" stroke="#121212" stroke-width="1" stroke-dasharray="3 3"/><circle cx="${X(hi)}" cy="${ya(HIST[hi][4])}" r="4" fill="#fdfcfa" stroke="#121212" stroke-width="2"/>`;
+  g+=`<rect x="${L}" y="${T-4}" width="${W-L-R}" height="${base-T+4}" fill="transparent" id="hhit"/>`;
+  const svg=box.querySelector('svg')||box.insertAdjacentElement('afterbegin',document.createElementNS('http://www.w3.org/2000/svg','svg'));
+  svg.setAttribute('width',W);svg.setAttribute('height',H);svg.setAttribute('role','img');
+  svg.setAttribute('aria-label',$('histtake').textContent+' A table of every Congress follows the chart.');svg.innerHTML=g;
+  const tip=$('htip');
+  if(hi===null){tip.hidden=true;return}
+  const h=HIST[hi];tip.hidden=false;tip.innerHTML=`<b>${ord(h[0])} Congress</b><small>convened ${hday(h)}</small>Median age ${fmt(h[4])} · ${h[5]} aged 70+ (${Math.round(100*h[5]/h[3])}%)<small>${h[2]} listed that day · birth dates known for ${h[3]}</small>`;
+  const tw=tip.offsetWidth,x=X(hi);tip.style.left=Math.max(0,Math.min(W-tw,x+(x>W/2?-tw-12:12)))+'px';tip.style.top=(T+8)+'px';
+}
+$('hchart').addEventListener('pointermove',e=>{const r=$('hchart').getBoundingClientRect(),W=r.width,L=30,R=W<520?8:40,i=Math.floor((e.clientX-r.left-L)/((W-L-R)/HIST.length));const v=i>=0&&i<HIST.length?i:null;if(v!==hi){hi=v;drawHist()}});
+$('hchart').addEventListener('pointerleave',()=>{hi=null;drawHist()});
+new ResizeObserver(()=>drawHist()).observe($('hchart'));
+/*GAME_JS*/
+/* Sub-pages: How Congress works, About the data and Sources show one section at a time, with a row of tabs on top and Back / Next underneath, so nothing competes for attention. */
+function pager(view,sel){const items=[...view.querySelectorAll(sel)];if(items.length<2)return;
+  const name=el=>el.dataset.tab||(el.querySelector('.sec,h3')||{}).textContent||'';let cur=0;
+  const nav=document.createElement('nav');nav.className='subnav';nav.setAttribute('aria-label','Sections');
+  nav.innerHTML=items.map((el,i)=>`<button data-i="${i}">${name(el)}</button>`).join('');items[0].before(nav);
+  const foot=document.createElement('div');foot.className='pgnav';view.append(foot);
+  const go=(i,scroll)=>{cur=i;items.forEach((el,k)=>{el.hidden=k!==i;if(el.dataset.with)$(el.dataset.with).hidden=k!==i});nav.querySelectorAll('button').forEach((b,k)=>b.setAttribute('aria-current',k===i?'page':'false'));
+    foot.innerHTML=(i?`<button data-i="${i-1}">← ${name(items[i-1])}</button>`:'<span></span>')+`<span>${i+1} of ${items.length}</span>`+(i<items.length-1?`<button class="nx" data-i="${i+1}">Next: ${name(items[i+1])} →</button>`:'<span></span>');
+    if(scroll)scrollTo({top:0,behavior:RM.matches?'auto':'smooth'})};
+  nav.onclick=e=>{const b=e.target.closest('button');if(b)go(+b.dataset.i)};foot.onclick=e=>{const b=e.target.closest('button');if(b)go(+b.dataset.i,true)};go(0);return go}
+pager($('v-how'),'.hblock');const chGo=pager($('v-cham'),'#v-chamber,#history,#young,#members');pager($('v-sources'),':scope>.block,:scope>.srcgrid');
+// ASCII look: the Capitol photo behind the page (inlined by build.py as DB.bg) and a redraw once the monospace font has loaded
+document.body.style.setProperty('--sbg',`url("${DB.bg}")`);asciiBg(DB.bg);document.fonts.load('300 14px "IBM Plex Mono"').then(()=>{paintBg()});document.body.style.setProperty('--hubph',cpurl('Capitol_at_Dusk_2.jpg').replace('width=1600','width=800'));document.fonts.load('400 20px "IBM Plex Mono"').then(()=>draw());
+document.body.classList.add('stitch');
+addEventListener('resize',size);let roW=0;new ResizeObserver(en=>{const w=Math.round(en[0].contentRect.width);if(w!==roW){roW=w;size()}}).observe($('v-chamber')); /* width only: the member card changing height must not resize the chamber */
+/* Play hub icons: small pictures made of typed characters (never information) */
+(()=>{const T=(x,y,ch,col,o=1)=>`<text x="${x}" y="${y}" style="fill:${col};opacity:${o}">${ch}</text>`;
+  let a='';[[17,64],[13,48],[9,32]].forEach(([n,r],k)=>{for(let i=0;i<n;i++){const t=Math.PI*(i+.5)/n,g=(i*3+k*2)%5,on=(i+k)%3!==1;a+=T(70-Math.cos(t)*r,76-Math.sin(t)*r,GLYPH[g],GC[g],on?1:.25)}});
+  $('ico-who').innerHTML=`<svg class="sm" viewBox="0 0 140 84">${a}</svg>`;
+  let b='';[1,1,0,1,0,1,1,0].forEach((v,i)=>{b+=T(16+(i%4)*36,30+(i>>2)*34,v?'+':'x',v?GC[1]:GC[4],1)});
+  $('ico-iss').innerHTML=`<svg viewBox="0 0 140 84">${b}</svg>`;
+  let c='';[2,3,4,5].forEach((h,i)=>{for(let k=0;k<h;k++)c+=T(22+i*32,74-k*15,'#',GC[[0,1,2,3][i]],k===h-1?1:.45)});
+  $('ico-run').innerHTML=`<svg viewBox="0 0 140 84">${c}</svg>`})();
+$('ramp').innerHTML=`<span aria-hidden="true">${GLYPH.map((g,i)=>`<i style="color:${GC[i]}">${g}</i>`).join('')}</span>One character per member. The older the generation, the denser the character.`;
+S.tab=null;document.body.classList.add('about');document.body.dataset.bg='chamber';buildAttrs();buildVotes();hero();render();size();
+</script>

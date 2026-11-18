@@ -1,0 +1,3 @@
+- [No four-stat rows](no-four-stat-rows.md) — never lay out 4 big-number stats in a row
+- [Less text, more widgets](less-text-more-widgets.md) — boxed sections, few hierarchy levels, white space
+- [No 3D skyline](no-3d-skyline.md) — 3D-printed skyline dropped Nov 10, 2026; final deliverable is web only

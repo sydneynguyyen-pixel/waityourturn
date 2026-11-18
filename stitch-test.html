@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wait your turn: cross-stitch style test</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Style test only. One scene: thread-white cross stitch on a soft photo. Not part of the build. */
+:root{--thread:#f7f0df}
+*{box-sizing:border-box}
+body{margin:0;min-height:100svh;background:#1c2530;color:var(--thread);font:400 12px/1.5 Archivo,sans-serif;letter-spacing:.14em;text-transform:uppercase;overflow-x:hidden}
+.bg{position:fixed;inset:-8%;background:#26323d 18% 50%/170% no-repeat;filter:blur(7px) saturate(1.1) brightness(.72);z-index:-2}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.22;mix-blend-mode:overlay;pointer-events:none}
+main{min-height:100svh;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr auto;gap:18px;padding:22px 26px}
+header,footer{display:flex;justify-content:space-between;gap:24px;align-items:flex-end}
+p{margin:0;max-width:34ch}
+.r{text-align:right}
+.scene{display:flex;gap:28px;align-items:center;justify-content:center;flex-wrap:wrap}
+canvas{display:block}
+figure{margin:0;display:grid;gap:10px}
+button{font:inherit;letter-spacing:.2em;text-transform:uppercase;color:var(--thread);background:none;border:1px solid var(--thread);padding:10px 22px;cursor:pointer}
+button:hover{background:var(--thread);color:#1c2530}
+@media (prefers-reduced-motion:no-preference){.bg{animation:drift 40s steps(60) infinite alternate}}
+@keyframes drift{to{transform:translate(2.5%,-1.5%) scale(1.04)}}
+@media (max-width:700px){main{padding:16px}header,footer{flex-direction:column;align-items:flex-start}.r{text-align:left}}
+</style></head><body>
+<div class="bg" id="bg"></div>
+<svg class="grain" width="100%" height="100%" aria-hidden="true"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+<main>
+  <header><p>Wait your turn<br>A game about a seat in Congress</p><p class="r">Style test · one scene<br>Nov 17, 2026</p></header>
+  <div class="scene">
+    <canvas id="main" role="img" aria-label="The Capitol and the words Wait your turn, drawn in white cross stitch on a grid"></canvas>
+    <figure><canvas id="face" role="img" aria-label="Portrait of Don Young drawn in cross stitch"></canvas><p>Don Young · Alaska<br>In Congress since 1973</p></figure>
+  </div>
+  <footer><p>534 seats. 259 of the people in them in 2017 were still there in 2025.</p><button id="again">Stitch it again</button></footer>
+</main>
+<script>
+const PHOTO='https://commons.wikimedia.org/wiki/Special:FilePath/Capitol_at_Dusk_2.jpg?width=1600';
+document.getElementById('bg').style.backgroundImage=`url("${PHOTO}")`;
+const FONT={W:'10001100011000110101101011101110001',A:'01110100011000111111100011000110001',I:'11111001000010000100001000010011111',T:'11111001000010000100001000010000100',Y:'10001100010101000100001000010000100',O:'01110100011000110001100011000101110',U:'10001100011000110001100011000101110',R:'11110100011000111110101001001010001',N:'10001110011010110101100111000110001',' ':''};
+const CORNER=['XXX.XX.','X.X.X..','XXX....','...X...','XX..X.X','X....X.','....X.X'];
+const COLS=100,ROWS=62,reduce=matchMedia('(prefers-reduced-motion:reduce)').matches||location.search==='?still';
+// cells: 2 = full cross, 1 = half stitch
+function blank(c,r){return Array.from({length:r},()=>new Uint8Array(c))}
+function put(g,x,y,v){if(g[y]&&x>=0&&x<g[y].length)g[y][x]=v}
+function word(g,s,x0,y0){[...s].forEach((ch,i)=>{const f=FONT[ch]||'';for(let k=0;k<f.length;k++)if(f[k]==='1')put(g,x0+i*6+k%5,y0+(k/5|0),2)})}
+function corners(g){const n=CORNER.length;for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(CORNER[y][x]==='X'){put(g,x,y,2);put(g,COLS-1-x,y,2);put(g,x,ROWS-1-y,2);put(g,COLS-1-x,ROWS-1-y,2)}}
+function fromImage(img,w,h){const c=Object.assign(document.createElement('canvas'),{width:w,height:h}),x=c.getContext('2d',{willReadFrequently:true});x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(img,0,0,w,h);const d=x.getImageData(0,0,w,h).data,out=blank(w,h);
+  for(let i=0;i<w*h;i++){const r=d[i*4],g=d[i*4+1],b=d[i*4+2],lum=.3*r+.59*g+.11*b,sat=Math.max(r,g,b)-Math.min(r,g,b);out[i/w|0][i%w]=lum>232&&sat<40?0:lum<105?1:2}return out}
+function fromLum(b64,w,h){const s=atob(b64),out=blank(w,h);for(let i=0;i<w*h;i++){const l=s.charCodeAt(i);out[i/w|0][i%w]=l>150?2:l>96?1:0}return out}
+function rnd(i){const x=Math.sin(i*127.1)*43758.5453;return x-Math.floor(x)}
+// prep sizes the canvas and draws the grid once; sew then adds only the new stitches each frame.
+function prep(j){const {cv,g,cell}=j,cols=g[0].length,rows=g.length,dpr=devicePixelRatio||1;cv.width=cols*cell*dpr;cv.height=rows*cell*dpr;cv.style.width=cols*cell+'px';cv.style.height=rows*cell+'px';
+  const x=j.x=cv.getContext('2d');x.scale(dpr,dpr);
+  x.strokeStyle='rgba(255,255,255,.2)';x.lineWidth=1;x.beginPath();for(let i=0;i<=cols;i++){const X=Math.min(i*cell+.5,cols*cell-.5);x.moveTo(X,0);x.lineTo(X,rows*cell)}for(let k=0;k<=rows;k++){const Y=Math.min(k*cell+.5,rows*cell-.5);x.moveTo(0,Y);x.lineTo(cols*cell,Y)}x.stroke();
+  x.lineCap='round';x.lineWidth=cell*.2;x.shadowColor='rgba(0,0,0,.4)';x.shadowBlur=cell*.18;x.shadowOffsetY=cell*.07;
+  j.list=[];for(let c=0;c<cols;c++)for(let r=0;r<rows;r++)if(g[r][c])j.list.push([c,r,g[r][c]]);j.done=0}
+function stitch(j,[c,r,v]){const x=j.x,cell=j.cell,k=c*131+r;let i=0;const w=()=>(rnd(k+ ++i)-.5)*cell*.1,a=.14*cell,b=.86*cell,X=c*cell,Y=r*cell;
+  x.strokeStyle=`rgba(247,240,223,${.82+rnd(k)*.18})`;x.beginPath();x.moveTo(X+a+w(),Y+b+w());x.lineTo(X+b+w(),Y+a+w());x.stroke();
+  if(v===2){x.strokeStyle='#fffaf0';x.beginPath();x.moveTo(X+a+w(),Y+a+w());x.lineTo(X+b+w(),Y+b+w());x.stroke()}}
+let run=0;
+function sew(jobs){const id=++run,t0=performance.now(),D=1800;jobs.forEach(prep);
+  (function step(now){if(id!==run)return;const t=reduce?1:Math.min(1,(now-t0)/D),p=1-(1-t)*(1-t);
+    jobs.forEach(j=>{const to=Math.ceil(p*j.list.length);while(j.done<to)stitch(j,j.list[j.done++])});if(t<1)requestAnimationFrame(step)})(t0)}
+async function start(){
+  const img=new Image();img.src='game-assets/capitol-from-screenshot.png';await img.decode();
+  const g=blank(COLS,ROWS),cw=84,ch=Math.round(cw*img.height/img.width),cap=fromImage(img,cw,ch);
+  cap.forEach((row,y)=>row.forEach((v,x)=>{if(v)put(g,8+x,4+y,v)}));
+  word(g,'WAIT YOUR TURN',9,ROWS-12);corners(g);
+  const faces=await fetch('data/img.json').then(r=>r.json()),f=fromLum(faces.Y000033,24,30);
+  const fit=()=>{const wide=innerWidth>1000,cell=Math.max(3,Math.min(11,Math.floor((innerWidth-52-(wide?28:0))/(wide?COLS+24:COLS)),Math.floor((innerHeight-200)/ROWS)));
+    sew([{cv:document.getElementById('main'),g,cell},{cv:document.getElementById('face'),g:f,cell}])};
+  fit();document.getElementById('again').onclick=fit;let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(fit,150)});
+}
+start();
+</script>
+</body></html>
