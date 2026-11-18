@@ -6,9 +6,9 @@
    A sprite is {w,h,cells:[[col,row,v,color]]} where v is 2 for a full cross and 1 for a half stitch. */
 const GAME=(()=>{
 const E=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
-const TH='#f7f0df',DK='#161d27',PHOTO={out:'Capitol_at_Dusk_2.jpg',room:'United_States_House_of_Representatives_chamber.jpg'},
-  WALK=['Capitol_at_Dusk_2.jpg','Wallach Place rowhouses - Greater U Street HD - Washington DC.jpg','A voter enters the Remer City offices building to vote on Election Day 1.jpg','National Mall - Reflecting Pool (45885661671).jpg','Washington Monument from the Capitol at dusk.jpg'], // the photo behind each stretch of the walk: Capitol, a DC street, a polling place, the Mall, the Mall at dusk
-  purl=f=>`url("https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=1600")`;
+const TH='#f7f0df',DK='#161d27',PHOTO={out:'game-assets/game-bg/dusk.jpg',room:'United_States_House_of_Representatives_chamber.jpg'},
+  WALK=['game-assets/game-bg/dome.jpg','game-assets/game-bg/crowd.jpg','game-assets/game-bg/archives.jpg','National Mall - Reflecting Pool (45885661671).jpg','game-assets/game-bg/dusk.jpg'], // the photo behind each stretch of the walk: Capitol, a DC street, a polling place, the Mall, the Mall at dusk
+  purl=f=>f.startsWith('game-assets/')?`url("${f}")`:`url("https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=1600")`;
 const SK=['#f6dcc6','#e8bc97','#cf9668','#a06a3f','#70482a'],HC=['#3b332d','#7a4f2a','#c9ad3b','#e98dca','#45a86f','#d9d6ce','#9e63d6'],OC=['#c9ad3b','#45a86f','#e98dca','#9e63d6','#ae6c18','#f08a3c','#f7f0df'];
 const OPT={hair:['Short','Bob','Long','Curls','Bun','Buzz','None'],fit:['Suit','Skirt suit','Dress','Vest'],extra:['None','Glasses','Bow tie','Pearls','Pin','Briefcase'],face:['Smile','Game face','Smirk','Wow']};
 const C={name:'',by:1992,skin:1,hair:1,hc:0,fit:0,oc:3,extra:0,face:0};
@@ -127,7 +127,7 @@ function items(now){crowdKey();let on75=false;const {cols,rows,gy,cx}=V,it=[],t=
   else if(E('gs').classList.contains('inroom'));
   else if(G.mode==='world'){const w0=Math.floor(G.wx),sx=x=>cx+x-w0;
     it.push({sp:text(String(G.year)),x:3,y:3});
-    if(G.char&&G.year>=2017){const c=Math.min(119,115+Math.floor((G.year-2017)/2)),n=n75(c),b=n75(115),per=cols>=96?27:18,y0=cols>=96?5:24,X=i=>cols-3-per*2+(i%per)*2+1,Y=i=>y0+(i/per|0)*2,row=(i0,i1)=>{const cs=[];for(let i=i0;i<i1;i++)cs.push([X(i),Y(i),2,TH]);return{w:cols,h:rows,cells:cs}};
+    if(G.char&&G.year>=2017){const c=Math.min(119,115+Math.floor((G.year-2017)/2)),n=n75(c),b=n75(115),per=18,y0=cols>=96?5:24,X=i=>cols-3-per*2+(i%per)*2+1,Y=i=>y0+(i/per|0)*2,row=(i0,i1)=>{const cs=[];for(let i=i0;i<i1;i++)cs.push([X(i),Y(i),2,TH]);return{w:cols,h:rows,cells:cs}};
       it.push({sp:row(0,Math.min(n,b)),x:0,y:0,a:.5});if(n>b)it.push({sp:row(b,n),x:0,y:0}); // one X per member 75 or older; the ones added since 2017 are brighter
       const l=E('g75'),tx=`${n} members are 75 or older`+(n>b?` · ${n-b} more than in 2017`:'');if(l.textContent!==tx)l.textContent=tx;l.style.cssText=`right:${V.ox+3*V.cell}px;top:${V.oy+y0*V.cell-22}px`;on75=true}
     if(G.vote){const b=WORLD.find(p=>p.r===G.vote.r);for(let i=0;i<3;i++){const k=(now-G.vote.t0-i*300)/700;if(k>=0&&k<1)it.push({sp:BALLOT,x:sx(b.x)+4,y:gy-21+Math.floor(k*12)})}}
@@ -350,5 +350,5 @@ function preview(cv){const W=56,H=38,YRS=['2018','2020','2022','2024'];let t=0,l
   if(RM.matches){t=30;frame();return}
   if(cv._on)return;cv._on=1;
   (function loop(now){if(!cv.isConnected||!cv.offsetParent){cv._on=0;return}if(now-last>170){last=now;t++;frame()}requestAnimationFrame(loop)})(0)}
-return{preview,title(cv,t,cell){drawSp(cv,text(t),cell,false)},capitol(cv,maxW,maxH){const ks=Object.keys(CAP).map(Number).sort((x,y)=>y-x);let pick=ks[ks.length-1],cell=3;for(const k of ks){const c=Math.floor(Math.min(maxW/CAP[k].w,maxH/CAP[k].h));if(c>=5){pick=k;cell=c;break}}drawSp(cv,CAP[pick],cell,false)},enter(){size();if(!G.started){G.started=true;play('title')}pdraw();if(!G.raf)G.raf=requestAnimationFrame(loop);},C,G,V,play};
+return{preview,title(cv,t,cell){drawSp(cv,text(t),cell,false)},capitol(cv,maxW,maxH){const ks=Object.keys(CAP).map(Number).sort((x,y)=>y-x);let pick=ks[ks.length-1],cell=3;for(const k of ks){const c=Math.floor(Math.min(maxW/CAP[k].w,maxH/CAP[k].h));if(c>=5){pick=k;cell=c;break}}cv._cap={sp:CAP[pick],cell};drawSp(cv,CAP[pick],cell,false)},capCells(cv){return cv._cap?{n:cv._cap.sp.cells.length,w:cv._cap.sp.w,h:cv._cap.sp.h,cell:cv._cap.cell,at:i=>cv._cap.sp.cells[i]}:null},capDraw(cv,hot){const k=cv._cap;if(!k)return;const d=devicePixelRatio||1,x=cv.getContext('2d'),{sp,cell}=k;x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,cv.width,cv.height);x.textAlign='center';x.textBaseline='middle';x.font=`500 ${cell*1.3}px "IBM Plex Mono",ui-monospace,monospace`;sp.cells.forEach(([c,r,v,col],i)=>{const h=hot&&hot.get(i);if(h){x.globalAlpha=1-h.a;put(x,c,r,v,col,cell);x.globalAlpha=h.a;x.fillStyle=h.col;x.fillText(h.ch,c*cell+cell/2,r*cell+cell*.54)}else put(x,c,r,v,col,cell)});x.globalAlpha=1},enter(){size();if(!G.started){G.started=true;play('title')}pdraw();if(!G.raf)G.raf=requestAnimationFrame(loop);},C,G,V,play};
 })();

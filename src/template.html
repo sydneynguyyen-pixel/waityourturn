@@ -919,7 +919,7 @@ body.stitch #gens .sdyk .tag,body.stitch #gens .sdyk .src,body.stitch #gens .sdy
 /* Round 22 (Nov 17): title screen, then the pinned chamber story */
 #intro{min-height:calc(100svh - 72px);display:grid;place-content:center;justify-items:center;gap:20px;text-align:center;color:#f4f1e8;padding:0 16px 8svh}
 #intro .ititle{margin:0;font:400 clamp(56px,9.5vw,152px)/.9 var(--serif);letter-spacing:-.02em;text-shadow:0 2px 30px rgba(8,11,16,.6)}#intro .ititle em{font-style:italic}
-#intro #icap{display:block;max-width:100%;filter:drop-shadow(0 2px 18px rgba(8,11,16,.5))}
+#intro #icap{display:block;max-width:100%;touch-action:pan-y;filter:drop-shadow(0 2px 18px rgba(8,11,16,.5))}
 #intro .ilede{margin:0;max-width:40ch;font:400 clamp(18px,1.7vw,24px)/1.35 var(--display);color:#e4e2da;text-shadow:0 1px 14px rgba(8,11,16,.9)}#intro .ilede b{font-weight:500;color:#fff}
 #intro{position:relative}
 #intro .icue{position:absolute;left:0;right:0;bottom:3.5svh;margin:0;text-align:center;font:400 14px/1 var(--display);color:#c9cacb;text-shadow:0 1px 10px rgba(8,11,16,.9)}#intro .icue b{display:inline-block;font-weight:400;margin-left:4px}
@@ -995,16 +995,29 @@ body.stitch #v-mini{display:block;max-width:1120px;margin:22svh auto 0}
 #gens .gsls{display:grid;align-items:center}#gens .gsls .gsl{grid-area:1/1;opacity:0;pointer-events:none;transition:opacity .7s ease,filter .7s ease;filter:blur(6px)}
 #gens .gsls .gsl.on{opacity:1;pointer-events:auto;filter:none}
 body.stitch #gens .sdyk{translate:none;filter:blur(8px);transition:opacity .7s ease,filter .7s ease}body.stitch #gens .sdyk.on{filter:none;transition-delay:0s}
-#gens .gprog{position:absolute;left:32px;bottom:40px;display:flex;gap:6px}#gens .gprog i{width:28px;height:2px;background:rgba(244,241,232,.28);transition:background .5s}#gens .gprog i.on{background:#f4f1e8}
+#gens .gprog{position:absolute;left:32px;bottom:40px;display:flex;gap:6px;align-items:center}#gens .gprog .gstep{margin-left:14px;font:400 14px/1 var(--display);color:#f4f1e8}#gens .gprog .gcue{margin-left:18px;font:400 14px/1 var(--display);color:#c9cacb;opacity:0;translate:0 4px;transition:opacity .6s,translate .6s}#gens .gprog .gcue.rdy{opacity:1;translate:none}#gens .gprog i{width:28px;height:2px;background:rgba(244,241,232,.28);transition:background .5s}#gens .gprog i.on{background:#f4f1e8}
 #gens .gpin{position:sticky}
 @media (prefers-reduced-motion:reduce){#gens .gsls .gsl,body.stitch #gens .sdyk{transition:none;filter:none}}
-@media(max-width:900px){#gens .gprog{left:20px;bottom:20px}}
+@media(max-width:900px){#gens .gprog{left:20px;bottom:20px;flex-wrap:wrap}#gens .gprog .gcue{flex-basis:100%;margin:10px 0 0}}
 
-/* Round 26 (Nov 17): generations swap by jumbling their letters (see jumble()), so no fade or blur between them */
+/* Round 26 (Nov 17): generations swap by jumbling their letters (Round 30 below replaced the jumble), so no fade or blur between them */
 #gens .gsls .gsl,body.stitch #gens .sdyk{transition:none!important;filter:none!important}
 #gens .gsls .gsl.on .gfield i{animation:vfade .8s ease both;animation-delay:calc(var(--k)*3ms)}
 @media (prefers-reduced-motion:no-preference){body.stitch #gens .sdyk.on .pic{animation:vfade .9s ease both}body.stitch #gens .sdyk.on canvas{animation:none}}
 
+/* Round 31 (Nov 17): the rules grids fill in as a diagonal wave when the section arrives; at step 3 the seats up in 2026 light in a sweep (Senate one by one, House as a wave) */
+@media (prefers-reduced-motion:no-preference){
+#rules .rgrid i{animation:rfill .7s ease backwards;animation-delay:calc(var(--d)*16ms)}
+@keyframes rfill{from{opacity:0;translate:0 8px;color:#ffe066}}
+#rules[data-k="2"] .rch.s .rgrid i.up{transition:color .5s ease,opacity .5s ease;transition-delay:calc(var(--n)*45ms)}
+#rules[data-k="2"] .rch:not(.s) .rgrid i{transition-delay:calc(var(--d)*12ms)}}
+/* Round 32 (Nov 17): the ASCII backdrop drifts slowly on its own and follows scroll and the pointer a little */
+@media (prefers-reduced-motion:no-preference){#abg{scale:1.07;translate:var(--ax,0px) var(--ay,0px);animation:abgdrift 70s ease-in-out infinite alternate}
+@keyframes abgdrift{from{transform:translate(-1%,.6%)}to{transform:translate(1%,-.8%)}}}
+/* Round 30 (Nov 17): calm swap. The symbol jumble was overstimulating, so each generation fades out while drifting down and the next rises in a beat later. */
+#gens .gsls .gsl,body.stitch #gens .sdyk{transition:opacity .9s ease,translate .9s cubic-bezier(.2,.7,.2,1)!important;translate:0 18px}
+#gens .gsls .gsl.on,body.stitch #gens .sdyk.on{translate:none;transition-delay:.3s!important}
+@media (prefers-reduced-motion:reduce){#gens .gsls .gsl,body.stitch #gens .sdyk{transition:none!important;translate:none}}
 /* Round 27 (Nov 17): the game stage fades in as it scrolls up, with a feathered top edge instead of a hard line */
 body.stitch #v-play .gs{opacity:var(--gp,1);-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 calc((1 - var(--gp,1))*320px + 1px));mask-image:linear-gradient(to bottom,transparent 0,#000 calc((1 - var(--gp,1))*320px + 1px));box-shadow:none}
 
@@ -1022,6 +1035,28 @@ body.stitch #ask>.sec.big{font-size:clamp(56px,8vw,128px);line-height:.95;margin
 #ask .abridge{margin:6svh 0 0;font:400 clamp(17px,1.5vw,21px)/1.4 var(--display);color:#e4e2da}
 @media (prefers-reduced-motion:no-preference){#ask:not(.in)>*{opacity:0;translate:0 28px}#ask>*{transition:opacity 1s ease,translate 1s cubic-bezier(.2,.7,.2,1)}#ask.in>.aby{transition-delay:.3s}#ask.in>.aline{transition-delay:.5s}#ask.in>.abridge{transition-delay:.9s}#askline.sw{animation:vfade .6s ease both}}
 body.act #ask{display:none!important}
+
+@media (prefers-reduced-motion:no-preference){#intro #icap{animation:cprint 1.8s steps(36,end) .1s both}}
+@keyframes cprint{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+#infob{top:20px!important;width:34px!important;height:34px!important}#infob i{font-size:17px!important}
+/* Round 33 (Nov 17): the chapter rail shows names on hover at every width, as a readable pill, with a bigger target. */
+#rail{padding:10px 8px 10px 36px;margin-right:-8px}
+#rail button{padding:8px 0;gap:12px}
+#rail i{width:9px;height:9px}
+#rail span{background:rgba(14,19,27,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(244,241,232,.28);border-radius:999px;padding:7px 14px;font:500 14px/1 var(--display);text-shadow:none}
+#rail button:hover span,#rail button:focus-visible span{opacity:1;translate:none;border-color:rgba(244,241,232,.7)}
+#rail button:hover i{background:#f4f1e8;scale:1.35}
+#rail:not(:hover) button:not([aria-current=step]) span{opacity:0}
+@media(max-width:1340px){#rail{right:8px}#rail span{display:block}#rail:hover span{opacity:0}#rail button:hover span,#rail button:focus-visible span{opacity:1}}
+@media(max-width:760px){#rail{right:2px;padding-left:12px}#rail i{width:7px;height:7px}#rail span{display:none}}
+@media(hover:none){#rail span{display:none!important}}
+/* Round 34 (Nov 17): rail names only on hover, small. */
+#rail{padding:6px 6px 6px 28px;margin-right:-6px;gap:0}
+#rail button{padding:6px 0;gap:8px}
+#rail i{width:7px;height:7px}
+#rail span{padding:4px 9px;font:400 12px/1 var(--display);opacity:0!important}
+#rail button:hover span,#rail button:focus-visible span{opacity:1!important}
+@media(max-width:1340px){#rail:hover span{opacity:0!important}#rail button:hover span,#rail button:focus-visible span{opacity:1!important}}
 </style>
 
 <canvas id="abg" aria-hidden="true"></canvas>
@@ -1236,8 +1271,8 @@ body.act #ask{display:none!important}
       <li>Senate seats up in 2026 (33 regular, 2 special for Ohio and Florida): term end dates in unitedstates/congress-legislators; see also <a href="https://en.wikipedia.org/wiki/2026_United_States_Senate_elections" target="_blank" rel="noopener">2026 United States Senate elections</a> (Wikipedia).</li>
     </ol></section>
     <section class="srcgroup"><h3>Generation timeline</h3><ol class="cite" id="tlcite"></ol></section>
-    <section class="srcgroup"><h3>Background photos</h3><ol class="cite"><li>Chamber page: the U.S. Capitol at sunrise. Photographer and license to be added.</li><li>Play: Martin Falbisoner. <i>Capitol at Dusk 2</i>. CC BY-SA 3.0. <a href="https://commons.wikimedia.org/wiki/File:Capitol_at_Dusk_2.jpg">Wikimedia Commons</a></li><li>How Congress works: United States House of Representatives. <i>United States House of Representatives chamber</i>. Public domain. <a href="https://commons.wikimedia.org/wiki/File:United_States_House_of_Representatives_chamber.jpg">Wikimedia Commons</a></li><li>Generations: Ian Poellet. <i>Wallach Place rowhouses, Greater U Street Historic District, Washington, DC</i>. CC BY-SA 4.0. <a href="https://commons.wikimedia.org/wiki/File:Wallach_Place_rowhouses_-_Greater_U_Street_HD_-_Washington_DC.jpg">Wikimedia Commons</a></li><li>Since 1789: Bradley Weber. <i>National Mall, Reflecting Pool</i>. CC BY 2.0. <a href="https://commons.wikimedia.org/wiki/File:National_Mall_-_Reflecting_Pool_(45885661671).jpg">Wikimedia Commons</a></li><li>All are shown blurred, darkened and with grain added.</li><li>In the game: United States House of Representatives. <i>United States House of Representatives chamber</i>. Public domain. <a href="https://commons.wikimedia.org/wiki/File:United_States_House_of_Representatives_chamber.jpg">Wikimedia Commons</a></li><li>Generations backgrounds, from Unsplash (free to use under the Unsplash License): Silent Generation, photo by <a href="https://unsplash.com/photos/2PdHHSPfjCI">Emily Schultz</a>; Baby boomers, photo by <a href="https://unsplash.com/photos/WeR-EmwT12A">Boston Public Library</a>; Gen X, photo by <a href="https://unsplash.com/photos/yo01Z-9HQAw">Hush Naidoo Jade Photography</a>.</li></ol></section>
-    <section class="srcgroup"><h3>Generation photos</h3><p class="listnote">Shown as halftones in the generation cards. All from Wikimedia Commons under the license listed.</p><ol class="cite" id="fimgcite"></ol></section>
+    <section class="srcgroup"><h3>Background photos</h3><ol class="cite"><li>Chamber page: the U.S. Capitol at sunrise. Photographer and license to be added.</li><li>Play: Martin Falbisoner. <i>Capitol at Dusk 2</i>. CC BY-SA 3.0. <a href="https://commons.wikimedia.org/wiki/File:Capitol_at_Dusk_2.jpg">Wikimedia Commons</a></li><li>How Congress works: United States House of Representatives. <i>United States House of Representatives chamber</i>. Public domain. <a href="https://commons.wikimedia.org/wiki/File:United_States_House_of_Representatives_chamber.jpg">Wikimedia Commons</a></li><li>Generations: Ian Poellet. <i>Wallach Place rowhouses, Greater U Street Historic District, Washington, DC</i>. CC BY-SA 4.0. <a href="https://commons.wikimedia.org/wiki/File:Wallach_Place_rowhouses_-_Greater_U_Street_HD_-_Washington_DC.jpg">Wikimedia Commons</a></li><li>Since 1789: Bradley Weber. <i>National Mall, Reflecting Pool</i>. CC BY 2.0. <a href="https://commons.wikimedia.org/wiki/File:National_Mall_-_Reflecting_Pool_(45885661671).jpg">Wikimedia Commons</a></li><li>All are shown blurred, darkened and with grain added.</li><li>In the game: United States House of Representatives. <i>United States House of Representatives chamber</i>. Public domain. <a href="https://commons.wikimedia.org/wiki/File:United_States_House_of_Representatives_chamber.jpg">Wikimedia Commons</a></li><li>Generations backgrounds, from Unsplash (free to use under the Unsplash License): Silent Generation, photo by <a href="https://unsplash.com/photos/2PdHHSPfjCI">Emily Schultz</a>; Baby boomers, photo by <a href="https://unsplash.com/photos/WeR-EmwT12A">Boston Public Library</a>; Gen X, photo by <a href="https://unsplash.com/photos/yo01Z-9HQAw">Hush Naidoo Jade Photography</a>.; Quartz, the first handheld mobile phone photo (Millennials), and SEO PowerSuite, Larry Page and Sergey Brin (Gen Z); photographers and licenses to be added</li></ol></section>
+    <section class="srcgroup"><h3>Generation photos</h3><p class="listnote">Shown as halftones in the generation cards. From Wikimedia Commons under the license listed, except the Brown v. Board photo (Getty Images) and the Google founders photo (SEO PowerSuite).</p><ol class="cite" id="fimgcite"></ol></section>
     <section class="srcgroup"><h3>Members and portraits</h3><ol class="cite">
       <li>The @unitedstates project. <i>congress-legislators</i>: legislators-current.yaml and legislators-historical.yaml. GitHub. <a href="https://github.com/unitedstates/congress-legislators">github.com/unitedstates/congress-legislators</a></li>
       <li>The @unitedstates project. <i>images</i>: official congressional portraits, public domain (225×275). GitHub. <a href="https://github.com/unitedstates/images">github.com/unitedstates/images</a></li>
@@ -1324,7 +1359,7 @@ const DB=JSON.parse(document.getElementById('data').textContent);
 const GEN=["Gen Z (1997+)","Millennial (1981–96)","Gen X (1965–80)","Baby boomer (1946–64)","Silent and older (≤1945)"];
 const GC=["#b4edff","#7be0a1","#ffb552","#87a0ff","#ff83bc"],GD=GC.map(()=>"#121212"); // chip color, dot color (always black so portraits never read as negatives)
 // ASCII look: each generation has one character (denser for older generations) and an ombre of two colors; a member's color sits along the ombre by birth year, oldest first.
-const GR=[['#8fe3ff','#d8f6ff'],['#3fd0a8','#b6f09a'],['#ff8a3d','#ffe066'],['#8f7bff','#7fc4ff'],['#ff5fa2','#ffa6d6']],GY=[[1997,2004],[1981,1996],[1965,1980],[1946,1964],[1930,1945]],GLYPH=['.','+','x','#','@'],RAMP=' .:-=+*#%@';
+const GR=[['#8fe3ff','#d8f6ff'],['#3fd0a8','#b6f09a'],['#ff8a3d','#ffe066'],['#8f7bff','#7fc4ff'],['#ff5fa2','#ffa6d6']],GY=[[1997,2004],[1981,1996],[1965,1980],[1946,1964],[1930,1945]],GLYPH=['o','+','x','#','@'],RAMP=' .:-=+*#%@';
 const hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),mix=(g,by)=>{const [a,b]=GR[g].map(hx),t=Math.max(0,Math.min(1,(by-GY[g][0])/(GY[g][1]-GY[g][0])));return`rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*t))})`};
 const $=id=>document.getElementById(id);
 const gi=by=>by>=1997?0:by>=1981?1:by>=1965?2:by>=1946?3:4;
@@ -1539,7 +1574,7 @@ document.querySelectorAll('.rail button,.tools button').forEach(b=>b.onclick=()=
 $('closeside').onclick=()=>{document.body.classList.remove('side-open');0};
 const BGS={play:'Capitol_at_Dusk_2.jpg',how:'United_States_House_of_Representatives_chamber.jpg',about:'National Mall - Reflecting Pool (45885661671).jpg'},cpurl=f=>`url("https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=1600")`;
 /* Direct Wikimedia addresses (they allow canvas reading, which the ASCII backdrop needs) */
-const BGU={g4:'game-assets/gen-bg/emily-schultz-2PdHHSPfjCI.jpg',g3:'game-assets/gen-bg/boston-public-library-WeR-EmwT12A.jpg',g2:'game-assets/gen-bg/hush-naidoo-jade-photography-yo01Z-9HQAw.jpg',play:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Capitol_at_Dusk_2.jpg/1280px-Capitol_at_Dusk_2.jpg',how:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/United_States_House_of_Representatives_chamber.jpg/1280px-United_States_House_of_Representatives_chamber.jpg',gen:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Wallach_Place_rowhouses_-_Greater_U_Street_HD_-_Washington_DC.jpg/1280px-Wallach_Place_rowhouses_-_Greater_U_Street_HD_-_Washington_DC.jpg',about:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/National_Mall_-_Reflecting_Pool_%2845885661671%29.jpg/1280px-National_Mall_-_Reflecting_Pool_%2845885661671%29.jpg'};
+const BGU={g0:'game-assets/gen-bg/google-founders.webp',g1:'game-assets/gen-bg/qz-dynatac.jpg',g4:'game-assets/gen-bg/emily-schultz-2PdHHSPfjCI.jpg',g3:'game-assets/gen-bg/boston-public-library-WeR-EmwT12A.jpg',g2:'game-assets/gen-bg/hush-naidoo-jade-photography-yo01Z-9HQAw.jpg',play:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Capitol_at_Dusk_2.jpg/1280px-Capitol_at_Dusk_2.jpg',how:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/United_States_House_of_Representatives_chamber.jpg/1280px-United_States_House_of_Representatives_chamber.jpg',gen:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Wallach_Place_rowhouses_-_Greater_U_Street_HD_-_Washington_DC.jpg/1280px-Wallach_Place_rowhouses_-_Greater_U_Street_HD_-_Washington_DC.jpg',about:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/National_Mall_-_Reflecting_Pool_%2845885661671%29.jpg/1280px-National_Mall_-_Reflecting_Pool_%2845885661671%29.jpg'};
 /* ASCII backdrop: the page's photo redrawn as typed characters, in the photo's own colors, over the blurred photo. Brighter areas get denser characters. A picture only, never information. */
 const ABG={img:{},cur:null};
 function asciiBg(src){ABG.cur=src;if(!src){paintBg();return}let im=ABG.img[src];if(!im){im=ABG.img[src]=new Image();im.crossOrigin='anonymous';im.onload=()=>{if(ABG.cur===src)paintBg()};im.src=src}else if(im.complete)paintBg()}
@@ -1560,7 +1595,7 @@ let abgT;addEventListener('resize',()=>{clearTimeout(abgT);abgT=setTimeout(()=>{
 /* One long scroll (Sydney, Nov 17): Chamber, Could you run, How Congress works and About this site are chapters of one page. Only the game (Play) and the Who's like you card (act) are separate states. how / about / mini just scroll to their chapter. */
 function setBg(k){const B=document.body;if(B.dataset.bg===k)return;B.dataset.bg=k;const src=BGU[k]||DB.bg;
   /* every photo is its own layer, so one fades in over the other (a true crossfade, no dip to black) */
-  let L=$('bgs');if(!L){L=document.createElement('div');L.id='bgs';L.setAttribute('aria-hidden','true');B.prepend(L);for(const q of ['chamber','about','gen','g4','g3','g2','how','play']){const d=document.createElement('div');d.dataset.k=q;d.style.backgroundImage=`url("${BGU[q]||DB.bg}")`;L.append(d)}L.offsetWidth}
+  let L=$('bgs');if(!L){L=document.createElement('div');L.id='bgs';L.setAttribute('aria-hidden','true');B.prepend(L);for(const q of ['chamber','about','gen','g4','g3','g2','g1','g0','how','play']){const d=document.createElement('div');d.dataset.k=q;d.style.backgroundImage=`url("${BGU[q]||DB.bg}")`;L.append(d)}L.offsetWidth}
   L.querySelectorAll('div').forEach(d=>d.classList.toggle('on',d.dataset.k===k));
   const a=$('abg'),first=!setBg.done;setBg.done=1;clearTimeout(setBg.t);if(first){asciiBg(B.classList.contains('playing')?null:src);return}a.style.opacity=0;setBg.t=setTimeout(()=>{asciiBg(B.classList.contains('playing')?null:src);a.style.opacity=''},600)}
 function showView(v,arg){const V0=v,B=document.body,J={how:'rules',hist:'v-about',gens:'gens',explore:'explore',play:'v-hub',game:'v-hub'}[v],M=v==='mini',A=v==='about';if(J||M||A)v='chamber';modal(null);const game=false; /* the game is the last chapter of the page now, not a separate state */
@@ -1700,12 +1735,12 @@ function renderFact(gm,box,dots,fk){
   else if(born.length)then=`${born.length*2<ms.length?'Only ':''}<b>${born.length} of the ${ms.length}</b> ${L} in Congress had been born. The oldest, <b>${old[1]}</b>, turned ${y-old[6]} that year.`;
   else if(same.length)then=`<b>${same[0][1]}</b> was born that year.`;
   else then=`None of the ${L} in Congress had been born yet. The oldest, <b>${old[1]}</b>, arrived ${old[6]-y} year${old[6]-y===1?'':'s'} later.`;
-  box.innerHTML=`<div class="pic">${im?'<canvas width="440" height="440" role="img" aria-label="Photo drawn in typed characters: '+im.file.replace(/\.[a-z]+$/i,'').replace(/"/g,'')+'"></canvas><div class="credit">Photo: '+im.artist+' · '+im.license+' · <a href="'+im.page+'" target="_blank" rel="noopener">Wikimedia Commons</a></div>':`<div class="tile" style="--c:linear-gradient(135deg,${GR[gm.g][0]},${GR[gm.g][1]})" aria-hidden="true">${y}</div><div class="credit">No free-to-use photo for this one.</div>`}</div>
+  box.innerHTML=`<div class="pic">${im?'<canvas width="440" height="440" role="img" aria-label="Photo drawn in typed characters: '+im.file.replace(/\.[a-z]+$/i,'').replace(/"/g,'')+'"></canvas><div class="credit">Photo: '+im.artist+(im.license?' · '+im.license:'')+(im.page?' · <a href="'+im.page+'" target="_blank" rel="noopener">'+(im.src||'Wikimedia Commons')+'</a>':'')+'</div>':`<div class="tile" style="--c:linear-gradient(135deg,${GR[gm.g][0]},${GR[gm.g][1]})" aria-hidden="true">${y}</div><div class="credit">No free-to-use photo for this one.</div>`}</div>
     <div><div class="tag">${f[1]==='born'?'When they were born':'When they turned 20'}</div><div class="yr">${y}</div><p class="fact">${f[3]}</p><p class="then">${then}</p><div class="src">Source: <a href="${f[5]}" target="_blank" rel="noopener">${f[4]}</a></div></div>`;
   if(im)face(box.querySelector('canvas'),{id:key,g:gm.g},fk,56,56,6,im.g,2);
   dots.innerHTML=gm.facts.map((_,i)=>`<button aria-label="Fact ${i+1} of ${gm.facts.length}" aria-current="${i===gm.i}" data-i="${i}"></button>`).join('');
 }
-{const seen=new Set();$('fimgcite').innerHTML=Object.values(DB.fimg).filter(v=>!seen.has(v.page)&&seen.add(v.page)).map(v=>`<li>${v.artist}. <i>${v.file}</i>. ${v.license}. <a href="${v.page}">Wikimedia Commons</a></li>`).join('')}
+{const seen=new Set();$('fimgcite').innerHTML=Object.values(DB.fimg).filter(v=>!seen.has(v.file)&&seen.add(v.file)).map(v=>`<li>${v.artist}. <i>${v.file}</i>.${v.license?' '+v.license+'.':''}${v.page?` <a href="${v.page}">Wikimedia Commons</a>`:''}</li>`).join('')}
 const stepFact=d=>{gm.i=(gm.i+d+gm.facts.length)%gm.facts.length;showFact()};
 $('gmprev').onclick=()=>stepFact(-1);$('gmnext').onclick=()=>stepFact(1);
 $('gmdots').onclick=e=>{const b=e.target.closest('button');if(b){gm.i=+b.dataset.i;showFact()}};
@@ -1874,19 +1909,11 @@ pager($('v-how'),'.hblock');pager($('v-cham'),'#v-chamber,#history,#young,#membe
   $('v-how').before(s);$('v-how').after($('v-hub'));const dump=document.createElement('div');
   G5.forEach(o=>renderFact({g:o.g,i:0,ms:o.ms,facts:[o.facts[0]]},s.querySelector(`.sdyk[data-g="${o.g}"]`),dump,'story'+o.g+'0'));
   /* one pinned scene for all generations (Sydney, Nov 17): the layout stays put and each scroll step morphs the name, the characters, the year, the event and the photo into the next generation's */
-  const tr=s.querySelector('.gsc'),L=[...s.querySelectorAll('.gsl')],C=[...s.querySelectorAll('.sdyk')],P=[...s.querySelectorAll('.gprog i')];let gc=-1;
+  const tr=s.querySelector('.gsc'),L=[...s.querySelectorAll('.gsl')],C=[...s.querySelectorAll('.sdyk')],P=[...s.querySelectorAll('.gprog i')],GP=s.querySelector('.gprog'),gst=document.createElement('b');let gc=-1;gst.className='gstep';GP.append(gst); /* a counter and a cue that appears once the text has settled, so you know when to scroll again */
   window.gscn=()=>{if(!s.offsetParent)return;const r=tr.getBoundingClientRect();if(r.bottom<-innerHeight||r.top>innerHeight*2)return;const n=L.length,p=Math.max(0,Math.min(.999,-r.top/Math.max(1,r.height-innerHeight))),k=Math.floor(p*n);if(k===gc)return;gc=k;window.gbgk=BGU['g'+G5[k].g]?'g'+G5[k].g:'gen';if((document.body.dataset.bg||'').startsWith('g'))setBg(gbgk); /* each generation has its own photo behind the page, where Sydney has supplied one */
-    const was=L.findIndex(e=>e.classList.contains('on'));L.forEach((e,i)=>e.classList.toggle('on',i===k));C.forEach((e,i)=>e.classList.toggle('on',i===k));P.forEach((e,i)=>e.classList.toggle('on',i===k));
-    if(was>=0&&!RM.matches)jumble([[L[was],L[k]],[C[was],C[k]]]);setTimeout(()=>wash('story'+G5[k].g+'0'),300)};
-  /* the swap is a jumble, not a fade (Sydney, Nov 17): every letter starts as the old text, flickers through symbols and settles into the new text, left to right. Spaces stay put so lines do not rewrap. The real text is restored at the end, so the symbols are never information. */
-  const SYM='#@+x=*:%/<>01',KEEP=new WeakMap(),FLD=['.gk','b','.gn','.gall','.tag','.yr','.fact','.then','.src','.credit'];let jt=0,jn=[];
-  const nodes=el=>{const o=[],w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(!KEEP.has(n))KEEP.set(n,n.nodeValue);o.push(n)}return o};
-  const jumble=pairs=>{cancelAnimationFrame(jt);jn.forEach(n=>n.nodeValue=KEEP.get(n));jn=[];const jobs=[];
-    pairs.forEach(([a,b])=>FLD.forEach(q=>{const ea=a.querySelector(':scope '+q),eb=b.querySelector(':scope '+q);if(!eb)return;const from=ea?[...nodes(ea)].map(n=>KEEP.get(n)).join(''):'';let off=0;
-      nodes(eb).forEach(n=>{const to=KEEP.get(n);jobs.push({n,to,from:from.slice(off,off+to.length),len:Math.max(1,to.length),r:[...to].map(()=>Math.random())});off+=to.length;jn.push(n)})}));
-    const t0=performance.now(),D=1500;let f=0;const step=now=>{const q=Math.min(1,(now-t0)/D),p=q<.5?2*q*q:1-(-2*q+2)**2/2;f++; /* eased, and the symbols change about 12 times a second, so it reads as a morph and not a flicker */
-      jobs.forEach(j=>{let o='';for(let i=0;i<j.to.length;i++){const c=j.to[i],at=.28+.55*(i/j.len)+j.r[i]*.17,go=.04+.2*(i/j.len)+j.r[i]*.1;if(c===' '||c==='\n'||p>=at)o+=c;else if(p<go&&j.from[i]&&j.from[i]!==' ')o+=j.from[i];else o+=SYM[(i*7+((f/5)|0)*13+((j.r[i]*97)|0))%SYM.length]}j.n.nodeValue=o});
-      if(p<1)jt=requestAnimationFrame(step);else{jn.forEach(n=>n.nodeValue=KEEP.get(n));jn=[]}};jt=requestAnimationFrame(step)};gscn();
+    const was=L.findIndex(e=>e.classList.contains('on'));gst.textContent=`${k+1} of ${n}`;L.forEach((e,i)=>e.classList.toggle('on',i===k));C.forEach((e,i)=>e.classList.toggle('on',i===k));P.forEach((e,i)=>e.classList.toggle('on',i===k));
+    setTimeout(()=>wash('story'+G5[k].g+'0'),300)};
+  gscn();
   s.addEventListener('click',e=>{const b=e.target.closest('.gall');if(!b)return;const t=$('gtlbar').querySelector(`[data-g="${b.dataset.g}"]`);if(t)t.click();mFrom=b;modal('young')});
   const io=new IntersectionObserver(en=>en.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -12% 0px'});s.querySelectorAll('.sdyk,.gsl').forEach(e=>io.observe(e));
 }
@@ -1900,11 +1927,23 @@ pager($('v-how'),'.hblock');pager($('v-cham'),'#v-chamber,#history,#young,#membe
 /* The whole game is played in the last chapter (Sydney, Nov 17): the stage sits under the chapter title, full width and one window tall, and starts the first time it comes near the screen. */
 {const vp=$('v-play');$('v-hub').append(vp);vp.hidden=false;const io=new IntersectionObserver(en=>{if(en.some(x=>x.isIntersecting)){GAME.enter();io.disconnect()}},{rootMargin:'60% 0px'});io.observe(vp);
   let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(GAME.G.started)GAME.enter()},200)})}
+/* jmb(el): after you set el's new content, it rises and fades in. Sydney found the symbol jumble overstimulating (Nov 17), so this is the calm version; the name is kept so the callers did not change. */
+window.jmb=el=>{if(RM.matches||!el)return;el.classList.remove('sw');void el.offsetWidth;el.classList.add('sw')};
 /* Opening (Sydney, Nov 17): a title screen first, so the page reads as a scroll. Then the chamber is pinned (#cpin is the scroll track) while the headline narrates and one generation lights at a time; at the last step the controls fade in and the chamber is free to explore. */
 {const t=document.createElement('div');t.id='cpin';$('v-about').before(t);
   t.innerHTML='<div class="spin"><p id="stake" aria-live="polite"></p><div class="swrap"><canvas id="scv" role="img" aria-label="The chamber: one typed character for each member of Congress"></canvas></div></div>';
   const n0=O70(CS[0]),n1=O70(119);$('ilede').textContent='An interactive look at how old the people in Congress are: every member in the chamber, how it got this old, and a short game about waiting for a seat.';
   const icap=()=>GAME.capitol($('icap'),Math.min(innerWidth*.86,760),Math.max(120,innerHeight*.32));icap();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(icap);let ict;addEventListener('resize',()=>{clearTimeout(ict);ict=setTimeout(icap,150)});
+  /* the title Capitol lights up under the pointer in the generation colors and fades back, like the portraits */
+  {const cv=$('icap'),hot=new Map(),RAMP2='.:-=+*#%@';let raf=0,inside=false,tx=0,ty=0,px=0,py=0,fresh=true,lt=0;
+    /* smooth: the glow follows a eased copy of the pointer, brightness falls off smoothly with distance, rises fast and fades slowly, and the character follows the brightness instead of flickering */
+    const tick=now=>{raf=0;const k=GAME.capCells(cv);if(!k)return;const dt=Math.min(64,lt?now-lt:16);lt=now;const ez=1-Math.exp(-dt/70);if(fresh){px=tx;py=ty;fresh=false}px+=(tx-px)*ez;py+=(ty-py)*ez;const R=6; /* time based, so it fades the same on 60 and 120 Hz screens */
+      for(let i=0;i<k.n;i++){const [c,rw]=k.at(i);let h=hot.get(i);const dd=inside?Math.hypot(c+.5-px,rw+.5-py):99,f=dd<R?.5+.5*Math.cos(Math.PI*dd/R):0;
+        if(f>0||h){if(!h){h={a:0};hot.set(i,h)}h.a=f>h.a?h.a+(f-h.a)*(1-Math.exp(-dt/60)):h.a*Math.exp(-dt/700);h.pk=Math.max(h.pk||0,f);if(h.a<.01){hot.delete(i);continue}
+          const g=Math.min(4,Math.floor(c/k.w*5));h.ch=RAMP2[Math.min(RAMP2.length-1,Math.floor(h.pk*RAMP2.length))]; /* the character is set by the peak, so it only fades out and never changes while dimming */h.col=mix(g,GY[g][0]+(GY[g][1]-GY[g][0])*(rw/k.h))}}
+      GAME.capDraw(cv,hot);if(inside||hot.size)raf=requestAnimationFrame(tick);else lt=0};
+    cv.addEventListener('pointermove',e=>{if(RM.matches)return;const k=GAME.capCells(cv);if(!k)return;const r=cv.getBoundingClientRect();tx=(e.clientX-r.left)/k.cell;ty=(e.clientY-r.top)/k.cell;if(!inside){inside=true;fresh=true}if(!raf)raf=requestAnimationFrame(tick)});
+    cv.addEventListener('pointerleave',()=>{inside=false;if(!raf&&hot.size)raf=requestAnimationFrame(tick)})}
   const cnt=g=>{const [a,b]=GYRS[g];return DB.data[119].filter(r=>r[6]>=a&&r[6]<=b).length},NM=['Gen Z','Millennials','Gen X','Baby boomers','from the Silent Generation'],pop=DB.pop[2025];
   const ST=[{g:null,txt:`<b>${DB.data[119].length}</b> members of Congress. <span>One character each.</span>`}].concat([4,3,2,1,0].filter(g=>cnt(g)).map(g=>({g,txt:`<b>${cnt(g)}</b> ${cnt(g)===1?'is':'are'} ${NM[g]}, <span>born ${GYRS[g][0]} to ${GYRS[g][1]}.</span>`})),[{g:null,txt:`Their median age is <b>${fmt(med(AGES[119]))}</b>.${pop!=null?` <span>For everyone living in the United States, it is ${pop}.</span>`:''}`}]);
   t.style.setProperty('--n',ST.length);
@@ -1914,11 +1953,12 @@ pager($('v-how'),'.hblock');pager($('v-cham'),'#v-chamber,#history,#young,#membe
     SL.forEach(o=>{const c=o.c,ch=GLYPH[o.m.g];if(c.k!==fk){fk=c.k;sx.font=`400 ${SEATPX[c.k]}px "IBM Plex Mono",monospace`}
       if(o.a<1){sx.globalAlpha=.16*(1-o.a);sx.fillStyle='#f4f1e8';sx.fillText(ch,c.x,c.y)}if(o.a>0){sx.globalAlpha=o.a;sx.fillStyle=mix(o.m.g,o.m.by);sx.fillText(ch,c.x,c.y)}});sx.globalAlpha=1};
   const ssize=()=>{const w=sc.parentElement.clientWidth;if(!w)return;const d=devicePixelRatio||1;sc.width=Math.round(w*d);sc.height=Math.round(w*AR*d);sc.style.height=w*AR+'px';sk=w/1000*d;sdraw()};
-  const sfade=()=>{cancelAnimationFrame(sa);if(RM.matches){SL.forEach(o=>o.a=o.ta);sdraw();return}SL.forEach(o=>o.a0=o.a);const t0=performance.now();
-    const step=now=>{const p=Math.min(1,(now-t0)/450),e=p<.5?2*p*p:1-(-2*p+2)**2/2;SL.forEach(o=>o.a=o.a0+(o.ta-o.a0)*e);sdraw();if(p<1)sa=requestAnimationFrame(step)};sa=requestAnimationFrame(step)};
+  const sfade=()=>{cancelAnimationFrame(sa);if(RM.matches){SL.forEach(o=>o.a=o.ta);sdraw();return}if(!SL[0].d){const my=Math.max(...SL.map(o=>o.c.y)),md=Math.max(...SL.map(o=>Math.hypot(o.c.x-500,o.c.y-my)));SL.forEach(o=>o.d=Math.hypot(o.c.x-500,o.c.y-my)/md)} /* the change travels outward from the middle of the chamber */
+    SL.forEach(o=>o.a0=o.a);const t0=performance.now();
+    const step=now=>{const p=Math.min(1,(now-t0)/1100);SL.forEach(o=>{const q=Math.max(0,Math.min(1,(p*1.7-o.d*.7))),e=q<.5?2*q*q:1-(-2*q+2)**2/2;o.a=o.a0+(o.ta-o.a0)*e});sdraw();if(p<1)sa=requestAnimationFrame(step)};sa=requestAnimationFrame(step)};
   new ResizeObserver(ssize).observe(sc.parentElement);document.fonts.load('400 20px "IBM Plex Mono"').then(sdraw);
   window.cscn=()=>{if(!t.offsetParent)return;const r=t.getBoundingClientRect(),p=Math.max(0,Math.min(.999,-r.top/Math.max(1,r.height-innerHeight))),k=Math.floor(p*ST.length);if(k===cur)return;
-    cur=k;const st=$('stake');st.innerHTML=ST[k].txt;st.classList.remove('sw');void st.offsetWidth;st.classList.add('sw');SL.forEach(o=>o.ta=+(ST[k].g==null||o.m.g===ST[k].g));sfade()};
+    cur=k;const st=$('stake');st.innerHTML=ST[k].txt;jmb(st,1000);SL.forEach(o=>o.ta=+(ST[k].g==null||o.m.g===ST[k].g));sfade()};
   /* Explore (Sydney, Nov 17): everything you can click sits here, after the story, so nobody gets stuck before it ends */
   const x=document.createElement('section');x.id='explore';x.setAttribute('aria-label','Explore the chamber');x.innerHTML='<h2 class="sec big">Explore the chamber</h2><p class="lede">Now it is yours. Pick a generation, drag the timeline back to 2017, or tap a seat to see who holds it.</p>';
   $('v-hub').before(x);x.append($('v-chamber'));$('v-hub').before($('v-mini'));
@@ -1932,7 +1972,7 @@ pager($('v-how'),'.hblock');pager($('v-cham'),'#v-chamber,#history,#young,#membe
     if(A<30)return`At ${A} you can vote and run for the House. The Senate opens at 30, in ${yy(30-A)}.`;
     if(A<35)return`At ${A} you can vote and run for the House or the Senate. President opens at 35, in ${yy(35-A)}.`;
     return`At ${A} you are old enough for every seat in Congress, and for President.`};
-  $('askby').oninput=()=>{const l=$('askline');l.textContent=askT(+$('askby').value);l.classList.remove('sw');void l.offsetWidth;l.classList.add('sw')};
+  $('askby').oninput=()=>{const l=$('askline');l.textContent=askT(+$('askby').value);jmb(l,700)};
   $('v-mini').hidden=true;
   {const io=new IntersectionObserver(en=>en.forEach(q=>{if(q.isIntersecting){ak.classList.add('in');io.disconnect()}}),{rootMargin:'0px 0px -15% 0px'});io.observe(ak)}
   window.cfree=()=>x.scrollIntoView();
@@ -1940,10 +1980,10 @@ pager($('v-how'),'.hblock');pager($('v-cham'),'#v-chamber,#history,#young,#membe
   q.oninput=q.onchange=()=>{const v=q.value.trim().toLowerCase();if(v.length<3)return;const A=S.all||[],m=A.find(m=>m.name.toLowerCase()===v)||(A.filter(m=>m.name.toLowerCase().includes(v)).length===1&&A.find(m=>m.name.toLowerCase().includes(v)));if(m){S.sel=m.bg;S.gen=null;render()}};
   /* The rules (Sydney, Nov 17): one pinned screen, three scroll steps, in place of the How Congress works tabs. The grids are plain seats, not members: nothing here says which senators are up. */
   const RS=[['Two chambers','The House has 435 seats, split among the states by population. The Senate has 100, two for each state. A bill has to pass both.'],['Terms','A House term is 2 years. A Senate term is 6. Neither chamber limits how many terms a member can serve.'],['On the ballot in 2026','Every House seat is up on November 3, 2026, and 35 of the 100 Senate seats: 33 regular elections and 2 special elections, in Ohio and Florida.']];
-  const g=(n,up)=>Array.from({length:n},(_,i)=>`<i${i<up?' class="up"':''}>#</i>`).join(''),ru=document.createElement('section');ru.id='rules';ru.setAttribute('aria-label','The rules');
+  const g=(n,up,cols)=>Array.from({length:n},(_,i)=>`<i${i<up?' class="up"':''} style="--n:${i};--d:${(i/cols|0)+(i%cols)*.6}">#</i>`).join(''),ru=document.createElement('section');ru.id='rules';ru.setAttribute('aria-label','The rules');
   ru.innerHTML=`<div class="rpin"><div class="rtxt"><span class="rk"><b id="rkn">1</b> of ${RS.length}</span><div class="rsteps">${RS.map(([h,p])=>`<div class="rstep"><h3>${h}</h3><p>${p}</p></div>`).join('')}</div><p class="rsrc">U.S. Constitution, Article I and the 17th Amendment; 2 U.S.C. § 7. Links are under <button data-modal="v-sources">About this site</button>.</p></div>
-    <div class="rpic"><div class="rch"><span class="rlab"><b>House</b> 435 seats</span><div class="rgrid" aria-hidden="true">${g(435,435)}</div><div class="rterm" aria-hidden="true"><i></i><i></i><i></i></div><span class="rtl">6 years = 3 House elections</span></div>
-    <div class="rch s"><span class="rlab"><b>Senate</b> 100 seats</span><div class="rgrid" aria-hidden="true">${g(100,35)}</div><div class="rterm" aria-hidden="true"><i></i></div><span class="rtl">6 years = 1 Senate election</span></div></div></div>`;
+    <div class="rpic"><div class="rch"><span class="rlab"><b>House</b> 435 seats</span><div class="rgrid" aria-hidden="true">${g(435,435,29)}</div><div class="rterm" aria-hidden="true"><i></i><i></i><i></i></div><span class="rtl">6 years = 3 House elections</span></div>
+    <div class="rch s"><span class="rlab"><b>Senate</b> 100 seats</span><div class="rgrid" aria-hidden="true">${g(100,35,25)}</div><div class="rterm" aria-hidden="true"><i></i></div><span class="rtl">6 years = 1 Senate election</span></div></div></div>`;
   $('v-how').before(ru);const rst=[...ru.querySelectorAll('.rstep')];let rc=-1;
   window.rscn=()=>{if(!ru.offsetParent)return;const r=ru.getBoundingClientRect(),p=Math.max(0,Math.min(.999,-r.top/Math.max(1,r.height-innerHeight))),k=Math.floor(p*RS.length);if(k===rc)return;rc=k;ru.dataset.k=k;$('rkn').textContent=k+1;rst.forEach((e,i)=>e.classList.toggle('on',i===k))};rscn()}
 if(!document.body.classList.contains('playing'))['v-mini','v-how','v-sources','v-hub'].forEach(id=>$(id).hidden=false);if(GAME.preview)GAME.preview($('hubcv')); /* the page loads as one scroll, before any showView call */
@@ -1966,5 +2006,17 @@ addEventListener('resize',size);let roW=0;new ResizeObserver(en=>{const w=Math.r
   let c='';[2,3,4,5].forEach((h,i)=>{for(let k=0;k<h;k++)c+=T(22+i*32,74-k*15,'#',GC[[0,1,2,3][i]],k===h-1?1:.45)});
   $('ico-run').innerHTML=`<svg viewBox="0 0 140 84">${c}</svg>`})();
 $('ramp').innerHTML=`<span aria-hidden="true">${GLYPH.map((g,i)=>`<i style="color:${GC[i]}">${g}</i>`).join('')}</span>One character per member. The older the generation, the denser the character.`;
+/* Strong anchors (Sydney, Nov 17): Explore and the age question hold in place for a stretch of scrolling once they are fully on screen (Explore holds when its bottom reaches the bottom of the window), so a quick scroll cannot carry you past them. Sticky, not snapping: nothing pulls the page. */
+{const hold=(el,ex)=>{if(!el)return;const w=document.createElement('div');w.className='hold';el.before(w);w.append(el);el.style.position='sticky';const fit=()=>{el.style.top=Math.min(0,innerHeight-el.offsetHeight)+'px';sp.style.height=ex()+'px'};const sp=document.createElement('div');sp.setAttribute('aria-hidden','true');w.append(sp);fit();new ResizeObserver(fit).observe(el);addEventListener('resize',fit)};
+  hold($('explore'),()=>innerHeight*.7);hold($('ask'),()=>innerHeight*.6)}
+/* The i button steps aside while the game fills the window (it covered the 75+ row). */
+{const g=$('v-play'),ib=$('infob');if(g&&ib&&'IntersectionObserver' in window){ib.style.transition='opacity .4s';new IntersectionObserver(es=>{const on=es[0].intersectionRatio>.35;ib.style.opacity=on?0:'';ib.style.pointerEvents=on?'none':''},{threshold:[0,.35,.6]}).observe(g)}}
+/* Backdrop drift: the ASCII photo shifts a little with the scroll and the pointer (eased), on top of its slow ambient drift. */
+if(!RM.matches){let tx=0,ty=0,cx=0,cy=0,mx=0,my=0,sy=0,raf=0;const ab=$('abg'),go=()=>{if(!raf)raf=requestAnimationFrame(st)},st=()=>{raf=0;ty=-sy*.03+my*14;tx=mx*18;cx+=(tx-cx)*.06;cy+=(ty-cy)*.06;ab.style.setProperty('--ax',cx.toFixed(2)+'px');ab.style.setProperty('--ay',cy.toFixed(2)+'px');if(Math.abs(tx-cx)+Math.abs(ty-cy)>.05)raf=requestAnimationFrame(st)};
+  addEventListener('scroll',()=>{sy=Math.min(scrollY,2400);go()},{passive:true});addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;go()},{passive:true})}
+/* Generation chips: on hover the glyph inside steps through the density ramp, o + x # @, and goes back to its own when the pointer leaves. */
+if(!RM.matches){const tm=new WeakMap(),stop=i=>{const t=tm.get(i);if(t){clearInterval(t);tm.delete(i)}};
+  document.addEventListener('mouseover',e=>{const b=e.target.closest('#genbar button,#gtlbar button'),i=b&&b.querySelector('i');if(!i||tm.has(i))return;const g=+(b.dataset.g),own=GLYPH[g];let k=g;tm.set(i,setInterval(()=>{k=(k+1)%GLYPH.length;i.textContent=GLYPH[k]},140))});
+  document.addEventListener('mouseout',e=>{const b=e.target.closest('#genbar button,#gtlbar button');if(!b||b.contains(e.relatedTarget))return;const i=b.querySelector('i');if(!i)return;stop(i);i.textContent=GLYPH[+b.dataset.g]})}
 S.tab=null;document.body.classList.add('about');document.body.dataset.bg='chamber';buildAttrs();buildVotes();hero();render();size();cscn();
 </script>
