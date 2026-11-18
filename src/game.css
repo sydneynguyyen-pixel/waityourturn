@@ -70,3 +70,106 @@
 @media (max-width:900px){.gs:has(.gover.gside:not([hidden])) .gkey,.gs:has(.gover.gside:not([hidden])) .gax{display:none}}
 .g75{white-space:nowrap}
 .grec{background:rgba(14,19,27,.78);border:1px solid var(--th);padding:10px 12px}.grec:empty{display:none}.grec div{font-size:13.5px}.grec small{opacity:.8}
+/* ---- Restructure (Nov 17), cleaned up after Sydney's layout notes. Three text styles only: serif headline, 17px body, 14px muted small.
+   Selectors start with #gs so the site's old rules (.gs button, .off, body.stitch #v-play .gdlg) cannot leak in. ---- */
+.gband{position:absolute;left:0;right:0;top:var(--bt,40%);height:calc(var(--bb,80%) - var(--bt,40%));background:linear-gradient(rgba(8,11,16,0),rgba(8,11,16,.5) 30%,rgba(8,11,16,.6) 80%,rgba(8,11,16,0));pointer-events:none;opacity:0;transition:opacity .6s}
+.gs.play .gband{opacity:1}
+/* buttons: one pill style; primary is filled, the rest outlined; hover is a soft change, never a color flip */
+#gs button{font:500 15px/1.2 var(--body);letter-spacing:0;border-radius:999px;padding:10px 20px;border:1px solid rgba(247,240,223,.45);background:none;color:var(--th);transition:background .2s,border-color .2s}
+#gs button:hover{background:rgba(247,240,223,.12);border-color:var(--th);color:var(--th)}
+#gs .pbtn{background:var(--th);border-color:var(--th);color:var(--dk)}
+#gs .pbtn:hover{background:#fff;border-color:#fff;color:var(--dk)}
+/* dialogue: a compact bar under the stage */
+body.stitch #v-play #gs.play .gdlg,#gs.play .gdlg{top:var(--dy);bottom:auto}
+#gs .gdlg{max-width:640px;padding:18px 20px 14px;border-radius:14px;border:1px solid rgba(247,240,223,.35);background:rgba(12,16,22,.78);gap:12px;align-content:start}
+#gs .gwho{top:-12px;left:16px;font:500 13px/1 var(--body);padding:5px 10px;border-radius:999px}
+#gs .gdlg p{font:400 17px/1.45 var(--body);min-height:0}
+#gs .gchoice{min-height:0;gap:8px}
+#gs .gsw button{width:24px;height:24px;padding:0;border-radius:50%}
+#gs .gcyc button{padding:5px 0;border-radius:8px}
+/* résumé: one compact line, a meter and a row of the dot icons, kept above the stage */
+#gs .grec{margin-top:10px;max-width:none;width:max-content;display:grid;gap:6px;padding:10px 14px;border-radius:12px;border:1px solid rgba(247,240,223,.25);background:rgba(12,16,22,.7)}
+#gs .grec .grl{display:flex;justify-content:space-between;align-items:baseline;gap:16px;border:0;padding:0;font:400 14px/1.2 var(--body)}
+#gs .grec .grl b{font:600 15px var(--body)}#gs .grec .grl span{opacity:.7}
+#gs .grec .gmeter{width:200px;margin:0}
+#gs .grec .gric{display:flex;justify-content:flex-start;gap:6px;border:0;padding:0}#gs .grec .gric svg{width:18px;height:18px;fill:var(--th);opacity:.85}
+/* overlays */
+.gover.cast,.gover.choose,.gover.res,.gover.end{background:rgba(10,13,18,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.gover h2,.gover .gchq{margin:0;font:400 clamp(28px,3.4vw,44px)/1.1 var(--serif);color:var(--th);max-width:24ch}
+.gcast,.gch,.gres,.gend{display:grid;gap:22px;max-width:920px;width:100%;color:var(--th);text-align:center;justify-items:center}
+.gover p{margin:0;font:400 17px/1.45 var(--body);color:rgba(247,240,223,.86);max-width:54ch}
+.gover .gsm,.gchn,.gres .mono,.gend .mono{font:400 14px/1.4 var(--body)!important;color:rgba(247,240,223,.6)!important}
+.gwhy{display:grid;gap:12px;justify-items:center}
+.gcards,.gopts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;width:100%}
+#gs .gpc,#gs .gopt{box-sizing:border-box;cursor:pointer;display:grid;justify-items:center;align-content:start;gap:10px;padding:26px 18px 22px;border-radius:18px;border:1px solid rgba(247,240,223,.22);background:rgba(247,240,223,.04);color:var(--th);text-align:center;font:inherit;transition:border-color .25s,background .25s,translate .25s,opacity .4s}
+#gs .gpc:hover,#gs .gopt:hover,#gs .gpc:focus-visible,#gs .gopt:focus-visible{border-color:rgba(247,240,223,.7);background:rgba(247,240,223,.08);translate:0 -3px}
+.gpc canvas{height:140px;width:auto;image-rendering:pixelated}
+.gpc b,.gopt b{font:500 18px/1.25 var(--body)}
+.gpc span{font:400 15px/1.4 var(--body);color:rgba(247,240,223,.8)}
+.gpc small,.gopt small{font:400 14px/1.35 var(--body);color:rgba(247,240,223,.6)}.gopt small b{font:600 14px var(--body);color:var(--pc,var(--th))}
+.gico{width:72px;height:72px;fill:var(--th);overflow:visible}.gico circle{transform-box:fill-box;transform-origin:center}
+#gs .gopt.on{border-color:var(--pc,var(--th));background:rgba(247,240,223,.1);translate:none}
+#gs .gopt.gdim{opacity:.3;pointer-events:none}
+.gfact{display:grid;justify-items:center;gap:16px}
+.gres,.gend{max-width:600px;padding:32px 28px;border-radius:22px;border:1px solid rgba(247,240,223,.25);background:rgba(12,16,22,.6)}
+#gs .gover .pbtn{justify-self:center}
+.gpair{display:flex;gap:40px;justify-content:center}.gpair figure{margin:0;display:grid;justify-items:center;gap:8px}.gpair canvas{height:72px;width:auto}
+.gpair figcaption{display:grid;gap:2px;font:400 14px/1.3 var(--body);color:rgba(247,240,223,.6)}.gpair figcaption b{font:400 40px/1 var(--serif);color:var(--th)}
+.gend .glesson{color:var(--th)}
+.gend .prow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.gmeter{height:6px;border-radius:3px;overflow:hidden;background:rgba(247,240,223,.18);position:relative}.gmeter i{position:absolute;inset:0 auto 0 0;background:var(--pc,var(--th));transition:width .8s cubic-bezier(.2,.7,.2,1)}
+@media (prefers-reduced-motion:no-preference){
+  .gopt:hover .gico circle,.gopt:focus-visible .gico circle{animation:gicop .7s ease calc(var(--d)*28ms)}
+  .gopt.on .gico circle{animation:gicop .7s ease calc(var(--d)*28ms) 2}
+}
+@keyframes gicop{0%,100%{scale:1}40%{scale:1.7;fill:var(--pc,#fff)}}
+@media (max-width:700px){
+  .gcards,.gopts{grid-template-columns:1fr;gap:10px}
+  #gs .gpc,#gs .gopt{grid-template-columns:auto 1fr;justify-items:start;text-align:left;padding:14px 16px;column-gap:14px;row-gap:4px}
+  .gpc canvas{height:80px;grid-row:span 3}.gico{width:48px;height:48px;grid-row:span 2}
+  .gres,.gend{padding:22px 18px}.gpair{gap:24px}
+  #gs .grec .gmeter{width:140px}
+}
+#gs button:focus-visible{outline:1px solid rgba(247,240,223,.6);outline-offset:3px}
+.gover .gpts{font:600 17px var(--body);color:var(--pc,var(--th))}
+.gover .gchq{max-width:30ch}
+@media (max-width:700px){#gs .gopt{align-items:center;padding:12px 16px}#gs .gopt .gico{grid-row:auto}.gover.choose,.gover.cast,.gover.res,.gover.end{padding-top:64px}}
+/* quiet text links (ending, title) */
+#gs .glink{border:0;padding:4px 2px;border-radius:0;background:none;font:400 14px/1.3 var(--body);color:rgba(247,240,223,.7);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(247,240,223,.3)}
+#gs .glink:hover{background:none;color:var(--th);text-decoration-color:var(--th)}
+.glinks{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 18px}
+/* story tree */
+.gover.tree{padding:0;place-items:stretch;background:rgba(10,13,18,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);overflow:hidden}
+.gtree{display:grid;grid-template-rows:auto 1fr;height:100%;min-height:0;color:var(--th)}
+.gtbar{display:flex;justify-content:space-between;align-items:end;gap:16px 32px;flex-wrap:wrap;padding:28px 32px 16px;border-bottom:1px solid rgba(247,240,223,.15)}
+.gtbar h2{text-align:left}.gtbar p{margin:6px 0 0;max-width:60ch}
+.gtbtns{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.gtseg{display:inline-flex;gap:2px;border:1px solid rgba(247,240,223,.3);border-radius:999px;padding:3px}
+#gs .gtseg button{border:0;padding:6px 14px;font-size:14px}#gs .gtseg button.on{background:var(--th);color:var(--dk)}
+.gtsv{width:100%;height:100%;cursor:grab;touch-action:none;display:block}.gtsv:active{cursor:grabbing}
+.gtsv text{font:500 13px var(--body);fill:var(--th)}
+.gtsv .th{font:400 13px var(--body);fill:rgba(247,240,223,.6)}.gtsv .thbg{fill:#0e1217;stroke:rgba(247,240,223,.12)}
+.gtsv .tb{font:400 24px var(--serif)}.gtsv .ts{font:400 14px var(--body);fill:rgba(247,240,223,.7)}
+.gtsv .te{fill:none;stroke:rgba(247,240,223,.22);stroke-width:1.2}.gtsv .te.dash{stroke-dasharray:3 4}
+.gtsv .te.on{stroke:var(--pc,var(--th));stroke-width:2.4}
+.gtsv .tn rect{fill:rgba(20,26,34,.95);stroke:rgba(247,240,223,.28)}.gtsv .tn g{fill:var(--th)}
+.gtsv .tn.on rect{stroke:var(--pc,var(--th));stroke-width:2}
+.gtsv .end.in rect{fill:var(--th)}.gtsv .end.in text{fill:var(--dk)}
+.gtsv .end.closed rect{stroke-dasharray:4 3}
+.gtsv .tp{fill:rgba(247,240,223,.6)}.gtsv .end.in .tp{fill:rgba(20,27,36,.7)}
+@media (max-width:700px){.gtbar{padding:72px 16px 12px}.gtbar p{font-size:14px}}
+#gs .gopt .gpv{display:none;font:600 14px var(--body);color:var(--th)}
+#gs .gopts.shown .gpv{display:block}#gs .gopt.on .gpv{color:var(--pc,var(--th))}
+#gs .gopt.gdim{opacity:.5}
+@media (max-width:700px){#gs .gopt .gpv{grid-column:2}}
+@media (max-width:700px){#gs .grec{margin-top:64px;padding:8px 12px}#gs .grec .gmeter{width:150px}}
+@media (max-width:700px){.gtbar{gap:10px}.gover.tree .gtbar p{font-size:13.5px}}
+.gopts{grid-template-columns:repeat(var(--n,3),minmax(0,1fr))}.gopts[style*="--n:2"]{max-width:640px;margin-inline:auto}
+.gtsv .lock{opacity:.3}.gtsv .end.in.lock rect{fill:rgba(247,240,223,.25)}
+@media (max-width:700px){.gopts{grid-template-columns:1fr}}
+
+/* Dialogue: box keeps its size while typing; one click spot finishes, then advances */
+#gs .gdlg{cursor:pointer}#gs .gghost{visibility:hidden}#gs .gchoice.gwait button{opacity:.35;pointer-events:none}
+#gs canvas[data-f]{width:auto;height:150px;image-rendering:auto}#gs .gpair canvas{height:150px}@media(max-width:700px){#gs canvas[data-f],#gs .gpair canvas{height:116px}}
+#gs .pvs canvas{height:130px;width:auto}#gs .pvs canvas[data-you]{image-rendering:pixelated}@media(max-width:700px){#gs .pvs canvas{height:100px}}
+#gs .gquit{position:absolute;left:16px;bottom:16px;z-index:6;display:none;padding:7px 14px;font:400 14px var(--body);color:rgba(247,240,223,.75);background:rgba(12,16,22,.55);border:1px solid rgba(247,240,223,.25);border-radius:999px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}#gs .gquit:hover{color:var(--th);border-color:rgba(247,240,223,.5)}#gs.play .gquit{display:block}

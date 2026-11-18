@@ -106,7 +106,8 @@ function build(){const gs=E('gs');
   new ResizeObserver(()=>{size();pdraw();const p=E('gpv');if(p)prev()}).observe(gs)}
 function size(){const gs=E('gs'),W=gs.clientWidth,T=parseFloat(getComputedStyle(gs).getPropertyValue('--top'))||0,H=gs.clientHeight-T;if(!W||H<=0)return; /* --top: room kept clear under the site header */
   const cell=Math.max(6,Math.min(10,Math.floor(W/112))),cols=Math.floor(W/cell),rows=Math.floor(H/cell),d=devicePixelRatio||1,cv=E('gcv'),ox=(W-cols*cell)>>1,oy=T+((H-rows*cell)>>1);
-  Object.assign(V,{ox,oy,cell,cols,rows,gy:rows-Math.ceil((W<700?214:178)/cell),cx:Math.round(cols*.2)});
+  const gy=Math.min(rows-Math.ceil((W<700?214:178)/cell),Math.round(rows*.58));Object.assign(V,{ox,oy,cell,cols,rows,gy,cx:Math.round(cols*.2)}); /* the ground sits a little above the middle, with the dialogue right under it (Sydney's class: too much empty space above) */
+  gs.style.setProperty('--dy',oy+(gy+5)*cell+'px');gs.style.setProperty('--bt',oy+(gy-40)*cell+'px');gs.style.setProperty('--bb',oy+(gy+4)*cell+'px');
   cv.width=cols*cell*d;cv.height=rows*cell*d;cv.style.cssText=`width:${cols*cell}px;height:${rows*cell}px;left:${ox}px;top:${oy}px;--cell:${cell}px`;
   gs.style.setProperty('--hx',ox+3*cell+'px');gs.style.setProperty('--hy',oy+12*cell+'px');G.dirty=true}
 // the ending picture: everyone who took an opened seat, in three age groups. One figure (a head stitch over a body stitch) per person; your group is in your color.
@@ -164,12 +165,14 @@ function walk(to,year){return new Promise(res=>{const run=G.run,from=G.wx,dur=RM
 
 /* ---- dialogue: typewriter text, tap anywhere to finish the line, then pick a button ---- */
 function say(who,text,choices=['Next']){return new Promise(res=>{const run=G.run,box=E('gdlg'),t=E('gtext'),ch=E('gchoice');
-  box.hidden=false;E('gwho').textContent=who;E('gsr').textContent=who+': '+text;ch.innerHTML='';t.textContent='';let i=0,done=false,iv=0;
+  box.hidden=false;E('gwho').textContent=who;E('gsr').textContent=who+': '+text;let i=0,done=false,iv=0;
   G.talk=who==='Quorum';
-  const fin=()=>{if(done)return;done=true;clearInterval(iv);t.textContent=text;G.talk=false;G.dirty=true;
-    ch.innerHTML=choices.map((c,j)=>`<button class="${j||choices.length>1?'':'pbtn'}" data-j="${j}">${esc(c)}</button>`).join('');ch.querySelector('button').focus({preventScroll:true})};
-  box.onclick=e=>{const b=e.target.closest('button[data-j]');if(b){box.onclick=null;res(+b.dataset.j)}else fin()};
-  if(RM.matches)fin();else iv=setInterval(()=>{if(run!==G.run)return clearInterval(iv);i++;t.textContent=text.slice(0,i);if(i>=text.length)fin()},20)})}
+  /* Full size from the start: untyped text is invisible and the buttons are already in place, so nothing moves under the pointer. */
+  const show=n=>{t.innerHTML=esc(text.slice(0,n))+'<span class="gghost">'+esc(text.slice(n))+'</span>'};show(0);
+  ch.innerHTML=choices.map((c,j)=>`<button class="${j||choices.length>1?'':'pbtn'}" data-j="${j}" tabindex="-1">${esc(c)}</button>`).join('');ch.classList.add('gwait');
+  const fin=()=>{if(done)return;done=true;clearInterval(iv);show(text.length);G.talk=false;G.dirty=true;ch.classList.remove('gwait');ch.querySelectorAll('button').forEach(b=>b.removeAttribute('tabindex'));ch.querySelector('button').focus({preventScroll:true})};
+  box.onclick=e=>{const b=e.target.closest('button[data-j]');if(!done)return fin();if(b){box.onclick=null;return res(+b.dataset.j)}if(choices.length===1){box.onclick=null;res(0)}};
+  if(RM.matches)fin();else iv=setInterval(()=>{if(run!==G.run)return clearInterval(iv);i++;show(i);if(i>=text.length)fin()},20)})}
 const q=(t,c)=>say('Quorum',t,c),hideDlg=()=>E('gdlg').hidden=true;
 function over(html,cls=''){const o=E('gover');o.className='gover '+cls;o.innerHTML=html;o.hidden=false;o.onclick=null;o.scrollTop=0;E('gs').classList.toggle('inroom',cls==='room'||cls==='end');G.dirty=true;paint();
   if(cls!=='create'){const b=o.querySelector('.pbtn');if(b)b.focus({preventScroll:true})}}
@@ -181,14 +184,18 @@ function histSp(you){const lo=SUCC[0],hi=SUCC[SUCC.length-1],n={},cells=[];let t
 const phist=you=>`<p>${SUCC.length} new members took a seat that opened between 2019 and 2025. ${GROUPS[0].n} were under 35, ${GROUPS[1].n} were 35 to 49 and ${GROUPS[2].n} were 50 or older.</p>`;
 function paint(){document.querySelectorAll('#gover canvas[data-q]').forEach(cv=>drawSp(cv,birdSp(true),4,false));
   document.querySelectorAll('#gover canvas[data-h]').forEach(cv=>{const sp=histSp(+cv.dataset.h),w=cv.parentElement.clientWidth||300;drawSp(cv,sp,Math.max(3,Math.min(7,Math.floor(w/sp.w))),true)});
-  document.querySelectorAll('#gover canvas[data-t],#gover canvas[data-f],#gover canvas[data-you]').forEach(cv=>{const d=cv.dataset,cell=+d.c||4;
-  drawSp(cv,d.t?text(d.t,d.col==='pc'?pc():TH):d.f?faceSp(d.f,+d.by,+d.n):charSp(C,0,false,true),cell,!d.t)})}
+  /* member portraits use the site's ASCII portrait (24 x 30, ten shades, normalized per face), which reads far better than stitched blocks */
+  document.querySelectorAll('#gover canvas[data-f]').forEach((cv,i)=>{const d=cv.dataset;if(GRID[d.f]){face(cv,{bg:d.f,g:gi(+d.by)},'game'+i,24,30,6);reveal(cv,d.f)}else drawSp(cv,faceSp(d.f,+d.by,24),+d.c||4,true)});
+  /* your character beside a member portrait is drawn at the portrait's height, so the two read as a pair */
+  document.querySelectorAll('#gover canvas[data-t],#gover canvas[data-you]').forEach(cv=>{const d=cv.dataset,pf=d.you&&cv.closest('.gpair,.pvs')?.querySelector('canvas[data-f]'),ph=pf&&pf.getBoundingClientRect().height,cell=ph?Math.max(4,Math.round(ph/15)):+d.c||4;
+  drawSp(cv,d.t?text(d.t,d.col==='pc'?pc():TH):charSp(C,0,false,true),cell,!d.t)})}
 const st=(t,c=4,col='')=>`<canvas data-t="${esc(t)}" data-c="${c}" data-col="${col}" role="img" aria-label="${esc(String(t).replace(/\|/g,' '))}"></canvas>`;
 
 /* ---- scenes ---- */
 function titleScene(){return new Promise(res=>{G.mode='title';sew();
-  over(`<div class="gtitle"><span class="mono">A game about getting into Congress</span><div><button class="pbtn" data-act="go">New game</button><span class="mono">Real members · real elections · 2017 to 2025</span></div></div>`,'title');
-  E('gover').onclick=e=>{if(e.target.closest('[data-act=go]'))res()}})}
+  over(`<div class="gtitle"><span class="mono">A game about getting into Congress</span><div><button class="pbtn" data-act="go">New game</button><span class="mono">Real members · real elections · 2017 to 2025</span><button class="glink" data-act="rules">How the game works</button></div></div>`,'title');
+  E('gover').onclick=e=>{if(e.target.closest('[data-act=rules]'))return rules();if(e.target.closest('[data-act=go]'))res()}})}
+const rules=()=>{const d=document.querySelector('#v-play>details.more');if(d)d.open=true};
 function prev(){const p=E('gpv');if(!p)return;drawSp(p,charSp(C),Math.max(6,Math.min(13,Math.floor(p.parentElement.clientHeight/27))),true)}
 function creator(){return new Promise(res=>{G.mode='blank';G.dirty=true;
   const cyc=(k,t)=>`<div class="gcyc" data-k="${k}"><span class="mono">${t}</span><button data-d="-1" aria-label="Previous ${t}">‹</button><b></b><button data-d="1" aria-label="Next ${t}">›</button></div>`;
@@ -286,57 +293,147 @@ const MEAN=[['Intern on Capitol Hill','Interned on Capitol Hill','91+','At least
    ['Run for mayor','Ran for mayor','38','38 members of the 2025 Congress were mayors.'],
    ['Organize a union','Organized a union','5','5 House members in 2025 were union representatives.'],
    ['Start a business','Started a business','163+','At least 135 House members and 28 senators in 2025 owned, founded or ran a business.']];
+/* ---- Restructure (Sydney, Nov 17, from class feedback): three characters on three real seats, a résumé score built from real shares of members, and a stated game rule.
+   Seats were picked by when they really opened: TX-26 at the 2024 election, TX-30 at the 2022 election, KY-5 not by 2025.
+   Balance (Sydney, Nov 17): Maya gets four turns but only steps a new graduate can take (no law degree or business), so her best path reaches 72 of 75; Dan starts with law only, and 12 of his 27 paths get in.
+   Each choice shows how many of the 535 members of the 2025 Congress share that background (CRS R48535, updated Aug 4 2025, from members' own CQ profiles).
+   Points: that count as a share of the 535 seats, rounded. They are a game score: members overlap, so the points are not a share of anything when added up.
+   Cards hide the points and the count until you pick (Sydney, Nov 17: showing them first gives the answer away). */
+const SEATS2=535,READY=75;
+const PTS={leg:['Run for state legislature','Served in a state legislature',251,'251 members of the 2025 Congress served in a state or territorial legislature.'],
+  law:['Go to law school','Practiced law',182,'About 182 members of the 2025 Congress practiced law: 31% of the House and 47% of the Senate.'],
+  biz:['Start a business','Ran a business',163,'At least 163 members of the 2025 Congress owned, founded or ran a business.'],
+  staff:['Work for a member of Congress','Worked as congressional staff',91,'At least 91 members of the 2025 Congress once worked as congressional staff.'],
+  mayor:['Run for mayor','Was a mayor',38,'38 members of the 2025 Congress were mayors.'],
+  union:['Organize a union','Organized a union',5,'5 House members in 2025 were union representatives.'],
+  corps:['Join AmeriCorps','Joined AmeriCorps',3,'3 members of the 2025 Congress were AmeriCorps volunteers.']};
+const pts=k=>Math.max(1,Math.round(PTS[k][2]/SEATS2*100)),plus=k=>PTS[k][2]+(k==='staff'||k==='biz'?'+':'');
+const CAST=[{name:'Maya',by:1992,look:{skin:1,hair:2,hc:0,fit:2,oc:1,extra:0,face:0},bio:'Just finished college. Nothing on her résumé yet.',start:[],seat:'B001248',order:['corps','union','staff','mayor','leg']},
+  {name:'Dan',by:1976,look:{skin:3,hair:0,hc:0,fit:0,oc:3,extra:1,face:1},bio:'A lawyer in Dallas.',start:['law'],seat:'J000126',order:['biz','mayor','staff','corps','union','leg']},
+  {name:'Rosa',by:1959,look:{skin:2,hair:4,hc:5,fit:1,oc:4,extra:3,face:0},bio:'A state legislator who runs a family business.',start:['leg','biz'],seat:'R000395',order:['law','corps','mayor','union','staff']}];
+const ICO={leg:['.....#.....','....###....','...#####...','..#######..','.#########.','###########','.#.#.#.#.#.','.#.#.#.#.#.','.#.#.#.#.#.','###########','###########'],
+  law:['.....#.....','.#########.','.#...#...#.','#.#..#..#.#','#.#..#..#.#','###..#..###','.....#.....','.....#.....','.....#.....','...#####...','..#######..'],
+  biz:['###########','#.#.#.#.#.#','###########','.#########.','.#.......#.','.#.##.##.#.','.#.##.##.#.','.#.......#.','.#..###..#.','.#..#.#..#.','###########'],
+  staff:['....###....','....#.#....','.#########.','.#.......#.','.#..###..#.','.#..###..#.','.#.......#.','.#.#####.#.','.#.......#.','.#.###...#.','.#########.'],
+  mayor:['...........','...........','.###.......','#...#......','#...#######','#...#..#.#.','.###...#.#.','...........','...........','...........','...........'],
+  union:['.........#.','........##.','......####.','##..######.','##########.','##########.','##..######.','..#...####.','..#.....##.','..#......#.','...........'],
+  corps:['...........','.###...###.','#####.#####','###########','###########','.#########.','..#######..','...#####...','....###....','.....#.....','...........']};
+const icon=k=>`<svg class="gico" viewBox="0 0 11 11" aria-hidden="true">${ICO[k].map((r,y)=>[...r].map((ch,x)=>ch==='#'?`<circle cx="${x+.5}" cy="${y+.5}" r=".36" style="--d:${x+y}"/>`:'').join('')).join('')}</svg>`;
+let ME=null,RES=[];
+const score=()=>RES.reduce((a,k)=>a+pts(k),0);
+const rec2=()=>{const s=score();E('grec').innerHTML=`<div class="grl"><span>Résumé</span><b>${s} of ${READY}${s>=READY?' · ready':''}</b></div><div class="gmeter" role="img" aria-label="${s} of ${READY} points"><i style="width:${Math.min(100,s/READY*100)}%"></i></div><div class="gric">${RES.map(k=>`<span title="${PTS[k][1]} +${pts(k)}" aria-label="${PTS[k][1]}">${icon(k)}</span>`).join('')}</div>`};
+const short=m=>m.name.replace(/\.$/,'');
+function castPick(){return new Promise(res=>{G.mode='blank';G.dirty=true;
+  over(`<div class="gcast"><div class="gwhy"><h2>A seat opens only when someone leaves.</h2><p>Most members of Congress spent years building a résumé first. Pick a character, build their résumé, and see whether they are ready when the door opens.</p></div>
+    <div class="gcards">${CAST.map((p,i)=>`<button class="gpc" data-i="${i}"><canvas data-cast="${i}" aria-hidden="true"></canvas><b>${p.name}, ${2017-p.by}</b><span>${p.bio}</span></button>`).join('')}</div></div>`,'cast');
+  const by0=C.by;document.querySelectorAll('#gover canvas[data-cast]').forEach(cv=>{const p=CAST[+cv.dataset.cast];C.by=p.by;drawSp(cv,charSp({...C,...p.look,by:p.by}),5,false)});C.by=by0;
+  E('gover').onclick=e=>{const b=e.target.closest('[data-i]');if(b)res(+b.dataset.i)}})}
+function choose(r,yr){return new Promise(res=>{const left=ME.order.filter(k=>!RES.includes(k)),opts=left.slice(0,3),s=score();
+  over(`<div class="gch"><p class="gchq">${yr}. The next election is in ${yr+1}. What will ${ME.name} do for two years?</p>
+    <div class="gopts" style="--n:${opts.length}">${opts.map(k=>`<button class="gopt" data-k="${k}">${icon(k)}<b>${PTS[k][0]}</b><small class="gpv">+${pts(k)} point${pts(k)>1?"s":""}</small></button>`).join('')}</div>
+    <p class="gchn">${s} of ${READY} points so far. The more members share a background, the more points it is worth.</p></div>`,'choose');
+  const o=E('gover');o.onclick=e=>{const b=e.target.closest('[data-k]');if(b&&!o.dataset.done){o.dataset.done=1;const k=b.dataset.k;RES.push(k);rec2();
+      b.classList.add('on');o.querySelector('.gopts').classList.add('shown');o.querySelectorAll('.gopt').forEach(x=>{if(x!==b)x.classList.add('gdim')});
+      o.querySelector('.gchn').outerHTML=`<div class="gfact"><p class="gpts">+${pts(k)} point${pts(k)>1?"s":""}</p><p>${PTS[k][3]}</p><button class="pbtn" data-next="1">${score()>=READY&&s<READY?'Ready. Keep going':'Keep going'}</button></div>`;o.querySelector('[data-next]').focus({preventScroll:true});return}
+    if(e.target.closest('[data-next]')){delete o.dataset.done;res()}}})}
+const pair=(c,m,label)=>`<div class="gpair"><figure>${fyou()}<figcaption>${ME.name}<b>${page(c)}</b></figcaption></figure><figure>${fmem(m[0],m[1],12)}<figcaption>${label}<b>${m[2]}</b></figcaption></figure></div>`;
+function result2(c,m,r){return new Promise(res=>{const g=DB.game[m.bg],y=startYear(c)-1,open=g[2]===c,now=inC[c].get(m.bg);
+  over(`<div class="gres"><span class="mono">Election ${r+1} of 4</span><h2>${open?'The seat is open.':'Still there.'}</h2>
+    ${open?`<p>${short(m)} ${g[4]?'moved to the Senate':'is no longer in the House'} after ${startYear(c)-g[0]} years.</p>`:`<p>${short(m)} kept the seat in the ${y} election.</p>${pair(c,[m.bg,m.by,now[8]],short(m))}<p class="gsm">${short(m)} has been in Congress since ${g[0]}.</p>`}
+    <button class="pbtn" data-act="go">${open?'See what happens':r===3?'Walk on':'Keep walking'}</button></div>`,'res');
+  E('gover').onclick=e=>{if(e.target.closest('[data-act=go]'))res()}})}
+function ending(m,out){const g=DB.game[m.bg],s=score(),ready=s>=READY,su=out&&g[3]&&inC[out].get(g[3]);
+  const yr=out?startYear(out)-1:2024,now=inC[119].get(m.bg);
+  const head=out?(ready?'You got in.':'The door opened too early.'):'Still closed.';
+  const who=su?`${su[1]}, ${su[8]},`:'';
+  const why=out?(ready?`${short(m)}'s seat opened in ${yr}, and ${ME.name} had ${s} points, past the game's ${READY}.`:`${short(m)}'s seat opened in ${yr}, when ${ME.name} had ${s} of the game's ${READY} points.`)+(su?` In real life, ${who} took it.`:'')
+    :`${ME.name} had ${s} of the game's ${READY} points, but ${short(m)}, ${now?now[8]:''}, has held the seat since ${g[0]} and was still there in 2025.`;
+  const ci=CAST.indexOf(ME),key=ci+':'+RES.slice(ME.start.length).join(','),seen=played();if(!seen.includes(key)){seen.push(key);try{localStorage.setItem('wyt-paths',JSON.stringify(seen))}catch(e){}}
+  const ends=[];(function walk(nd){if(nd.kids)nd.kids.forEach(walk);else ends.push(nd.end)})(tdata(ci).root);
+  const same=ends.every(x=>x===ends[0])?` Every one of ${ME.name}'s ${ends.length} paths ends this way.`:'';
+  over(`<div class="gend"><h2>${head}</h2><p>${why}${same}</p>
+    <div class="prow"><button class="pbtn" data-act="again">Play again</button><button data-act="tree">See every path</button></div>
+    <div class="glinks"><button class="glink" data-act="rules">How the game works</button><button class="glink" data-act="explore">Explore the chamber</button></div></div>`,'end');
+  LAST=[m,out];
+  E('gover').onclick=e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;if(a==='explore')return showView('explore');if(a==='rules')return rules();if(a==='tree')return tree(CAST.indexOf(ME));if(a==='again')return play({})}}
+/* ---- Story tree (Sydney, Nov 17): every choice and ending for all three characters, as a map you can drag and zoom.
+   Built from the same rules the game uses (the three options offered are the first three left in each character's list), so it is exact, not a sketch. ---- */
+let LAST=null;
+const played=()=>{try{return JSON.parse(localStorage.getItem('wyt-paths')||'[]')}catch(e){return[]}};
+const SHORT={leg:'State legislature',law:'Law school',biz:'A business',staff:'Hill staff',mayor:'Mayor',union:'Union',corps:'AmeriCorps'};
+const ENDS={in:'You got in',early:'Too early',closed:'Still closed'};
+function tdata(ci){const p=CAST[ci],m=M115.find(x=>x.bg===p.seat),g=DB.game[m.bg],oi=PC.findIndex(c=>g[2]===c),n=oi<0?4:oi+1,base=p.start.reduce((a,k)=>a+pts(k),0);
+  const rec=(res,d,sc)=>d===n?{end:oi<0?'closed':sc>=READY?'in':'early',sc}:{kids:p.order.filter(k=>!res.includes(k)).slice(0,3).map(k=>({k,...rec([...res,k],d+1,sc+pts(k))}))};
+  return{p,m,g,oi,n,root:rec([],0,base)}}
+function tree(ci){
+  const CW=210,RH=34,NW=168,NH=26,EX=40+5*CW,mine=RES.slice(ME.start.length),seen=new Set(played());let nplayed=0;let y=0,svg='';const bands=[];
+  const ico=(k,x,yy,sz)=>`<g transform="translate(${x} ${yy}) scale(${sz/11})">${ICO[k].map((r,j)=>[...r].map((c,i)=>c==='#'?`<circle cx="${i+.5}" cy="${j+.5}" r=".38"/>`:'').join('')).join('')}</g>`;
+  CAST.forEach((p,i)=>{const t=tdata(i),top=y,tally={};let leaf=0;
+    const lay=(nd,d,path,on)=>{nd.d=d;nd.on=on;if(nd.kids){nd.kids.forEach(k=>lay(k,d+1,[...path,k.k],on&&i===ci&&mine[d]===k.k));nd.y=(nd.kids[0].y+nd.kids[nd.kids.length-1].y)/2;nd.seen=nd.kids.some(k=>k.seen)}else{nd.y=top+70+leaf++*RH;tally[nd.end]=(tally[nd.end]||0)+1;nd.seen=seen.has(i+':'+path.join(','));if(nd.seen)nplayed++}};
+    const n0=nplayed;lay(t.root,0,[],i===ci);t.root.seen=true;const mineN=nplayed-n0;
+    const tk=Object.keys(tally),lab={in:'got in',early:'too early',closed:'still closed'},sum=tk.length===1?`all ${leaf} end ${lab[tk[0]]}`:tk.map(k=>`${tally[k]} ${lab[k]}`).join(', ');
+    const when=t.oi<0?`${short(t.m)} still held the seat in 2025`:`the seat opened at the ${startYear(PC[t.oi])-1} election`;
+    svg+=`<text class="tb" x="40" y="${top+18}">${p.name}, ${2017-p.by}</text><text class="ts" x="40" y="${top+40}">Waits for ${short(t.m)}'s seat, ${t.g[1]}: ${when}. You have played ${mineN} of ${leaf} paths; ${sum}.</text>`;
+    const draw=(nd,px,py,pon)=>{const x=40+nd.d*CW;
+      if(nd.d>0){const x0=px+NW,y0=py,x1=nd.end?EX:x,mx=(x0+x)/2;svg+=`<path class="te${nd.on?' on':''}${nd.seen?'':' lock'}" d="M${x0} ${y0} C${mx} ${y0} ${mx} ${nd.y} ${x} ${nd.y}"/>`;
+        svg+=`<g class="tn${nd.on?' on':''}${nd.seen?'':' lock'}"><rect x="${x}" y="${nd.y-NH/2}" width="${NW}" height="${NH}" rx="13"/>${ico(nd.k,x+9,nd.y-7,14)}<text x="${x+30}" y="${nd.y+4.5}">${SHORT[nd.k]}</text></g>`}
+      else svg+=`<g class="tn root${nd.on?' on':''}"><rect x="${x}" y="${nd.y-NH/2}" width="${NW}" height="${NH}" rx="13"/><text x="${x+14}" y="${nd.y+4.5}">${p.name} in 2017</text></g>`;
+      if(nd.kids)nd.kids.forEach(k=>draw(k,x,nd.y,nd.on));
+      else{const lx=EX;if(nd.d>0)svg+=`<path class="te dash${nd.on?' on':''}${nd.seen?'':' lock'}" d="M${x+NW} ${nd.y} H${lx}"/>`;svg+=`<g class="tn end ${nd.end}${nd.on?' on':''}${nd.seen?'':' lock'}"><rect x="${lx}" y="${nd.y-NH/2}" width="${NW}" height="${NH}" rx="13"/><text x="${lx+14}" y="${nd.y+4.5}">${ENDS[nd.end]}</text><text class="tp" x="${lx+NW-12}" y="${nd.y+4.5}" text-anchor="end">${nd.sc}</text></g>`}};
+    draw(t.root,0,0,false);y=top+70+leaf*RH+50;bands.push([top,y-40,p.name])});
+  const heads=['2017','Before 2018','Before 2020','Before 2022','Before 2024','Ending · points'];
+  const W=EX+NW+40,H=y;
+  over(`<div class="gtree"><div class="gtbar"><div><h2>Every path</h2><p>Every way the game can go. Paths you have played are bright, this one in your color; the rest are greyed out until you play them. Drag to move, scroll or pinch to zoom.</p></div>
+    <div class="gtbtns"><span class="gtseg">${bands.map((b,i)=>`<button data-b="${i}"${i===ci?' class="on"':''}>${b[2]}</button>`).join('')}<button data-b="all">All</button></span><span class="gtseg"><button data-z="-1" aria-label="Zoom out">−</button><button data-z="1" aria-label="Zoom in">+</button></span><button class="pbtn" data-act="back">Back</button></div></div>
+    <svg class="gtsv" role="img" aria-label="Story tree: every choice and ending for Maya, Dan and Rosa"><g class="gtg">${svg}</g><rect class="thbg" x="0" y="0" width="100%" height="44"/><g class="gth">${heads.map((h,i)=>`<text class="th" data-x="${i<5?40+i*CW:EX}" y="27">${h}</text>`).join('')}</g></svg></div>`,'tree');
+  const o=E('gover'),sv=o.querySelector('.gtsv'),g=o.querySelector('.gtg'),ths=[...o.querySelectorAll('.th')],V={x:0,y:0,s:1},T={x:0,y:0,s:1},vel={x:0,y:0};
+  const calm=matchMedia('(prefers-reduced-motion: reduce)').matches;let drag=false,first=true,lt=0;
+  /* V is what is drawn, T is where it is heading; each frame V eases toward T. Column heads stay one size and only follow x. */
+  const set=()=>{g.setAttribute('transform',`translate(${V.x} ${V.y}) scale(${V.s})`);ths.forEach(t=>t.setAttribute('x',V.x+t.dataset.x*V.s))};
+  const tick=t=>{if(!sv.isConnected)return;const dt=Math.min(50,lt?t-lt:16);lt=t;
+    if(!drag&&(Math.abs(vel.x)+Math.abs(vel.y)>.01)){T.x+=vel.x*dt;T.y+=vel.y*dt;const f=Math.exp(-dt/260);vel.x*=f;vel.y*=f}
+    const k=calm||first?1:1-Math.exp(-dt/110);V.x+=(T.x-V.x)*k;V.y+=(T.y-V.y)*k;V.s+=(T.s-V.s)*k;first=false;set();requestAnimationFrame(tick)};
+  requestAnimationFrame(tick);
+  const fit=(y0,y1)=>{vel.x=vel.y=0;const r=sv.getBoundingClientRect(),top=44,rh=r.height-top,bh=y1-y0+40,s=Math.max(.12,Math.min(1.6,Math.min(r.width/W,rh/bh)*.94));if(r.width<700&&y0>=0){const z=Math.max(s,.62);T.s=z;T.x=-28*z;T.y=top+Math.max(8,(rh-bh*z)/2)-(y0-30)*z;return}T.s=s;T.x=(r.width-W*s)/2;T.y=top+(rh-bh*s)/2-(y0-30)*s};
+  const zoom=(f,cx,cy)=>{vel.x=vel.y=0;const s=Math.max(.12,Math.min(3,T.s*f));T.x=cx-(cx-T.x)*s/T.s;T.y=cy-(cy-T.y)*s/T.s;T.s=s};
+  const band=b=>{o.querySelectorAll('[data-b]').forEach(x=>x.classList.toggle('on',x.dataset.b===String(b)));if(b==='all')fit(-30,H);else fit(bands[b][0],bands[b][1])};
+  band(ci);
+  const pts2=new Map();let last=null,lm=null;
+  sv.addEventListener('pointerdown',e=>{sv.setPointerCapture(e.pointerId);pts2.set(e.pointerId,[e.clientX,e.clientY]);last=null;drag=true;vel.x=vel.y=0;lm=[e.clientX,e.clientY,performance.now()]});
+  sv.addEventListener('pointermove',e=>{if(!pts2.has(e.pointerId))return;const r=sv.getBoundingClientRect(),p0=pts2.get(e.pointerId);
+    if(pts2.size===1){const dx=e.clientX-p0[0],dy=e.clientY-p0[1];T.x+=dx;T.y+=dy;V.x+=dx;V.y+=dy;const n=performance.now(),dt=Math.max(1,n-lm[2]);vel.x=.8*vel.x+.2*(e.clientX-lm[0])/dt;vel.y=.8*vel.y+.2*(e.clientY-lm[1])/dt;lm=[e.clientX,e.clientY,n]}
+    pts2.set(e.pointerId,[e.clientX,e.clientY]);
+    if(pts2.size===2){vel.x=vel.y=0;const[a,b]=[...pts2.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(last){zoom(d/last,(a[0]+b[0])/2-r.left,(a[1]+b[1])/2-r.top);Object.assign(V,T)}last=d}});
+  const up=e=>{pts2.delete(e.pointerId);last=null;if(!pts2.size){drag=false;if(calm||performance.now()-lm[2]>80)vel.x=vel.y=0}};sv.addEventListener('pointerup',up);sv.addEventListener('pointercancel',up);
+  sv.addEventListener('wheel',e=>{e.preventDefault();const r=sv.getBoundingClientRect();zoom(Math.exp(-e.deltaY*.0022),e.clientX-r.left,e.clientY-r.top)},{passive:false});
+  o.onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.act==='back')return ending(...LAST);if(b.dataset.b)return band(b.dataset.b==='all'?'all':+b.dataset.b);if(b.dataset.z){const r=sv.getBoundingClientRect();zoom(b.dataset.z>0?1.4:1/1.4,r.width/2,r.height/2)}}}
+/* Leave game: back to the title screen from anywhere in a run (play() bumps G.run, which stops the old run's dialogue and walks) */
+document.addEventListener('click',e=>{if(e.target.closest('#gquit'))play('title')});
 async function play(mode){
   const run=++G.run,ok=async p=>{const v=await p;if(run!==G.run)throw 0;return v};
   try{
-    scene(0);setWx(0);tint();hideDlg();E('ghud').hidden=true;E('gs').classList.remove('play');G.cv=[];rec();G.cv=[];G.lit=null;G.side=false;Object.assign(G,{char:false,bird:false,walk:false,talk:false,vote:null});
-    if(mode!=='again'){await ok(titleScene());await ok(creator())}
-    unover();tint();Object.assign(G,{mode:'world',char:true,bird:true});E('gs').classList.add('play');E('ghud').hidden=false;setYear(2017);sew();
-    const a=2017-C.by;
-    if(mode==='again')await ok(q('Back again. Pick a different seat this time.'));
-    else{
-      await ok(q('Coo. You look new.'));
-      await ok(q(`I'm Quorum. I live on the Capitol roof.`));
-      await ok(q(`So${C.name?', '+C.name:''}, you want a seat in Congress.`));
-      await ok(q('There are 535 of them. Every one is taken.'));
-      await ok(q(a<25?`You're ${a}. The House won't take you until 25. The Senate, 30.`:a<30?`You're ${a}. Just old enough for the House. The Senate wants 30.`:`You're ${a}. Old enough for either chamber. That part is done.`));
-      await ok(q("Around here, you wait your turn. Come on, I'll show you the room.",["Let's go"]));
-    }
-    hideDlg();await ok(walk(STOP.room));
-    await ok(q('This is everyone seated on January 3, 2017. Real people, real ages.'));
-    await ok(q("Pick one. That's the seat you'll wait for.",['Open the chamber']));
-    hideDlg();const m=await ok(pickSeat()),g=DB.game[m.bg];unover();
-    await ok(q(`${m.name.replace(/\.$/,'')}. Age ${m.yrs}, in Congress since ${g[0]}${g[0]<C.by?'. You were born in '+C.by:''}.`));
-    const ev=then(m);if(ev){G.year=ev.y;E('gage').textContent=`They are ${ev.a}`;G.dirty=true;
-      await ok(q(`Picture ${ev.y}. They are ${ev.a}${ev.a===a?', your age':', about your age'}.`));await ok(q(`${ev.t}.`));setYear(2017);await ok(q(`Now it's 2017 again. They are ${m.yrs}. You are ${a}.`))}
-    await ok(q(m.yrs>=OLD?`One of ${n75(115)} members who are 75 or older. Let's see how long they stay.`:m.yrs>=60?`${m.yrs}. Mid-career around here. This could take a while.`:`${m.yrs}. Young for this room. This could take a long while.`,['Start walking']));
-    let out=0;const STAY=[()=>'Still there. Keep walking.',c=>`Still there. You're ${page(c)} now, by the way.`,()=>'Three elections. Same person. Coo.',()=>'Four for four.'];
-    for(let r=0;r<4;r++){const c=PC[r],y=startYear(c)-1,young=page(c)<PMIN[m.ch];
-      const yr=2017+2*r,pool=MEAN.filter(p=>!G.cv.some(v=>v.d===p[1]+'.')).slice(0,3);
-      const pk=await ok(q(r?'Two more years until the next one. What now?':'The next election is two years off. What will you do?',pool.map(p=>p[0])));
-      G.cv.push({y:yr,d:pool[pk][1]+'.',n:pool[pk][2],f:pool[pk][3]});rec();await ok(q(pool[pk][3]));
-      hideDlg();scene(r+1);await ok(walk(STOP.e[r],y));
-      await ok(q((r===0?`${y}. Election day. Every House seat is up, and a third of the Senate.`:`${y}. Election day again.`)+(young?` You'd be ${page(c)} at swearing-in. Too young for the ${chName(m.ch)}.`:''),[`Hold the ${y} election`]));
+    scene(0);setWx(0);hideDlg();E('ghud').hidden=true;E('gs').classList.remove('play');RES=[];E('grec').innerHTML='';G.cv=[];G.lit=null;G.side=false;Object.assign(G,{char:false,bird:false,walk:false,talk:false,vote:null});
+    if(mode==='title'||!mode){await ok(titleScene())}
+    const ci=mode&&mode.cast!=null?mode.cast:await ok(castPick());ME=CAST[ci];Object.assign(C,ME.look,{name:ME.name,by:ME.by});tint();
+    const m=M115.find(x=>x.bg===ME.seat),g=DB.game[m.bg];
+    unover();Object.assign(G,{mode:'world',char:true,bird:true});E('gs').classList.add('play');E('ghud').hidden=false;setYear(2017);sew();
+    RES=[...ME.start];rec2();
+    await ok(q(`Coo. I'm Quorum. I live on the Capitol roof.`));
+    await ok(q(`You're ${ME.name}, ${2017-ME.by}. You want to represent ${g[1]} in the House.`));
+    await ok(q(`That seat belongs to ${short(m)}, ${m.yrs}, in Congress since ${g[0]}. Each district has just one seat in the House.`));
+    await ok(q(`You could run against ${short(m)}, but members who run again rarely lose. So in this game, you wait for the seat to open.`));
+    await ok(q(`Nobody knows when that will be. So build your résumé while you wait.`));
+    await ok(q(`Here's the game rule: you get in if the seat opens and you have ${READY} points. You have ${score()}.`,["Let's go"]));
+    let out=0;
+    for(let r=0;r<4;r++){const c=PC[r],y=startYear(c)-1,yr=2017+2*r;
+      hideDlg();if(ME.order.some(k=>!RES.includes(k))){await ok(choose(r,yr));unover()}
+      scene(r+1);await ok(walk(STOP.e[r],y));
+      await ok(q(`${y}. Election day. Will ${short(m)} keep the seat?`,[`Hold the ${y} election`]));
       hideDlg();G.vote={r,t0:performance.now()};await ok(sleep(1500));G.vote=null;setYear(startYear(c));
-      await ok(result(c,m,r));unover();
+      await ok(result2(c,m,r));unover();
       if(g[2]===c){out=c;break}
-      await ok(q(STAY[r](c)));
     }
-    hideDlg();scene(0);await ok(walk(STOP.cap));
-    if(out){const su=g[3]&&inC[out].get(g[3]),a2=page(out),min=PMIN[m.ch];
-      await ok(q(`The seat opened in ${startYear(out)}.`));
-      await ok(q(su?`It went to ${su[1]}, age ${su[8]}.`:newLine(out)));
-      await ok(q(a2<min?`You were ${a2}. The ${chName(m.ch)} needs ${min}. Not your turn yet.`:`You were ${a2}. Old enough to run. Whether you'd win, I can't say. I'm a pigeon.`));
-    }else{
-      await ok(q(`It's 2025. ${m.name} is ${inC[119].get(m.bg)[8]} and still in that seat.`));
-      await ok(q(`You were ${a} when we met. You're ${page(119)} now.`));
-      await ok(q(`${STILL} of the ${M115.length} members from 2017 are still here. Coo.`));
-    }
-    {const ya=out?page(out):page(119);hideDlg();E('ghud').hidden=true;G.crowd=ya;G.mode='crowd';sew();await ok(sleep(900));
-      await ok(q(`So who did get in? These are the ${SUCC.length} new members who took a seat that opened, 2019 to 2025.`));
-      await ok(q(`${GROUPS[0].n} were under 35. ${GROUPS[1].n} were 35 to 49. ${GROUPS[2].n} were 50 or older.`));
-      await ok(q(`${out?'You were':"You're"} ${ya}. Your group is the one in your color.`,['See my result']))}
-    hideDlg();poster(m,out);
+    hideDlg();scene(0);await ok(walk(STOP.cap));E('ghud').hidden=true;ending(m,out);
   }catch(e){if(e!==0)throw e}
 }
 build();
