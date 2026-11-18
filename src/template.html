@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wait Your Turn</title>
+<title>The Oldest Congress</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
@@ -522,8 +522,8 @@ body.stitch .top h1{margin:0}
 body.stitch.playing{overflow:hidden;height:100svh;padding-bottom:0}
 body.playing .top{position:relative;top:0}
 body.playing .gs{top:96px;height:calc(100svh - 96px)}body.playing #v-play{padding-top:0}
-body.playing #v-play>details.more{position:fixed;left:16px;bottom:12px;z-index:7;margin:0!important}
-body.playing #v-play>details.more[open]{inset:104px 16px 16px;overflow:auto;padding:32px;background:rgba(12,16,22,.9);-webkit-backdrop-filter:blur(28px);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.28);border-radius:28px}
+body.stitch #v-play>details.more{position:fixed;left:16px;bottom:12px;z-index:7;margin:0!important}
+body.stitch #v-play>details.more[open]{inset:104px 16px 16px;overflow:auto;padding:32px;background:rgba(12,16,22,.9);-webkit-backdrop-filter:blur(28px);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.28);border-radius:28px}
 @media(max-width:900px){body.playing .gdlg{bottom:48px}body.playing .gs{top:124px;height:calc(100svh - 124px)}}
 body.stitch .agestrip text.gl{font:300 8px/1 var(--mono)}
 body.stitch .bvis text.gl{font:300 13px/1 var(--mono);text-anchor:middle;dominant-baseline:central;fill:rgba(244,241,232,.3);transition:fill .4s}body.stitch .bvis text.gl.on{fill:#ffe066}
@@ -554,7 +554,7 @@ body.stitch #p-age>button{background:var(--ink);color:var(--on);border-color:var
 body.stitch .nav button,body.stitch .nav button:hover,body.stitch .subnav button:hover{background:none}body.stitch .nav button:hover{color:var(--ink)}
 body.stitch .top{position:relative;top:0}
 @media(min-width:900px){body.stitch.widetools #p-iss{grid-template-rows:repeat(7,auto) 1fr}body.stitch.widetools #p-iss>.qhead{grid-row:3}body.stitch.widetools #qcard{grid-row:4/9}body.stitch.widetools #iss-status{grid-row:4}body.stitch.widetools #thr{grid-row:5}body.stitch.widetools #p-iss>.how{grid-row:6}body.stitch.widetools #clearvotes{grid-row:7}}
-body.playing #v-play>details.more:not([open]) summary{background:rgba(12,16,22,.7);padding:4px 12px;border:0;border-radius:999px;color:var(--ink)}
+body.stitch #v-play>details.more:not([open]) summary{background:rgba(12,16,22,.7);padding:4px 12px;border:0;border-radius:999px;color:var(--ink)}
 #gtlfact{grid-template-columns:minmax(0,340px) minmax(0,1fr)}
 
 /* phone widths: character grids may shrink below the width of their glyphs */
@@ -588,14 +588,14 @@ body.playing .gs{top:0;height:100svh;--top:96px}body.playing .gover{top:var(--to
 }
 
 /* "How the game works" overlay: rules flow in columns across the whole panel */
-body.playing #v-play>details.more[open] .grules{display:block;columns:3 300px;column-gap:48px;max-width:none;margin:24px 0}
-body.playing #v-play>details.more[open] .grules dt{break-after:avoid;font-weight:500;color:var(--ink);margin-bottom:4px}
-body.playing #v-play>details.more[open] .grules dd{break-inside:avoid;margin:0 0 24px}
-body.playing #v-play>details.more[open]>p{max-width:none;columns:2 400px;column-gap:48px;border-top:1px solid var(--soft);padding-top:24px;font-size:14px}
-body.playing #v-play>details.more[open]{z-index:9;inset:16px}
-body.playing #v-play>details.more[open] summary{position:sticky;top:0;float:right;background:var(--ink);color:var(--on);border:0;border-radius:999px;padding:6px 16px}
+body.stitch #v-play>details.more[open] .grules{display:block;columns:3 300px;column-gap:48px;max-width:none;margin:24px 0}
+body.stitch #v-play>details.more[open] .grules dt{break-after:avoid;font-weight:500;color:var(--ink);margin-bottom:4px}
+body.stitch #v-play>details.more[open] .grules dd{break-inside:avoid;margin:0 0 24px}
+body.stitch #v-play>details.more[open]>p{max-width:none;columns:2 400px;column-gap:48px;border-top:1px solid var(--soft);padding-top:24px;font-size:14px}
+body.stitch #v-play>details.more[open]{z-index:9;inset:16px}
+body.stitch #v-play>details.more[open] summary{position:sticky;top:0;float:right;background:var(--ink);color:var(--on);border:0;border-radius:999px;padding:6px 16px}
 
-@media (max-width:760px){body.playing #v-play>details.more[open] .grules,body.playing #v-play>details.more[open]>p{columns:auto;column-count:1}body.playing #v-play>details.more[open] summary{float:none;display:inline-block;margin-bottom:8px}}
+@media (max-width:760px){body.stitch #v-play>details.more[open] .grules,body.stitch #v-play>details.more[open]>p{columns:auto;column-count:1}body.stitch #v-play>details.more[open] summary{float:none;display:inline-block;margin-bottom:8px}}
 
 /* Hover bug: the member card changes height from member to member. It now sits in its own fixed column and never moves or resizes the chamber. */
 @container (min-width:681px){.stage>.room{position:relative;align-items:start}body.stitch .room>.card{position:absolute;top:0;right:0;bottom:0;width:216px;overflow:auto;align-content:start;scrollbar-width:none}}
@@ -740,18 +740,302 @@ body.stitch .lfilt select,body.stitch #q{font:400 14px/1.4 var(--display);color:
 body.stitch .lfilt select{padding-right:28px;cursor:pointer}
 body.stitch .lfilt select:focus-visible,body.stitch #q:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 body.stitch #lfilt select{border-radius:999px;-webkit-appearance:none;appearance:none;background:rgba(255,255,255,.55) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2312161c' stroke-width='1.4'/%3E%3C/svg%3E") no-repeat right 12px center}
+
+/* Activities as Chamber tabs (Nov 17): the tab row stays visible in an activity; Could you run shows under the same tabs with the chamber sections hidden. */
+.off{display:none!important}
+body.act #v-cham>.subnav{display:flex!important}
+body.mini #v-cham>:not(.subnav){display:none!important}
+body.mini #v-mini{margin-top:0}
+/* Round 15 (Nov 17): true liquid glass. Every panel is clear, smoked glass over the photo with light ink; inner cards are a faint lighter pane. */
+body.stitch .side,body.stitch :is(#v-how,#v-mini) .hblock,body.stitch #v-about>.block,body.stitch #v-sources .srcgroup,body.stitch #v-sources>.block{--ink:#f4f1e8;--mute:#c4c5c7;--rule:#f4f1e8;--soft:rgba(244,241,232,.2);--ik:244,241,232;--on:#10151b;--sun:#ffe066;--blue:#f4f1e8;color:var(--ink);color-scheme:dark;
+  background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.04) 45%,rgba(255,255,255,.1)),rgba(14,19,27,.34)!important;-webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8);border:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(255,255,255,.14),inset 0 0 28px rgba(255,255,255,.06),0 28px 64px rgba(0,0,0,.38)!important}
+body.stitch .side .runtiles,body.stitch .side .tf,body.stitch :is(.hblock,.block) :is(.runtiles,.chcard,.stepcard,.kcard,.bb,.gcard,.tf),body.stitch .gfact,body.stitch .side .wbox{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.16)}
+body.stitch :is(.hblock,.block) .tf:hover{background:rgba(255,255,255,.14)}
+body.stitch .lfilt select,body.stitch #q{background-color:rgba(255,255,255,.08);color:var(--ink)}
+body.stitch #lfilt select{background:rgba(255,255,255,.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23f4f1e8' stroke-width='1.4'/%3E%3C/svg%3E") no-repeat right 12px center}
+body.stitch #lfilt select option{color:#12161c}
+
+/* Round 16 (Nov 17): one long scroll. Chapters ease in, the photo fades when the page changes, a rail on the right shows where you are, and the top tabs are a hamburger menu. */
+html{scroll-behavior:auto}
+body.stitch #v-cham>.subnav,body.act #v-cham>.subnav,body.stitch #v-cham>.pgnav{display:none!important}
+body.stitch :is(#v-chamber,#history,#young,#members,#v-mini,#v-how,#v-sources){scroll-margin-top:32px}
+body.stitch :is(#history,#young,#members,#v-mini,#v-how,#v-sources){margin-top:clamp(120px,22vh,240px)}
+body.stitch #v-sources{margin-bottom:96px}
+body.act :is(#v-about,#v-mini,#v-how,#v-sources,#rail,.wlybtn),body.playing #rail{display:none!important}
+body.stitch::before,#abg{transition:opacity .42s ease}
+body.bgswap::before,body.bgswap #abg{opacity:0!important}
+@media (prefers-reduced-motion:no-preference){.chap{opacity:0;translate:0 48px;transition:opacity .9s ease,translate .9s cubic-bezier(.2,.7,.2,1)}.chap.in{opacity:1;translate:none}}
+#rail{position:fixed;right:18px;top:50%;translate:0 -50%;z-index:30;display:grid;gap:4px;justify-items:end}
+#rail button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:5px 0;font:400 13px/1 var(--display);color:#f4f1e8}
+#rail i{display:block;width:7px;height:7px;border-radius:50%;border:1px solid rgba(244,241,232,.75);transition:background .3s,scale .3s}
+#rail span{opacity:0;translate:6px 0;transition:opacity .25s,translate .25s;text-shadow:0 1px 10px rgba(8,11,16,.95),0 0 3px rgba(8,11,16,.7);white-space:nowrap;pointer-events:none}
+#rail button[aria-current=step] i{background:#f4f1e8;scale:1.35}
+#rail button[aria-current=step] span,#rail:hover span,#rail button:focus-visible span{opacity:1;translate:none}
+#rail button:focus-visible i{outline:2px solid #f4f1e8;outline-offset:3px}
+@media(max-width:1340px){#rail{right:8px}#rail span{display:none}}
+@media(max-width:760px){#rail{right:4px}#rail i{width:5px;height:5px}}
+/* header: no pill; the name on the left, a round glass menu button fixed top right */
+body.stitch .top{position:static!important;background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border:0!important;box-shadow:none!important;padding:8px 0!important}
+body.stitch .top h1{text-shadow:0 1px 12px rgba(8,11,16,.8)}
+#menub{all:unset;cursor:pointer;position:fixed;top:24px;right:24px;z-index:60;width:48px;height:48px;border-radius:50%;display:grid;place-content:center;gap:6px;background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,.06));-webkit-backdrop-filter:blur(20px) saturate(1.8);backdrop-filter:blur(20px) saturate(1.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 0 1px rgba(255,255,255,.2),0 12px 32px rgba(0,0,0,.3)}
+#menub i{display:block;width:18px;height:1.5px;background:#f4f1e8;transition:translate .3s,rotate .3s}
+#menub:focus-visible{outline:2px solid #f4f1e8;outline-offset:3px}
+body.menu #menub i:first-child{translate:0 3.75px;rotate:45deg}body.menu #menub i:last-child{translate:0 -3.75px;rotate:-45deg}
+body.stitch .top .nav{display:none}
+body.stitch.menu .top .nav{display:grid;position:fixed;inset:0;z-index:55;place-content:center;justify-items:start;gap:8px;padding:32px;background:rgba(10,13,18,.62);-webkit-backdrop-filter:blur(34px) saturate(1.6);backdrop-filter:blur(34px) saturate(1.6);animation:menuin .35s ease}
+body.stitch.menu .top .nav button{all:unset;cursor:pointer;font:400 clamp(40px,7vw,84px)/1.12 var(--serif)!important;color:rgba(244,241,232,.55);transition:color .2s,translate .3s;text-shadow:none}
+body.stitch.menu .top .nav button:hover,body.stitch.menu .top .nav button[aria-current=page]{color:#f4f1e8}
+body.stitch.menu .top .nav button:hover{translate:12px 0}
+body.stitch.menu .top .nav button:focus-visible{outline:2px solid #f4f1e8;outline-offset:6px}
+body.menu{overflow:hidden}
+@keyframes menuin{from{opacity:0}}
+@media (prefers-reduced-motion:reduce){body.stitch.menu .top .nav{animation:none}}
+/* Who's like you opens beside the chamber from one quiet button */
+body.stitch .wlybtn{all:unset;cursor:pointer;font:400 15px/1.4 var(--display);color:var(--ink);padding:8px 18px;border-radius:999px;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);margin-right:16px}
+body.stitch .wlybtn:hover{background:rgba(255,255,255,.2)}body.stitch .wlybtn:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+
+/* Round 17 (Nov 17): modals. The chamber is the whole first screen; its extras open over it. */
+body.stitch .morerow{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+body.stitch .morerow button{all:unset;cursor:pointer;font:400 15px/1.4 var(--display);color:var(--ink);padding:8px 18px;border-radius:999px;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.28);margin:0;transition:background .2s}
+body.stitch .morerow button:hover{background:rgba(255,255,255,.22)}body.stitch .morerow button:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+body.act .morerow{display:none}
+body:not([data-modal=v-sources]) #v-sources,body:not([data-modal=young]) #young,body:not([data-modal=members]) #members{display:none!important}
+body[data-modal] :is(#v-sources,#young,#members,#v-mini){position:fixed!important;z-index:70;left:50%;top:50%;translate:-50% -50%!important;opacity:1!important;width:min(1120px,calc(100vw - 32px));max-height:calc(100svh - 48px);overflow:auto;margin:0!important;animation:mdin .35s cubic-bezier(.2,.7,.2,1)}
+body[data-modal] :is(#history,#young,#members,#v-mini .hblock){background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.03) 45%,rgba(255,255,255,.08)),rgba(14,19,27,.72)!important}
+body[data-modal=v-mini] #v-mini{border-radius:28px}body[data-modal=v-mini] #v-mini .hblock{margin:0}
+#mveil{display:none}body[data-modal] #mveil{display:block;position:fixed;inset:0;z-index:65;background:rgba(8,10,14,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:menuin .3s ease}
+body[data-modal]{overflow:hidden}
+@keyframes mdin{from{opacity:0;translate:-50% calc(-50% + 24px)}}
+@media (prefers-reduced-motion:reduce){body[data-modal] :is(#v-sources,#young,#members,#v-mini),#mveil{animation:none!important}}
+.mx{display:none}
+body[data-modal] .mx{all:unset;cursor:pointer;display:grid;place-items:center;position:absolute;top:20px;right:20px;z-index:2;width:40px;height:40px;border-radius:50%;font:300 24px/1 var(--display);color:#f4f1e8;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+body[data-modal] .mx:hover{background:rgba(255,255,255,.22)}body[data-modal] .mx:focus-visible{outline:2px solid #f4f1e8;outline-offset:3px}
+body.stitch #members .listhead{padding-right:56px}
+body.stitch .list button{border-radius:0}
+body.stitch :is(#v-how,#v-about,#gens,#v-hub,#explore,#rules){margin-top:clamp(120px,22vh,240px)}
+
+/* Round 18 (Nov 17): scroll feel. Photos crossfade as layers; the photo slowly zooms as you go down; the chamber sinks back as you leave it; each page opens on a full-screen serif title that drifts up and fades as its content arrives. */
+body.stitch::before{display:none!important}
+#bgs{position:fixed;inset:-40px;z-index:-2;background:#12171d;overflow:hidden}
+#bgs div{position:absolute;inset:0;background:62% 40%/cover no-repeat;filter:blur(14px) saturate(1.2) brightness(.34);opacity:0;transition:opacity 1.6s ease;scale:var(--bz,1)}
+#bgs div.on{opacity:1}
+#abg{transition:opacity .6s ease}
+body.playing #bgs{display:none}
+@media (prefers-reduced-motion:reduce){#bgs div{transition:none}}
+@media (prefers-reduced-motion:no-preference){
+  body.stitch :is(#v-how,#v-about,#gens,#v-hub,#explore,#rules)>.sec.big{translate:0 calc(var(--o,0)*-90px);opacity:calc(1 - var(--o,0)*2.2)}
+  body.stitch :is(#v-how,#v-about,#gens,#v-hub,#explore,#rules)>.lede{translate:0 calc(var(--o,0)*-50px);opacity:calc(1 - var(--o,0)*2.6)}
+}
+body.stitch :is(#v-how,#v-about,#gens,#v-hub,#explore,#rules){margin-top:0;padding-top:34svh;scroll-margin-top:-12svh}
+body.stitch :is(#v-how,#v-about,#gens,#v-hub,#explore,#rules)>.sec.big{font-size:clamp(56px,9.5vw,148px);line-height:.95;text-align:center;margin:0 auto 24px;max-width:14ch}
+body.stitch :is(#v-how,#v-about,#gens,#v-hub,#explore,#rules)>.lede{text-align:center;margin:0 auto 26svh;font-size:19px;max-width:44ch}
+body.stitch :is(#v-how,#v-about,#gens,#v-hub,#explore,#rules)>.subnav{justify-content:center}
+
+/* Round 19 (Nov 17): one scroll story. Chamber, Since 1789, Generations (pinned scenes), How Congress works, then the game as the last chapter. About this site is a modal behind the "i" button. */
+body.stitch #history{margin-top:0}body.stitch #history>.sec{display:none}
+body.stitch #v-about{scroll-margin-top:-12svh}
+body.act :is(#gens,#v-hub),body.playing #infob,body.menu #rail,body[data-modal] #rail{display:none!important}
+#infob{all:unset;cursor:pointer;position:fixed;top:24px;right:84px;z-index:60;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,.06));-webkit-backdrop-filter:blur(20px) saturate(1.8);backdrop-filter:blur(20px) saturate(1.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 0 1px rgba(255,255,255,.2),0 12px 32px rgba(0,0,0,.3)}
+#infob i{font:italic 400 24px/1 var(--serif);color:#f4f1e8}#infob:focus-visible{outline:2px solid #f4f1e8;outline-offset:3px}
+body.stitch .morerow .cue{margin-left:auto;align-self:center;font:400 14px/1.4 var(--display);color:var(--mute);text-shadow:0 1px 10px rgba(8,11,16,.9)}
+body.stitch .morerow .cue b{display:inline-block;font-weight:400;margin-left:4px}
+@media (prefers-reduced-motion:no-preference){body.stitch .morerow .cue b{animation:cue 1.8s ease-in-out infinite}}@keyframes cue{50%{translate:0 5px}}
+/* About as a modal */
+body[data-modal=v-sources] #v-sources{padding:40px 32px 32px;border-radius:28px;background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.03) 45%,rgba(255,255,255,.07)),rgba(14,19,27,.82);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 0 0 1px rgba(255,255,255,.14),0 30px 80px rgba(0,0,0,.5)}
+body[data-modal=v-sources] #v-sources>.sec.big{font-size:44px;margin:0 56px 8px 0}body[data-modal=v-sources] #v-sources>.lede{margin:0 0 24px}
+@media(max-width:760px){body[data-modal=v-sources] #v-sources{padding:28px 16px 16px}}
+/* Generations scenes */
+body.stitch #gens>.sec.big{max-width:12ch}
+body.stitch #gens>.lede{margin-bottom:22svh}
+.gsc{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;max-width:1120px;margin:0 auto;padding:0 32px 24svh}
+.gsl{position:sticky;top:20svh;align-self:start;display:grid;gap:8px;justify-items:start;color:#f4f1e8;text-shadow:0 1px 14px rgba(8,11,16,.85)}
+.gsl .gk,.gsl .gn{font:400 16px/1.4 var(--display);color:#c9cacb}
+.gsl b{font:400 clamp(48px,6.4vw,92px)/.95 var(--serif);letter-spacing:-.01em}
+.gfield{display:flex;flex-wrap:wrap;gap:2px 5px;max-width:400px;margin:16px 0 8px;font:300 16px/1 "IBM Plex Mono",monospace;text-shadow:none}.gfield i{font-style:normal;width:1ch;text-align:center}
+.gall{all:unset;cursor:pointer;font:400 15px/1.4 var(--display);color:#f4f1e8;border-bottom:1px solid rgba(244,241,232,.45);padding-bottom:1px}.gall:hover{border-color:#f4f1e8}.gall:focus-visible{outline:2px solid #f4f1e8;outline-offset:4px}
+.gev{display:grid;grid-template-columns:minmax(0,1fr);gap:18svh;padding:6svh 0 0;min-width:0}
+body.stitch .sdyk{--ink:#f4f1e8;--mute:#c4c5c7;--soft:rgba(244,241,232,.2);--ik:244,241,232;--on:#10151b;--sun:#ffe066;color:var(--ink);position:relative;padding:28px;border-radius:28px;min-height:0;grid-template-columns:minmax(0,200px) minmax(0,1fr);background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.04) 45%,rgba(255,255,255,.1)),rgba(14,19,27,.4);-webkit-backdrop-filter:blur(26px) saturate(1.6);backdrop-filter:blur(26px) saturate(1.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(255,255,255,.16),0 24px 60px rgba(0,0,0,.3)}
+body.stitch .sdyk .then{background:rgba(255,255,255,.07);border-left-color:var(--sun);color:var(--ink)}
+body.stitch .sdyk canvas{background:#0d1117;border-radius:14px}
+@media (prefers-reduced-motion:no-preference){
+  .sdyk{opacity:0;translate:0 56px;scale:.97;transition:opacity .9s ease,translate .9s cubic-bezier(.2,.7,.2,1),scale .9s cubic-bezier(.2,.7,.2,1)}.sdyk.in{opacity:1;translate:none;scale:1}
+  .gsl{opacity:0;translate:-24px 0;transition:opacity .9s ease,translate .9s cubic-bezier(.2,.7,.2,1)}.gsl.in{opacity:1;translate:none}
+  .gsl.in .gfield i{animation:gfin .6s both;animation-delay:calc(var(--k,0)*4ms)}
+}
+@keyframes gfin{from{opacity:0}}
+@media(max-width:900px){.gsc{grid-template-columns:minmax(0,1fr);gap:24px;padding:0 16px 14svh}.gsl{position:static}.gev{gap:24px;padding:0}body.stitch .sdyk{padding:20px;border-radius:20px}.gfield{font-size:13px}}
+@media(max-width:560px){body.stitch .sdyk{grid-template-columns:minmax(0,1fr)}}
+/* the game is the last chapter */
+body.stitch #v-hub{padding-bottom:14svh}
+body.stitch #v-hub>.lede{margin-bottom:8svh}
+body.stitch #v-hub .hub{display:block;max-width:920px;margin:0 auto;padding:0 16px}
+body.stitch #v-hub .hubtile,body.stitch #v-hub .hubmain>:is(.hk,b,.hd){display:none}
+body.stitch #v-hub .hubmain{width:100%;box-sizing:border-box;display:grid;justify-items:center;padding:20px 20px 28px}
+body.stitch #v-hub .hubscreen{width:100%}
+body.stitch #v-hub .hubmain i{justify-self:center;font-size:18px;padding:16px 44px}
+
+/* Round 20 (Nov 17): text beats between chapters, and character pictures that print in as they arrive */
+.beat{min-height:86svh;display:grid;place-content:center;justify-items:center;gap:24px;padding:10svh 24px;text-align:center;color:#f4f1e8}
+.beat p{margin:0;max-width:24ch;font:400 clamp(26px,3.3vw,46px)/1.22 var(--display);letter-spacing:-.015em;text-shadow:0 1px 18px rgba(8,11,16,.9),0 0 4px rgba(8,11,16,.6);text-wrap:balance}
+.beat p+p{color:#c9cacb}.beat b{font-weight:500;color:#fff}
+.bduo{display:flex;gap:clamp(24px,6vw,96px);justify-content:center;margin-bottom:16px}.bduo figure{margin:0;display:grid;gap:12px;justify-items:center}
+.bduo canvas{width:clamp(130px,17vw,216px);height:auto;aspect-ratio:24/30;display:block}
+.bduo figcaption{font:500 17px/1.3 var(--display);text-shadow:0 1px 12px rgba(8,11,16,.9)}.bduo figcaption span{display:block;font-weight:400;color:#c9cacb}
+body.act .beat,body.playing .beat{display:none!important}
+@media (prefers-reduced-motion:no-preference){
+  .beat p,.beat figcaption{opacity:0;translate:0 28px;transition:opacity 1s ease,translate 1s cubic-bezier(.2,.7,.2,1)}
+  .beat.in p,.beat.in figcaption{opacity:1;translate:none}.beat.in p:nth-of-type(2){transition-delay:.45s}.beat.in .bduo+p{transition-delay:1.5s}.beat.in figcaption{transition-delay:1.2s}
+  .typein,.sdyk .pic canvas{clip-path:inset(0 0 100% 0)}
+  .beat.in .typein{animation:typein 1.5s steps(30) .15s both}.beat.in figure+figure .typein{animation-delay:.55s}
+  .sdyk.in .pic canvas{animation:typein 1.3s steps(28) .35s both}
+  #hchart svg{clip-path:inset(0 100% 0 0)}#hchart.in svg{animation:drawin 2.2s cubic-bezier(.3,.1,.2,1) .2s both}
+  body[data-modal] .dyk .pic canvas{clip-path:none;animation:none}
+}
+@keyframes typein{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0)}}
+@keyframes drawin{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 -8% 0 0)}}
+
+/* Round 21 (Nov 17): the generation timeline is pinned. Each generation holds the screen while its events take turns; no cards, a big year in the generation's colors, and the photo washes into those colors as it arrives. */
+#gens .gsc{display:block;max-width:none;margin:0 0 12svh;padding:0;height:calc(100svh + var(--n,2)*85svh)}
+#gens .gpin{position:sticky;top:0;height:100svh;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:64px;align-items:center;max-width:1240px;margin:0 auto;padding:104px 72px 48px 32px}
+#gens .gsl{position:static}
+#gens .gev{display:grid;grid-template-columns:minmax(0,1fr);gap:0;padding:0;align-items:center}
+body.stitch #gens .sdyk{grid-area:1/1;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;padding:0;border-radius:0;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:16px 48px;align-items:center;opacity:0;translate:0 48px;scale:1;pointer-events:none;transition:opacity .6s ease,translate .8s cubic-bezier(.2,.7,.2,1);text-shadow:0 1px 14px rgba(8,11,16,.85)}
+body.stitch #gens .sdyk.on{opacity:1;translate:none;pointer-events:auto;transition-delay:.25s}
+body.stitch #gens .sdyk canvas{background:none;border-radius:0;clip-path:none;animation:none}
+body.stitch #gens .sdyk .yr{font:400 clamp(80px,10vw,156px)/.88 var(--serif);letter-spacing:-.02em;margin:8px 0 16px;background:linear-gradient(100deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 2px 14px rgba(8,11,16,.6))}
+body.stitch #gens .sdyk .fact{font:500 clamp(21px,2.1vw,30px)/1.2 var(--display);margin:0 0 16px;max-width:22ch}
+body.stitch #gens .sdyk .then{background:none;border-left:1px solid var(--c2);padding:0 0 0 14px;font-size:16px;max-width:36ch;color:#e4e2da}
+body.stitch #gens .sdyk .tag,body.stitch #gens .sdyk .src,body.stitch #gens .sdyk .credit{color:#c9cacb}body.stitch #gens .sdyk a{color:inherit}
+@media (prefers-reduced-motion:no-preference){body.stitch #gens .sdyk.on canvas{animation:typein 1.1s steps(28) .3s both}}
+@media (prefers-reduced-motion:reduce){body.stitch #gens .sdyk{transition:none;translate:none}}
+@media(max-width:900px){
+  #gens .gpin{grid-template-columns:minmax(0,1fr);align-content:center;gap:20px;padding:76px 28px 16px 20px}
+  #gens .gsl{gap:2px}#gens .gsl b{font-size:40px}#gens .gfield{display:none}#gens .gsl .gk{font-size:14px}
+  body.stitch #gens .sdyk{grid-template-columns:minmax(0,1fr);gap:10px}body.stitch #gens .sdyk .pic{max-width:min(46vw,200px)}
+  body.stitch #gens .sdyk .yr{font-size:72px;margin:2px 0 8px}body.stitch #gens .sdyk .fact{font-size:20px;margin-bottom:10px}body.stitch #gens .sdyk .then{font-size:14.5px}
+}
+
+/* Round 22 (Nov 17): title screen, then the pinned chamber story */
+#intro{min-height:calc(100svh - 72px);display:grid;place-content:center;justify-items:center;gap:20px;text-align:center;color:#f4f1e8;padding:0 16px 8svh}
+#intro .ititle{margin:0;font:400 clamp(56px,9.5vw,152px)/.9 var(--serif);letter-spacing:-.02em;text-shadow:0 2px 30px rgba(8,11,16,.6)}#intro .ititle em{font-style:italic}
+#intro #icap{display:block;max-width:100%;filter:drop-shadow(0 2px 18px rgba(8,11,16,.5))}
+#intro .ilede{margin:0;max-width:40ch;font:400 clamp(18px,1.7vw,24px)/1.35 var(--display);color:#e4e2da;text-shadow:0 1px 14px rgba(8,11,16,.9)}#intro .ilede b{font-weight:500;color:#fff}
+#intro{position:relative}
+#intro .icue{position:absolute;left:0;right:0;bottom:3.5svh;margin:0;text-align:center;font:400 14px/1 var(--display);color:#c9cacb;text-shadow:0 1px 10px rgba(8,11,16,.9)}#intro .icue b{display:inline-block;font-weight:400;margin-left:4px}
+@media (prefers-reduced-motion:no-preference){#intro .icue b{animation:cue 1.8s ease-in-out infinite}#intro>*{animation:vfade 1.2s ease both}#intro .ilede{animation-delay:.35s}#intro .icue{animation-delay:.9s}}
+body.act #intro,body.playing #intro{display:none}
+body.stitch:not(.act) #cpin{height:calc(100svh + var(--n,6)*62svh)}
+body.stitch:not(.act) #cpin>#v-chamber{position:sticky;top:0;margin-top:0;padding-top:20px;box-sizing:border-box}
+body.stitch #v-chamber :is(.stagebar,.ramp,.scrub,#caption,.morerow),body.stitch .stage>.room>.card{transition:opacity .6s ease}
+body.cstory #v-chamber :is(.stagebar,.ramp,.scrub,#caption,.morerow),body.cstory .stage>.room>.card{opacity:0;pointer-events:none}
+body.stitch #take span{font-style:italic}
+@media(max-width:760px){body.stitch #cpin #take{padding-right:112px}}
+
+/* Round 23 (Nov 17): no hamburger; the game is played in the last chapter */
+#menub,body.stitch .top .nav{display:none!important}#infob{right:24px}
+body.stitch{padding-bottom:0}
+body.stitch #v-hub{padding-bottom:0}body.stitch #v-hub .hub{display:none}
+body.stitch #v-hub>.lede{margin-bottom:12svh}
+body.stitch #v-play{position:relative;margin:0;padding:0}
+body.stitch #v-play .gs{position:relative;left:auto;top:auto;width:100vw;margin:0 0 0 calc(50% - 50vw);height:100svh;--top:0px;box-shadow:0 -1px 0 rgba(255,255,255,.14)}
+body.stitch #v-play .gdlg{bottom:48px}
+body.stitch #v-play>details.more:not([open]){position:absolute;left:16px;bottom:12px;z-index:7;margin:0!important}
+body.stitch #v-play>details.more[open]{position:fixed;z-index:80}
+body.stitch #v-hub{padding-top:0;margin-top:24svh;scroll-margin-top:0}body.stitch #v-hub>.sec.big,body.stitch #v-hub>.lede{display:none}
+/* story steps: the chamber and its headline sit in the middle of the screen; they slide back to make room for the member card when the controls return */
+body.stitch .stage>.room>.cvwrap{transition:translate .8s cubic-bezier(.2,.7,.2,1)}body.stitch #cpin #take{transition:none}
+body.cstory #cpin #take{text-align:center;margin-inline:auto}
+@media(min-width:900px){body.cstory .stage>.room>.cvwrap{translate:124px 0}}
+@media (prefers-reduced-motion:reduce){body.stitch .stage>.room>.cvwrap{transition:none}}
+
+/* Round 24 (Nov 17): the story has no controls. The opening chamber is a picture (#scv); The rules is one pinned screen with scroll steps; everything clickable lives in Explore, before the game. */
+#cpin{height:calc(100svh + var(--n,7)*60svh)}
+#cpin .spin{position:sticky;top:0;height:100svh;box-sizing:border-box;display:grid;grid-template-rows:auto auto;align-content:center;justify-items:center;gap:32px;padding:88px 24px 40px}
+#stake{margin:0;min-height:2.3em;max-width:24ch;text-align:center;color:#f4f1e8;font:400 clamp(28px,3.4vw,46px)/1.12 var(--serif);text-wrap:balance;text-shadow:0 1px 14px rgba(8,11,16,.95),0 0 3px rgba(8,11,16,.6)}#stake b{font-weight:400}#stake span{font-style:italic}
+.swrap{width:min(100%,1080px,calc((100svh - 330px)/.535))}#scv{display:block;width:100%}
+@media (prefers-reduced-motion:no-preference){#stake.sw{animation:vfade .7s ease both}}
+body.act :is(#cpin,#rules,#explore>.sec,#explore>.lede,.xtools){display:none!important}
+#v-how{display:none!important}
+body.stitch #explore{margin-top:22svh;scroll-margin-top:24px}body.act #explore{margin-top:0}
+body.stitch #explore>.sec.big{font-size:clamp(40px,5vw,68px);margin-bottom:12px;max-width:none}body.stitch #explore>.lede{text-align:center;margin:0 auto 32px;max-width:44ch}
+body.stitch #explore #v-chamber{margin-top:0}
+@media(min-width:900px){body.act #explore{margin-right:456px}}
+.xtools{display:flex;gap:8px;align-items:center;margin-left:auto;flex-wrap:wrap}
+.xtools input,.xtools button{font:400 15px/1.2 var(--display);color:#f4f1e8;background:rgba(255,255,255,.06);border:1px solid rgba(244,241,232,.34);border-radius:999px;padding:8px 14px;cursor:pointer}
+.xtools input{width:168px;cursor:text}.xtools input::placeholder{color:#c9cacb}.xtools button:hover{background:rgba(255,255,255,.16)}.xtools :focus-visible{outline:2px solid #f4f1e8;outline-offset:2px}
+body.stitch #v-mini{display:block;max-width:1120px;margin:22svh auto 0}
+@media(min-width:901px) and (max-width:1180px){#gens .gpin{gap:32px;padding-right:56px;grid-template-columns:minmax(0,3fr) minmax(0,8fr)}body.stitch #gens .sdyk{grid-template-columns:minmax(0,210px) minmax(0,1fr);gap:16px 28px}#gens .gsl b{font-size:40px}}
+@media(max-width:1100px){body.stitch #h-run{grid-template-columns:minmax(0,1fr)}body.stitch #h-run>*{grid-column:1!important;grid-row:auto!important}}
+#rules{height:calc(100svh + 3*70svh);margin-top:0;color:#f4f1e8}
+#rules .rpin{position:sticky;top:0;height:100svh;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:72px;align-items:center;max-width:1240px;margin:0 auto;padding:104px 72px 48px 32px;text-shadow:0 1px 14px rgba(8,11,16,.9)}
+#rules .rk{display:block;font:400 16px/1 var(--display);color:#c9cacb}#rules .rk b{font:400 clamp(88px,10vw,150px)/.9 var(--serif);color:#f4f1e8;margin-right:10px}
+#rules .rsteps{display:grid;margin-top:20px}#rules .rstep{grid-area:1/1;opacity:0;translate:0 32px;transition:opacity .5s ease,translate .7s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+#rules .rstep.on{opacity:1;translate:none;transition-delay:.15s}
+#rules .rstep h3{margin:0 0 12px;font:400 clamp(34px,3.6vw,52px)/1 var(--serif)}#rules .rstep p{margin:0;max-width:32ch;font:400 clamp(17px,1.5vw,20px)/1.4 var(--display);color:#e4e2da}
+#rules .rsrc{margin:32px 0 0;font:400 13px/1.4 var(--display);color:#c9cacb;max-width:40ch}#rules .rsrc button{all:unset;cursor:pointer;text-decoration:underline}
+#rules .rpic{display:grid;gap:36px}#rules .rch{display:grid;gap:10px}
+#rules .rlab{font:400 15px/1 var(--display);color:#c9cacb}#rules .rlab b{font:500 19px/1 var(--display);color:#f4f1e8;margin-right:8px}
+#rules .rgrid{display:grid;grid-template-columns:repeat(29,1fr);font:300 clamp(11px,1.5vw,19px)/1.02 "IBM Plex Mono",monospace;text-shadow:none}#rules .rch.s .rgrid{grid-template-columns:repeat(25,1fr);max-width:86.2%}
+#rules .rgrid i{font-style:normal;text-align:center;color:#f4f1e8;transition:color .6s ease,opacity .6s ease}
+#rules[data-k="2"] .rgrid i{opacity:.2}#rules[data-k="2"] .rgrid i.up{opacity:1;color:#ffe066}
+#rules .rterm{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px;height:5px;max-width:420px;opacity:0;transition:opacity .6s ease}#rules .rterm i{background:#f4f1e8}
+#rules .rtl{font:400 14px/1 var(--display);color:#c9cacb;opacity:0;transition:opacity .6s ease}
+#rules[data-k="1"] :is(.rterm,.rtl){opacity:1}
+@media (prefers-reduced-motion:reduce){#rules .rstep{transition:none;translate:none}}
+@media(max-width:900px){
+  #cpin .spin{padding:84px 12px 24px;gap:20px}.swrap{width:100%}
+  #rules .rpin{grid-template-columns:minmax(0,1fr);align-content:center;gap:24px;padding:76px 20px 16px}
+  #rules .rk b{font-size:64px}#rules .rstep h3{font-size:30px}#rules .rstep p{font-size:16px}#rules .rsrc{display:none}#rules .rpic{gap:18px}#rules .rgrid{font-size:min(3vw,13px)}
+  .xtools{margin-left:0;width:100%}.xtools input{flex:1;min-width:0}
+}
+
+/* Round 25 (Nov 17): the generations share one pinned layout and morph into each other on scroll */
+#gens .gsc{height:calc(100svh + var(--n,5)*80svh);margin-bottom:0}
+#gens .gsls{display:grid;align-items:center}#gens .gsls .gsl{grid-area:1/1;opacity:0;pointer-events:none;transition:opacity .7s ease,filter .7s ease;filter:blur(6px)}
+#gens .gsls .gsl.on{opacity:1;pointer-events:auto;filter:none}
+body.stitch #gens .sdyk{translate:none;filter:blur(8px);transition:opacity .7s ease,filter .7s ease}body.stitch #gens .sdyk.on{filter:none;transition-delay:0s}
+#gens .gprog{position:absolute;left:32px;bottom:40px;display:flex;gap:6px}#gens .gprog i{width:28px;height:2px;background:rgba(244,241,232,.28);transition:background .5s}#gens .gprog i.on{background:#f4f1e8}
+#gens .gpin{position:sticky}
+@media (prefers-reduced-motion:reduce){#gens .gsls .gsl,body.stitch #gens .sdyk{transition:none;filter:none}}
+@media(max-width:900px){#gens .gprog{left:20px;bottom:20px}}
+
+/* Round 26 (Nov 17): generations swap by jumbling their letters (see jumble()), so no fade or blur between them */
+#gens .gsls .gsl,body.stitch #gens .sdyk{transition:none!important;filter:none!important}
+#gens .gsls .gsl.on .gfield i{animation:vfade .8s ease both;animation-delay:calc(var(--k)*3ms)}
+@media (prefers-reduced-motion:no-preference){body.stitch #gens .sdyk.on .pic{animation:vfade .9s ease both}body.stitch #gens .sdyk.on canvas{animation:none}}
+
+/* Round 27 (Nov 17): the game stage fades in as it scrolls up, with a feathered top edge instead of a hard line */
+body.stitch #v-play .gs{opacity:var(--gp,1);-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 calc((1 - var(--gp,1))*320px + 1px));mask-image:linear-gradient(to bottom,transparent 0,#000 calc((1 - var(--gp,1))*320px + 1px));box-shadow:none}
+
+/* Round 28 (Nov 17): the lead-in to the game replaces the Could you run? card */
+#v-mini{display:none!important}
+#ask{min-height:100svh;display:grid;align-content:center;justify-items:center;gap:26px;text-align:center;padding:14svh 24px 12svh;margin-top:10svh;color:#f4f1e8;text-shadow:0 1px 18px rgba(8,11,16,.85)}
+body.stitch #ask>.sec.big{font-size:clamp(56px,8vw,128px);line-height:.95;margin:0;max-width:none;translate:none;opacity:1}
+#ask .aby{display:block}
+#ask input{width:7ch;text-align:center;font:400 clamp(56px,7vw,104px)/1 var(--serif);color:#f4f1e8;background:none;border:0;border-bottom:1px solid rgba(244,241,232,.5);border-radius:0;padding:0 0 4px;appearance:textfield;-moz-appearance:textfield;outline:none}
+#ask input::-webkit-inner-spin-button,#ask input::-webkit-outer-spin-button{-webkit-appearance:none}
+#ask input::placeholder{color:rgba(244,241,232,.32);font-size:.5em}
+#ask input:focus{border-bottom-color:#f4f1e8}
+#ask .aline{margin:8px 0 0;max-width:24ch;min-height:3.6em;font:400 clamp(26px,3.2vw,44px)/1.2 var(--serif);text-wrap:balance}
+#ask .anote{margin:0;font:400 13px/1.4 var(--display);color:#c9cacb}
+#ask .abridge{margin:6svh 0 0;font:400 clamp(17px,1.5vw,21px)/1.4 var(--display);color:#e4e2da}
+@media (prefers-reduced-motion:no-preference){#ask:not(.in)>*{opacity:0;translate:0 28px}#ask>*{transition:opacity 1s ease,translate 1s cubic-bezier(.2,.7,.2,1)}#ask.in>.aby{transition-delay:.3s}#ask.in>.aline{transition-delay:.5s}#ask.in>.abridge{transition-delay:.9s}#askline.sw{animation:vfade .6s ease both}}
+body.act #ask{display:none!important}
 </style>
 
 <canvas id="abg" aria-hidden="true"></canvas>
 <div class="wrap">
 <header class="top">
   <div class="brand">
-    <h1>Wait Your <em>Turn</em></h1>
-    <nav class="nav" aria-label="Views"><button data-view="chamber" aria-current="page">Chamber</button><button data-view="play" aria-current="false">Play</button><button data-view="how" aria-current="false">How Congress works</button><button data-view="about" aria-current="false">About this site</button></nav>
+    <h1>The Oldest <em>Congress</em></h1>
+    <button id="infob" data-modal="v-sources" aria-label="About this site"><i>i</i></button><button id="menub" aria-label="Menu" aria-expanded="false" aria-controls="mainnav"><i></i><i></i></button>
+    <nav class="nav" id="mainnav" aria-label="Views"><button data-view="chamber" aria-current="page">Chamber</button><button data-view="hist" aria-current="false">Since 1789</button><button data-view="gens" aria-current="false">Generations</button><button data-view="how" aria-current="false">How Congress works</button><button data-view="play" aria-current="false">Play</button><button data-view="about" aria-current="false">About this site</button></nav>
   </div>
   <div class="vs" id="vs"></div>
 </header>
 
+<section id="intro" aria-hidden="true"><canvas id="icap" aria-hidden="true"></canvas><p class="ititle">The Oldest <em>Congress</em></p><p class="ilede" id="ilede"></p><p class="icue">Scroll <b>↓</b></p></section>
 <div id="v-cham">
 <section class="stage" id="v-chamber" data-tab="Today" aria-label="Chamber">
   <p class="take" id="take"></p>
@@ -769,6 +1053,7 @@ body.stitch #lfilt select{border-radius:999px;-webkit-appearance:none;appearance
         </ul>
       </div>
     </details>
+    <div class="xtools"><input type="search" id="xq" list="xql" placeholder="Find a member" aria-label="Find a member by name"><datalist id="xql"></datalist><button data-modal="members">All members</button><button class="wlybtn" data-go="act:t-who">Who's like you?</button></div>
   </div>
   <p class="ramp" id="ramp"></p>
   <div class="room"><div class="cvwrap">
@@ -783,8 +1068,11 @@ body.stitch #lfilt select{border-radius:999px;-webkit-appearance:none;appearance
     <div class="ticks" id="ticks"></div>
   </div>
   <p class="caption" id="caption" aria-live="polite"></p>
+  <div class="morerow" id="morerow" hidden></div>
 </section>
 <div id="v-about">
+  <h2 class="sec big">Since 1789</h2>
+  <p class="lede">The median age of every Congress, from the 1st to the 119th.</p>
   <div class="hero" id="hero">
     <div class="duo"><figure><canvas id="cutY" aria-hidden="true"></canvas><figcaption id="capY"></figcaption></figure><figure><canvas id="cutO" aria-hidden="true"></canvas><figcaption id="capO"></figcaption></figure></div>
     <div>
@@ -826,8 +1114,8 @@ body.stitch #lfilt select{border-radius:999px;-webkit-appearance:none;appearance
 <!--GAME_HTML-->
 
 <section id="v-hub" aria-label="Play" hidden>
-  <h2 class="sec big">Play</h2>
-  <p class="lede">One story game and three quick things to try.</p>
+  <h2 class="sec big">Wait Your Turn</h2>
+  <p class="lede">You have seen who holds the seats. Now pick one from 2017 and wait through four real elections.</p>
   <div class="hub">
     <button class="hubmain" data-go="game"><span class="hubscreen"><canvas id="hubcv" aria-hidden="true"></canvas></span><span class="hk">Story game</span><b>Wait Your Turn</b><span class="hd">Pick a seat in 2017 and wait through four real elections.</span><i>Play</i></button>
     <button class="hubtile wide" data-go="act:t-who"><span class="hubico" id="ico-who" aria-hidden="true"></span><b>Who's like you?</b><span class="hd">Your age, gender, race, religion and more. See who in Congress matches.</span></button>
@@ -836,7 +1124,6 @@ body.stitch #lfilt select{border-radius:999px;-webkit-appearance:none;appearance
   </div>
 </section>
 <section id="v-mini" aria-label="Activity" hidden>
-  <button class="backlink" data-go="play">← All activities</button>
   <section class="hblock" id="h-run" aria-labelledby="h-run-t">
     <div class="hhead"><div><h2 class="sec" id="h-run-t">Could you run?</h2><p class="kick">Put in your birth year and see what you're old enough for.</p></div></div>
     <div class="runin">
@@ -918,7 +1205,7 @@ body.stitch #lfilt select{border-radius:999px;-webkit-appearance:none;appearance
         <h3>What the trait labels mean</h3>
         <p>Blank means the sources don't say. It never means "no."</p><details class="more"><summary>Details</summary><p>Race and ethnicity labels come from Wikipedia lists of members, not from self-identification, and a member who is not listed is unknown, not White. Religion is self-reported and compiled by Pew Research Center. Immigrant background counts come from Pew and are minimums. A blank means the sources do not say. No filter is based on how a portrait looks.</p></details>
       </article>
-      <article class="kcard wide">
+      <article class="kcard wide off" hidden>
         <div class="tag">How would you vote?</div>
         <h3>How the issue quiz matches</h3>
         <p>8 real votes. Some split by party, so matches partly sort by party.</p><details class="more"><summary>Details</summary><p>The issue quiz uses 8 roll-call votes from the 119th Congress, picked because they are easy to explain and cover different topics. Four split mostly by party, so matches partly sort by party. That is a property of the votes, not a recommendation. Votes are matched to the same issue in each chamber, which sometimes meant two different but parallel resolutions.</p></details>
@@ -949,7 +1236,7 @@ body.stitch #lfilt select{border-radius:999px;-webkit-appearance:none;appearance
       <li>Senate seats up in 2026 (33 regular, 2 special for Ohio and Florida): term end dates in unitedstates/congress-legislators; see also <a href="https://en.wikipedia.org/wiki/2026_United_States_Senate_elections" target="_blank" rel="noopener">2026 United States Senate elections</a> (Wikipedia).</li>
     </ol></section>
     <section class="srcgroup"><h3>Generation timeline</h3><ol class="cite" id="tlcite"></ol></section>
-    <section class="srcgroup"><h3>Background photos</h3><ol class="cite"><li>Chamber page: the U.S. Capitol at sunrise. Photographer and license to be added.</li><li>Play: Martin Falbisoner. <i>Capitol at Dusk 2</i>. CC BY-SA 3.0. <a href="https://commons.wikimedia.org/wiki/File:Capitol_at_Dusk_2.jpg">Wikimedia Commons</a></li><li>How Congress works: United States House of Representatives. <i>United States House of Representatives chamber</i>. Public domain. <a href="https://commons.wikimedia.org/wiki/File:United_States_House_of_Representatives_chamber.jpg">Wikimedia Commons</a></li><li>About this site: Bradley Weber. <i>National Mall, Reflecting Pool</i>. CC BY 2.0. <a href="https://commons.wikimedia.org/wiki/File:National_Mall_-_Reflecting_Pool_(45885661671).jpg">Wikimedia Commons</a></li><li>All are shown blurred, darkened and with grain added.</li><li>In the game: United States House of Representatives. <i>United States House of Representatives chamber</i>. Public domain. <a href="https://commons.wikimedia.org/wiki/File:United_States_House_of_Representatives_chamber.jpg">Wikimedia Commons</a></li></ol></section>
+    <section class="srcgroup"><h3>Background photos</h3><ol class="cite"><li>Chamber page: the U.S. Capitol at sunrise. Photographer and license to be added.</li><li>Play: Martin Falbisoner. <i>Capitol at Dusk 2</i>. CC BY-SA 3.0. <a href="https://commons.wikimedia.org/wiki/File:Capitol_at_Dusk_2.jpg">Wikimedia Commons</a></li><li>How Congress works: United States House of Representatives. <i>United States House of Representatives chamber</i>. Public domain. <a href="https://commons.wikimedia.org/wiki/File:United_States_House_of_Representatives_chamber.jpg">Wikimedia Commons</a></li><li>Generations: Ian Poellet. <i>Wallach Place rowhouses, Greater U Street Historic District, Washington, DC</i>. CC BY-SA 4.0. <a href="https://commons.wikimedia.org/wiki/File:Wallach_Place_rowhouses_-_Greater_U_Street_HD_-_Washington_DC.jpg">Wikimedia Commons</a></li><li>Since 1789: Bradley Weber. <i>National Mall, Reflecting Pool</i>. CC BY 2.0. <a href="https://commons.wikimedia.org/wiki/File:National_Mall_-_Reflecting_Pool_(45885661671).jpg">Wikimedia Commons</a></li><li>All are shown blurred, darkened and with grain added.</li><li>In the game: United States House of Representatives. <i>United States House of Representatives chamber</i>. Public domain. <a href="https://commons.wikimedia.org/wiki/File:United_States_House_of_Representatives_chamber.jpg">Wikimedia Commons</a></li><li>Generations backgrounds, from Unsplash (free to use under the Unsplash License): Silent Generation, photo by <a href="https://unsplash.com/photos/2PdHHSPfjCI">Emily Schultz</a>; Baby boomers, photo by <a href="https://unsplash.com/photos/WeR-EmwT12A">Boston Public Library</a>; Gen X, photo by <a href="https://unsplash.com/photos/yo01Z-9HQAw">Hush Naidoo Jade Photography</a>.</li></ol></section>
     <section class="srcgroup"><h3>Generation photos</h3><p class="listnote">Shown as halftones in the generation cards. All from Wikimedia Commons under the license listed.</p><ol class="cite" id="fimgcite"></ol></section>
     <section class="srcgroup"><h3>Members and portraits</h3><ol class="cite">
       <li>The @unitedstates project. <i>congress-legislators</i>: legislators-current.yaml and legislators-historical.yaml. GitHub. <a href="https://github.com/unitedstates/congress-legislators">github.com/unitedstates/congress-legislators</a></li>
@@ -979,18 +1266,18 @@ body.stitch #lfilt select{border-radius:999px;-webkit-appearance:none;appearance
       <li>Wikipedia. “<a href="https://en.wikipedia.org/wiki/List_of_Native_Americans_in_the_United_States_Congress">List of Native Americans in the United States Congress</a>.”</li>
     </ol></section>
   </div>
-  <section class="block" data-tab="The 8 votes"><h3 class="sub">The 8 quiz votes</h3><p class="listnote">Each links to its roll call on Voteview.</p><div class="vtable" id="vtable"></div></section>
+  <section class="block off" data-tab="The 8 votes" hidden><h3 class="sub">The 8 quiz votes</h3><p class="listnote">Each links to its roll call on Voteview.</p><div class="vtable" id="vtable"></div></section>
 </section>
 </div>
 
 <aside class="side" aria-label="Explore tools">
+  <button class="backlink" data-go="chamber">← Back to the chamber</button>
   <div class="rail">
     <button class="open" data-tab="" aria-label="Open the tools panel">◀</button>
     <button class="tool" data-tab="t-who">Who's like you?</button>
     <button class="tool" data-tab="t-iss">Issues</button>
   </div>
   <div class="drawer">
-    <button class="backlink" data-go="play">← All activities</button>
     <div class="dhead">
       <div class="row">
         <div class="picker">
@@ -1108,8 +1395,8 @@ const fmt=(x,d=1)=>x.toFixed(d);
 const cv=$('cv'),ov=$('ov'),ctx=cv.getContext('2d'),octx=ov.getContext('2d');let K=1,DPR=1;
 /* On wide but short screens, shrink the chamber so the page top, the chamber, the scrubber and the caption all fit in the viewport. Phones (under 640px) keep the full width. */
 function size(){const wrap=cv.parentElement;wrap.style.maxWidth='';const col=wrap.clientWidth;if(!col)return;
-  const top=cv.getBoundingClientRect().top+scrollY,below=$('caption').getBoundingClientRect().bottom-$('scrub').getBoundingClientRect().top+12;
-  const fitW=(innerHeight-top-below-20-24)/AR; /* 88 leaves the tool tabs under the chamber peeking into view */ // 20 = body bottom padding
+  const sec=$('v-chamber').getBoundingClientRect(),top=cv.getBoundingClientRect().top-sec.top+(document.body.classList.contains('act')?sec.top+scrollY:32),below=$('caption').getBoundingClientRect().bottom-$('scrub').getBoundingClientRect().top+12;
+  const fitW=(innerHeight-top-below-20-84)/AR; /* 88 leaves the tool tabs under the chamber peeking into view */ // 20 = body bottom padding
   wrap.style.maxWidth=col>=640&&fitW<col?Math.max(640,fitW)+'px':'';
   const w=wrap.clientWidth;DPR=devicePixelRatio||1;const h=w*AR;
   [cv,ov].forEach(c=>{c.width=Math.round(w*DPR);c.height=Math.round(h*DPR);c.style.height=h+'px'});K=w/1000*DPR;draw();placeCard()}
@@ -1167,7 +1454,7 @@ function ageOut(R){
   const y=[...all].sort((p,q)=>p.age-q.age)[0],seg=(n,c,l)=>n?`<i style="flex:${n};background:${c}" title="${n} ${l}"></i>`:'';
   $('ageout').innerHTML=`<div class="wbig"><b>${a}</b><span>your age on January 3, ${startYear(S.c)}</span></div>
     <div class="wbar">${seg(younger,'#87a0ff','younger')}${seg(near,'#ffb552','near you')}${seg(older,'#12161c','older')}</div>
-    <div class="wleg"><span><i style="background:#87a0ff"></i>${younger} younger</span><span><i style="background:#ffb552"></i>${near} within ${S.band} yrs</span><span><i style="background:#12161c"></i>${older} older</span></div>
+    <div class="wleg"><span><i style="background:#87a0ff"></i>${younger} younger</span><span><i style="background:#ffb552"></i>${near} within ${S.band} yrs</span><span><i style="background:#f4f1e8"></i>${older} older</span></div>
     ${younger?'':`<p class="wnote">Youngest member: <b>${y.name}, ${y.yrs}</b></p>`}`;
 }
 function notes(){
@@ -1252,7 +1539,7 @@ document.querySelectorAll('.rail button,.tools button').forEach(b=>b.onclick=()=
 $('closeside').onclick=()=>{document.body.classList.remove('side-open');0};
 const BGS={play:'Capitol_at_Dusk_2.jpg',how:'United_States_House_of_Representatives_chamber.jpg',about:'National Mall - Reflecting Pool (45885661671).jpg'},cpurl=f=>`url("https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=1600")`;
 /* Direct Wikimedia addresses (they allow canvas reading, which the ASCII backdrop needs) */
-const BGU={play:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Capitol_at_Dusk_2.jpg/1280px-Capitol_at_Dusk_2.jpg',how:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/United_States_House_of_Representatives_chamber.jpg/1280px-United_States_House_of_Representatives_chamber.jpg',about:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/National_Mall_-_Reflecting_Pool_%2845885661671%29.jpg/1280px-National_Mall_-_Reflecting_Pool_%2845885661671%29.jpg'};
+const BGU={g4:'game-assets/gen-bg/emily-schultz-2PdHHSPfjCI.jpg',g3:'game-assets/gen-bg/boston-public-library-WeR-EmwT12A.jpg',g2:'game-assets/gen-bg/hush-naidoo-jade-photography-yo01Z-9HQAw.jpg',play:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Capitol_at_Dusk_2.jpg/1280px-Capitol_at_Dusk_2.jpg',how:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/United_States_House_of_Representatives_chamber.jpg/1280px-United_States_House_of_Representatives_chamber.jpg',gen:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Wallach_Place_rowhouses_-_Greater_U_Street_HD_-_Washington_DC.jpg/1280px-Wallach_Place_rowhouses_-_Greater_U_Street_HD_-_Washington_DC.jpg',about:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/National_Mall_-_Reflecting_Pool_%2845885661671%29.jpg/1280px-National_Mall_-_Reflecting_Pool_%2845885661671%29.jpg'};
 /* ASCII backdrop: the page's photo redrawn as typed characters, in the photo's own colors, over the blurred photo. Brighter areas get denser characters. A picture only, never information. */
 const ABG={img:{},cur:null};
 function asciiBg(src){ABG.cur=src;if(!src){paintBg();return}let im=ABG.img[src];if(!im){im=ABG.img[src]=new Image();im.crossOrigin='anonymous';im.onload=()=>{if(ABG.cur===src)paintBg()};im.src=src}else if(im.complete)paintBg()}
@@ -1270,15 +1557,36 @@ function paintBg(){const cv=$('abg'),im=ABG.img[ABG.cur],W=innerWidth,H=innerHei
     x.fillStyle=`rgba(${Math.min(255,px[i]*1.3+50|0)},${Math.min(255,px[i+1]*1.3+50|0)},${Math.min(255,px[i+2]*1.3+50|0)},${a.toFixed(3)})`;x.fillText(g,c*cw,r*ch)}}
 let abgT;addEventListener('resize',()=>{clearTimeout(abgT);abgT=setTimeout(()=>{paintBg()},200)});
 /* Views: chamber, play (the hub), game, act (one activity beside the chamber), mini (an activity with no chamber), how, about. Each menu item has its own background photo. */
-function showView(v,arg){const B=document.body,top={game:'play',act:'play',mini:'play'}[v]||v;B.classList.add('stitch');B.classList.toggle('playing',v==='game');B.classList.toggle('act',v==='act');B.classList.toggle('about',v!=='act');
-  const show={'v-cham':v==='chamber'||v==='act','v-hub':v==='play','v-play':v==='game','v-mini':v==='mini','v-how':v==='how','v-sources':v==='about'};for(const k in show)$(k).hidden=!show[k];
-  const src=BGU[top]||DB.bg;B.style.setProperty('--sbg',`url("${src}")`);B.dataset.bg=top;asciiBg(v==='game'?null:src);
-  if(v==='game')GAME.enter();if(v==='play')GAME.preview($('hubcv'));
-  if(v==='mini')$('h-run').hidden=false;
-  if(v==='act'){chGo(0);selectTab(arg)}else if(S.tab){S.tab=null} /* activities filter only while open */
-  document.querySelectorAll('.nav button').forEach(b=>b.setAttribute('aria-current',b.dataset.view===top?'page':'false'));render();size();scrollTo(0,0)}
+/* One long scroll (Sydney, Nov 17): Chamber, Could you run, How Congress works and About this site are chapters of one page. Only the game (Play) and the Who's like you card (act) are separate states. how / about / mini just scroll to their chapter. */
+function setBg(k){const B=document.body;if(B.dataset.bg===k)return;B.dataset.bg=k;const src=BGU[k]||DB.bg;
+  /* every photo is its own layer, so one fades in over the other (a true crossfade, no dip to black) */
+  let L=$('bgs');if(!L){L=document.createElement('div');L.id='bgs';L.setAttribute('aria-hidden','true');B.prepend(L);for(const q of ['chamber','about','gen','g4','g3','g2','how','play']){const d=document.createElement('div');d.dataset.k=q;d.style.backgroundImage=`url("${BGU[q]||DB.bg}")`;L.append(d)}L.offsetWidth}
+  L.querySelectorAll('div').forEach(d=>d.classList.toggle('on',d.dataset.k===k));
+  const a=$('abg'),first=!setBg.done;setBg.done=1;clearTimeout(setBg.t);if(first){asciiBg(B.classList.contains('playing')?null:src);return}a.style.opacity=0;setBg.t=setTimeout(()=>{asciiBg(B.classList.contains('playing')?null:src);a.style.opacity=''},600)}
+function showView(v,arg){const V0=v,B=document.body,J={how:'rules',hist:'v-about',gens:'gens',explore:'explore',play:'v-hub',game:'v-hub'}[v],M=v==='mini',A=v==='about';if(J||M||A)v='chamber';modal(null);const game=false; /* the game is the last chapter of the page now, not a separate state */
+  B.classList.add('stitch');B.classList.toggle('playing',game);B.classList.toggle('act',v==='act');B.classList.toggle('about',v!=='act');menu(false);
+  for(const k of ['v-cham','v-mini','v-how','v-sources','gens','v-hub'])$(k).hidden=game;$('v-play').hidden=false;$('h-run').hidden=false;
+  setBg(game?'play':'chamber');
+  if(game)GAME.enter();else if(GAME.preview)GAME.preview($('hubcv'));
+  if(v==='act')selectTab(arg);else if(S.tab){S.tab=null} /* the activity filters only while open */
+  window.cscn&&cscn();render();size();scrollTo(0,0);if(J)$(J).scrollIntoView();if(V0==='chamber'&&window.cfree)cfree();window.cscn&&cscn();if(M)$('v-mini').scrollIntoView();if(A)modal('v-sources');chapter()}
+/* Since 1789, Generations, All members and Could you run open as glass modals over the chamber (Sydney, Nov 17). The sections stay where they are in the page; CSS lifts the open one into a fixed card. */
+let mFrom=null;function modal(id){const B=document.body,was=B.dataset.modal;if(!id){if(!was)return;delete B.dataset.modal;if(mFrom&&mFrom.isConnected)mFrom.focus();mFrom=null;return}
+  mFrom=document.activeElement;B.dataset.modal=id;const el=$(id);el.hidden=false;el.scrollTop=0;if(id==='history')drawHist();const x=el.querySelector('.mx');if(x)x.focus()}
+document.addEventListener('click',e=>{const o=e.target.closest('[data-modal]:not(body)');if(o){modal(o.dataset.modal);return}if(e.target.closest('.mx,#mveil'))modal(null)});addEventListener('keydown',e=>{if(e.key==='Escape')modal(null)});
+function menu(open){document.body.classList.toggle('menu',open);const b=$('menub');if(b)b.setAttribute('aria-expanded',open)}
+/* The story, top to bottom (Sydney, Nov 17): chamber, history, generations, how Congress works, then the game. [element, label, photo, menu view] */
+const CHAPS=[['cpin','The room today','chamber','chamber'],['v-about','Since 1789','about','hist'],['gens','Who they are','gen','gens'],['rules','The rules','how','how'],['explore','Explore','chamber','explore'],['v-hub','Your turn','play','play']];
+function chapter(){const B=document.body,r=$('rail');if(!r||B.classList.contains('playing')){document.querySelectorAll('.nav button').forEach(b=>b.setAttribute('aria-current',b.dataset.view==='play'?'page':'false'));return}
+  const still=matchMedia('(prefers-reduced-motion:reduce)').matches,act=B.classList.contains('act');let cur=0;CHAPS.forEach(([id],i)=>{const e=$(id);if(!still)e.style.setProperty('--o',act?0:Math.max(0,Math.min(1,-e.getBoundingClientRect().top/innerHeight*1.3)).toFixed(3));if(e.offsetParent&&e.getBoundingClientRect().top<=innerHeight*.5)cur=i;if(e.getBoundingClientRect().top<innerHeight*.88)e.classList.add('in')});
+  r.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===cur?'step':'false'));
+  {const g=document.querySelector('#v-play .gs');if(g){const p=still?1:Math.max(0,Math.min(1,(innerHeight-g.getBoundingClientRect().top)/(innerHeight*.85)));g.style.setProperty('--gp',(p*p*(3-2*p)).toFixed(3))}} /* the game stage rises out of the page: its top edge feathers away as it arrives */
+  if(!B.classList.contains('act'))setBg(CHAPS[cur][2]==='gen'&&window.gbgk?gbgk:CHAPS[cur][2]);
+  if(!still&&$('bgs'))$('bgs').style.setProperty('--bz',(1+Math.min(1,scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight))*.12).toFixed(4));
+  document.querySelectorAll('.nav button').forEach(b=>b.setAttribute('aria-current',b.dataset.view===CHAPS[cur][3]?'page':'false'))}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;const [v,arg]=b.dataset.go.split(':');showView(v,arg)});
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
+$('menub').onclick=()=>menu(!document.body.classList.contains('menu'));addEventListener('keydown',e=>{if(e.key==='Escape')menu(false)});
 $('useage').onclick=e=>{S.useAge=!S.useAge;e.target.setAttribute('aria-pressed',S.useAge);e.target.textContent=S.useAge?'Showing members my age':'Light up members my age';render()};
 $('by').oninput=e=>{const v=+e.target.value;if(v>=1900&&v<=2026){S.by=v;render()}};
 $('band').onchange=e=>{S.band=+e.target.value;render()};
@@ -1310,14 +1618,16 @@ function face(cv,m,key='card',W=24,H=30,cw=CW,grid,gam=1.1){const d=devicePixelR
 function paintFace(f){if(!f.cv.isConnected)return;const {W,H,cw}=f,n=W*H,x=f.cv.getContext('2d');x.clearRect(0,0,W*cw,H*cw);x.textAlign='center';x.textBaseline='middle';
   if(!f.ch.length){x.font='400 14px Archivo,sans-serif';x.fillStyle='#b4b5b7';x.fillText('No portrait',W*cw/2,H*cw/2);return}
   const [a,b]=GR[f.m.g].map(hx),T=[244,241,232],fs=Math.round(cw*1.3);
-  for(let i=0;i<n;i++){const c=f.ch[i],h=f.heat[i];if(c===' '&&h<.05)continue;const t=(i/W|0)/(H-1),col=a.map((v,k)=>v+(b[k]-v)*t).map((v,k)=>Math.round(T[k]+(v-T[k])*h));
+  for(let i=0;i<n;i++){const c=f.ch[i],h=Math.min(1,f.heat[i]);if(c===' '&&h<.05)continue;const t=(i/W|0)/(H-1),col=a.map((v,k)=>v+(b[k]-v)*t).map((v,k)=>Math.round(T[k]+(v-T[k])*h));
     x.font=`${h>.3?500:400} ${fs}px "IBM Plex Mono",monospace`;x.fillStyle=`rgb(${col})`;x.fillText(c===' '?'.':c,(i%W+.5)*cw,((i/W|0)+.5)*cw)}}
 function glow(f,e){const {W,H}=f,r=f.cv.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*W,py=(e.clientY-r.top)/r.height*H,R=W*.75;
   for(let i=0;i<W*H;i++){const q=1-Math.hypot(i%W+.5-px,(i/W|0)+.5-py)/R;if(q>0)f.heat[i]=Math.max(f.heat[i],Math.min(1,q*2.2))}
   if(!frun){frun=1;requestAnimationFrame(cool)}}
 function cool(){let any=0;const still=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  for(const k in FS){const f=FS[k];let a=0;for(let i=0;i<f.heat.length;i++)if(f.heat[i]>0){f.heat[i]=Math.max(0,f.heat[i]-(still?.2:.018));a=1}if(a&&f.cv.isConnected){paintFace(f);any=1}}
+  for(const k in FS){const f=FS[k];let a=0;const fl=f.floor||0;for(let i=0;i<f.heat.length;i++)if(f.heat[i]>fl){f.heat[i]=Math.max(fl,f.heat[i]-(still?.2:.018));a=1}if(a&&f.cv.isConnected){paintFace(f);any=1}}
   if(any)requestAnimationFrame(cool);else frun=0}
+/* wash: flood a character picture with its generation colors from the top down, then let it settle at a colored floor (story photos and the two story portraits) */
+function wash(key,floor=.62){const f=FS[key];if(!f||!f.ch.length)return;f.floor=floor;for(let i=0;i<f.heat.length;i++)f.heat[i]=Math.max(f.heat[i],1+(1-(i/f.W|0)/f.H)*1.1);if(!frun){frun=1;requestAnimationFrame(cool)}}
 let cardM=null;
 function card(m){
   const el=$('card');cardM=m;
@@ -1347,7 +1657,7 @@ addEventListener('keydown',e=>{if(e.key!=='Escape')return;if($('filt').open)$('f
 cv.onmousemove=e=>{const m=hit(e);const id=m?m.bg:null;if(id!==S.hov){S.hov=id;mark();if(!S.sel)card(m)}};
 cv.onmouseleave=()=>{S.hov=null;mark();if(!S.sel)card(null)};
 cv.onclick=e=>{const m=hit(e);S.sel=m&&S.sel!==m.bg?m.bg:null;card(S.sel?m:null);mark()};
-$('list').onclick=e=>{const b=e.target.closest('button');if(!b)return;showView('chamber');chGo(0);S.sel=b.dataset.bg;card(findM(S.sel));mark()};
+$('list').onclick=e=>{const b=e.target.closest('button');if(!b)return;mFrom=null;showView('chamber');chGo(0);S.sel=b.dataset.bg;card(findM(S.sel));mark()};
 /* ---------- legend, ticks ---------- */
 $('ticks').innerHTML=[115,116,117,118,119].map(c=>`<span data-c="${c}" title="${c}th Congress">${startYear(c)}</span>`).join('');
 $('ticks').onclick=e=>{const t=e.target.closest('[data-c]');if(t)slideTo(+t.dataset.c)};
@@ -1517,18 +1827,18 @@ function drawHist(){
   const i0=HIST.findIndex(h=>h[0]===CS[0]),i1=HIST.length-1,cur=HIST.findIndex(h=>h[0]===S.c);
   let g=`<rect x="${X(i0)-bw/2}" y="${T-4}" width="${bw*(i1-i0+1)}" height="${base-T+4}" fill="#f7c600" opacity=".22"/>`;
   g+=`<text class="ht1" x="${L}" y="${T-12}">Median age on opening day</text><text class="ht1" x="${L}" y="${T+HA+G-12}">Members aged 70 or older</text>`;
-  [40,50,60].forEach(v=>g+=`<line x1="${L}" x2="${W-R}" y1="${ya(v)}" y2="${ya(v)}" stroke="#e9e7e2"/><text x="${L-6}" y="${ya(v)+3.5}" text-anchor="end">${v}</text>`);
-  for(let v=0;v<=top70;v+=50)g+=`<line x1="${L}" x2="${W-R}" y1="${yb(v)}" y2="${yb(v)}" stroke="${v?'#e9e7e2':'#121212'}"/><text x="${L-6}" y="${yb(v)+3.5}" text-anchor="end">${v}</text>`;
-  g+=`<path d="${HIST.map((h,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+ya(h[4]).toFixed(1)).join('')}" fill="none" stroke="#121212" stroke-width="2" stroke-linejoin="round"/>`;
+  [40,50,60].forEach(v=>g+=`<line x1="${L}" x2="${W-R}" y1="${ya(v)}" y2="${ya(v)}" stroke="rgba(244,241,232,.18)"/><text x="${L-6}" y="${ya(v)+3.5}" text-anchor="end">${v}</text>`);
+  for(let v=0;v<=top70;v+=50)g+=`<line x1="${L}" x2="${W-R}" y1="${yb(v)}" y2="${yb(v)}" stroke="${v?'rgba(244,241,232,.18)':'#f4f1e8'}"/><text x="${L-6}" y="${yb(v)+3.5}" text-anchor="end">${v}</text>`;
+  g+=`<path d="${HIST.map((h,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+ya(h[4]).toFixed(1)).join('')}" fill="none" stroke="#f4f1e8" stroke-width="2" stroke-linejoin="round"/>`;
   const gap=bw>4?Math.min(2,bw*.25):bw*.15;
-  HIST.forEach((h,i)=>{const y=yb(h[5]),w=bw-gap,inC=i>=i0;g+=`<path d="M${X(i)-w/2} ${base}V${y+Math.min(2,w/2)}q0 -${Math.min(2,w/2)} ${Math.min(2,w/2)} -${Math.min(2,w/2)}H${X(i)+w/2-Math.min(2,w/2)}q${Math.min(2,w/2)} 0 ${Math.min(2,w/2)} ${Math.min(2,w/2)}V${base}Z" fill="${inC?'#121212':'#a8a59d'}"/>`});
+  HIST.forEach((h,i)=>{const y=yb(h[5]),w=bw-gap,inC=i>=i0;g+=`<path d="M${X(i)-w/2} ${base}V${y+Math.min(2,w/2)}q0 -${Math.min(2,w/2)} ${Math.min(2,w/2)} -${Math.min(2,w/2)}H${X(i)+w/2-Math.min(2,w/2)}q${Math.min(2,w/2)} 0 ${Math.min(2,w/2)} ${Math.min(2,w/2)}V${base}Z" fill="${inC?'#f4f1e8':'rgba(244,241,232,.42)'}"/>`});
   (W<520?[1800,1900,2000]:[1800,1850,1900,1950,2000]).forEach(y=>g+=`<text x="${X((y-1789)/2)}" y="${base+16}" text-anchor="middle">${y}</text>`); // one Congress every two years
   const mx=HIST.reduce((a,h,i)=>h[4]>HIST[a][4]?i:a,0),last=HIST[i1];
   g+=`<text class="lab" x="${X(0)}" y="${ya(Math.max(...HIST.slice(0,8).map(h=>h[4])))-9}">${HIST[0][4].toFixed(1)} in ${hyr(HIST[0])}</text>`;
   g+=`<text class="lab" x="${X(mx)}" y="${ya(HIST[mx][4])-9}" text-anchor="end">${HIST[mx][4].toFixed(1)}</text>`;
   g+=`<text class="lab" x="${X(i1)+(R>20?6:0)}" y="${yb(last[5])+(R>20?4:-6)}" text-anchor="${R>20?'start':'end'}">${last[5]}</text>`;
-  if(cur>=0)g+=`<circle cx="${X(cur)}" cy="${ya(HIST[cur][4])}" r="4.5" fill="#121212" stroke="#fdfcfa" stroke-width="2"/>`;
-  if(hi!==null)g+=`<line x1="${X(hi)}" x2="${X(hi)}" y1="${T-4}" y2="${base}" stroke="#121212" stroke-width="1" stroke-dasharray="3 3"/><circle cx="${X(hi)}" cy="${ya(HIST[hi][4])}" r="4" fill="#fdfcfa" stroke="#121212" stroke-width="2"/>`;
+  if(cur>=0)g+=`<circle cx="${X(cur)}" cy="${ya(HIST[cur][4])}" r="4.5" fill="#f4f1e8" stroke="#10151b" stroke-width="2"/>`;
+  if(hi!==null)g+=`<line x1="${X(hi)}" x2="${X(hi)}" y1="${T-4}" y2="${base}" stroke="#f4f1e8" stroke-width="1" stroke-dasharray="3 3"/><circle cx="${X(hi)}" cy="${ya(HIST[hi][4])}" r="4" fill="#10151b" stroke="#f4f1e8" stroke-width="2"/>`;
   g+=`<rect x="${L}" y="${T-4}" width="${W-L-R}" height="${base-T+4}" fill="transparent" id="hhit"/>`;
   const svg=box.querySelector('svg')||box.insertAdjacentElement('afterbegin',document.createElementNS('http://www.w3.org/2000/svg','svg'));
   svg.setAttribute('width',W);svg.setAttribute('height',H);svg.setAttribute('role','img');
@@ -1552,7 +1862,97 @@ function pager(view,sel){const items=[...view.querySelectorAll(sel)];if(items.le
     foot.innerHTML=(i?`<button data-i="${i-1}">← ${name(items[i-1])}</button>`:'<span></span>')+`<span>${i+1} of ${items.length}</span>`+(i<items.length-1?`<button class="nx" data-i="${i+1}">Next: ${name(items[i+1])} →</button>`:'<span></span>');
     if(scroll)scrollTo({top:0,behavior:RM.matches?'auto':'smooth'})};
   nav.onclick=e=>{const b=e.target.closest('button');if(b)go(+b.dataset.i)};foot.onclick=e=>{const b=e.target.closest('button');if(b)go(+b.dataset.i,true)};go(0);return go}
-pager($('v-how'),'.hblock');const chGo=pager($('v-cham'),'#v-chamber,#history,#young,#members');pager($('v-sources'),':scope>.block,:scope>.srcgrid');
+pager($('v-how'),'.hblock');pager($('v-cham'),'#v-chamber,#history,#young,#members');['v-chamber','history','young','members'].forEach(id=>$(id).hidden=false);$('hero').hidden=true;const chGo=()=>window.cfree?cfree():scrollTo(0,0); /* Chamber sections are scroll chapters now, not tabs */
+['v-sources','young','members'].forEach(id=>{const e=$(id);e.setAttribute('role','dialog');e.setAttribute('aria-modal','true');e.insertAdjacentHTML('afterbegin','<button class="mx" aria-label="Close">×</button>')});document.body.insertAdjacentHTML('beforeend','<div id="mveil"></div>');
+/* Generations as scroll scenes: the generation stays pinned on the left while two of its events (one from when they were born, one from when they turned 20) pass on the right. The full list opens from "All events". */
+{const s=document.createElement('section');s.id='gens';s.setAttribute('aria-label','Generations');
+  const MAINEV={4:1941,3:1954,2:1965,1:1983,0:1998}; /* the one event each generation's scene shows (Sydney's picks, Nov 17): WWII, Brown v. Board, Medicare, the first cell phone, Google */
+  const pick=(g,w)=>{const a=DB.tl.filter(f=>f[0]===g&&f[1]===w).sort((x,y)=>x[2]-y[2]);return a.find(f=>FIMG[`${f[0]}-${f[1]}-${f[2]}`])||a[0]};
+  const G5=[4,3,2,1,0].map(g=>{const [a,b]=GYRS[g];return{g,a,b,ms:DB.data[119].filter(r=>r[6]>=a&&r[6]<=b).sort((x,y)=>x[6]-y[6]),facts:[DB.tl.find(f=>f[0]===g&&f[1]==='born'&&f[2]===MAINEV[g])||pick(g,'born')].filter(Boolean),n:DB.tl.filter(f=>f[0]===g).length}}).filter(o=>o.ms.length&&o.facts.length);
+  const NW=['','One generation sits','Two generations sit','Three generations sit','Four generations sit','Five generations sit'][G5.length];
+  s.innerHTML=`<h2 class="sec big">When they were young</h2><p class="lede">${NW} in Congress today. Keep scrolling for one thing that happened in the years each was born.</p>`+`<div class="gsc" style="--n:${G5.length}"><div class="gpin"><div class="gsls">${G5.map(o=>`<div class="gsl" data-g="${o.g}" style="--c1:${GR[o.g][0]};--c2:${GR[o.g][1]}"><span class="gk">Born ${o.a} to ${o.b}</span><b>${GLONG[o.g]}</b><span class="gn">${o.ms.length} member${o.ms.length===1?'':'s'} of Congress today</span><div class="gfield" aria-hidden="true">${o.ms.map((r,k)=>`<i style="color:${mix(o.g,r[6])};--k:${k}">${GLYPH[o.g]}</i>`).join('')}</div><button class="gall" data-g="${o.g}">All ${o.n} events →</button></div>`).join('')}</div><div class="gev">${G5.map(o=>`<div class="dyk sdyk" data-g="${o.g}" style="--c1:${GR[o.g][0]};--c2:${GR[o.g][1]}"></div>`).join('')}</div><div class="gprog" aria-hidden="true">${G5.map(()=>'<i></i>').join('')}</div></div></div>`;
+  $('v-how').before(s);$('v-how').after($('v-hub'));const dump=document.createElement('div');
+  G5.forEach(o=>renderFact({g:o.g,i:0,ms:o.ms,facts:[o.facts[0]]},s.querySelector(`.sdyk[data-g="${o.g}"]`),dump,'story'+o.g+'0'));
+  /* one pinned scene for all generations (Sydney, Nov 17): the layout stays put and each scroll step morphs the name, the characters, the year, the event and the photo into the next generation's */
+  const tr=s.querySelector('.gsc'),L=[...s.querySelectorAll('.gsl')],C=[...s.querySelectorAll('.sdyk')],P=[...s.querySelectorAll('.gprog i')];let gc=-1;
+  window.gscn=()=>{if(!s.offsetParent)return;const r=tr.getBoundingClientRect();if(r.bottom<-innerHeight||r.top>innerHeight*2)return;const n=L.length,p=Math.max(0,Math.min(.999,-r.top/Math.max(1,r.height-innerHeight))),k=Math.floor(p*n);if(k===gc)return;gc=k;window.gbgk=BGU['g'+G5[k].g]?'g'+G5[k].g:'gen';if((document.body.dataset.bg||'').startsWith('g'))setBg(gbgk); /* each generation has its own photo behind the page, where Sydney has supplied one */
+    const was=L.findIndex(e=>e.classList.contains('on'));L.forEach((e,i)=>e.classList.toggle('on',i===k));C.forEach((e,i)=>e.classList.toggle('on',i===k));P.forEach((e,i)=>e.classList.toggle('on',i===k));
+    if(was>=0&&!RM.matches)jumble([[L[was],L[k]],[C[was],C[k]]]);setTimeout(()=>wash('story'+G5[k].g+'0'),300)};
+  /* the swap is a jumble, not a fade (Sydney, Nov 17): every letter starts as the old text, flickers through symbols and settles into the new text, left to right. Spaces stay put so lines do not rewrap. The real text is restored at the end, so the symbols are never information. */
+  const SYM='#@+x=*:%/<>01',KEEP=new WeakMap(),FLD=['.gk','b','.gn','.gall','.tag','.yr','.fact','.then','.src','.credit'];let jt=0,jn=[];
+  const nodes=el=>{const o=[],w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(!KEEP.has(n))KEEP.set(n,n.nodeValue);o.push(n)}return o};
+  const jumble=pairs=>{cancelAnimationFrame(jt);jn.forEach(n=>n.nodeValue=KEEP.get(n));jn=[];const jobs=[];
+    pairs.forEach(([a,b])=>FLD.forEach(q=>{const ea=a.querySelector(':scope '+q),eb=b.querySelector(':scope '+q);if(!eb)return;const from=ea?[...nodes(ea)].map(n=>KEEP.get(n)).join(''):'';let off=0;
+      nodes(eb).forEach(n=>{const to=KEEP.get(n);jobs.push({n,to,from:from.slice(off,off+to.length),len:Math.max(1,to.length),r:[...to].map(()=>Math.random())});off+=to.length;jn.push(n)})}));
+    const t0=performance.now(),D=1500;let f=0;const step=now=>{const q=Math.min(1,(now-t0)/D),p=q<.5?2*q*q:1-(-2*q+2)**2/2;f++; /* eased, and the symbols change about 12 times a second, so it reads as a morph and not a flicker */
+      jobs.forEach(j=>{let o='';for(let i=0;i<j.to.length;i++){const c=j.to[i],at=.28+.55*(i/j.len)+j.r[i]*.17,go=.04+.2*(i/j.len)+j.r[i]*.1;if(c===' '||c==='\n'||p>=at)o+=c;else if(p<go&&j.from[i]&&j.from[i]!==' ')o+=j.from[i];else o+=SYM[(i*7+((f/5)|0)*13+((j.r[i]*97)|0))%SYM.length]}j.n.nodeValue=o});
+      if(p<1)jt=requestAnimationFrame(step);else{jn.forEach(n=>n.nodeValue=KEEP.get(n));jn=[]}};jt=requestAnimationFrame(step)};gscn();
+  s.addEventListener('click',e=>{const b=e.target.closest('.gall');if(!b)return;const t=$('gtlbar').querySelector(`[data-g="${b.dataset.g}"]`);if(t)t.click();mFrom=b;modal('young')});
+  const io=new IntersectionObserver(en=>en.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -12% 0px'});s.querySelectorAll('.sdyk,.gsl').forEach(e=>io.observe(e));
+}
+/* Text beats between chapters (Sydney, Nov 17): a few plain sentences that carry the story from one chapter to the next. Every number is computed from the data; the age floors are the Constitution's. Pictures made of characters print in line by line when they arrive (.typein). */
+{const all=DB.data[119].filter(r=>GRID[r[0]]).sort((a,b)=>a[5]-b[5]),y=all[0],o=all[all.length-1],pop=DB.pop[2025],
+  beat=(id,h)=>{const e=document.createElement('section');e.className='beat';e.id=id;e.innerHTML=h;return e};
+  $('gens').before(beat('beat2',`<div class="bduo"><figure><canvas class="typein" id="btO" role="img" aria-label="Portrait of ${o[1]} drawn in typed characters"></canvas><figcaption>${o[1]}<span>born ${o[6]}</span></figcaption></figure><figure><canvas class="typein" id="btY" role="img" aria-label="Portrait of ${y[1]} drawn in typed characters"></canvas><figcaption>${y[1]}<span>born ${y[6]}</span></figcaption></figure></div><p>The oldest member and the youngest were born <b>${y[6]-o[6]} years</b> apart.</p>`));
+  $('v-how').before(beat('beat3','<p>The Constitution sets a minimum age to serve: <b>25</b> for the House, <b>30</b> for the Senate.</p><p>It sets no maximum age.</p>'));
+  face($('btO'),{bg:o[0],g:gi(o[6])},'beatO',24,30,9);face($('btY'),{bg:y[0],g:gi(y[6])},'beatY',24,30,9);
+  const io=new IntersectionObserver(en=>en.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);if(x.target.id==='beat2')setTimeout(()=>{wash('beatO');wash('beatY')},1900)}}),{rootMargin:'0px 0px -18% 0px'});document.querySelectorAll('.beat,#hchart').forEach(e=>io.observe(e))}
+/* The whole game is played in the last chapter (Sydney, Nov 17): the stage sits under the chapter title, full width and one window tall, and starts the first time it comes near the screen. */
+{const vp=$('v-play');$('v-hub').append(vp);vp.hidden=false;const io=new IntersectionObserver(en=>{if(en.some(x=>x.isIntersecting)){GAME.enter();io.disconnect()}},{rootMargin:'60% 0px'});io.observe(vp);
+  let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(GAME.G.started)GAME.enter()},200)})}
+/* Opening (Sydney, Nov 17): a title screen first, so the page reads as a scroll. Then the chamber is pinned (#cpin is the scroll track) while the headline narrates and one generation lights at a time; at the last step the controls fade in and the chamber is free to explore. */
+{const t=document.createElement('div');t.id='cpin';$('v-about').before(t);
+  t.innerHTML='<div class="spin"><p id="stake" aria-live="polite"></p><div class="swrap"><canvas id="scv" role="img" aria-label="The chamber: one typed character for each member of Congress"></canvas></div></div>';
+  const n0=O70(CS[0]),n1=O70(119);$('ilede').textContent='An interactive look at how old the people in Congress are: every member in the chamber, how it got this old, and a short game about waiting for a seat.';
+  const icap=()=>GAME.capitol($('icap'),Math.min(innerWidth*.86,760),Math.max(120,innerHeight*.32));icap();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(icap);let ict;addEventListener('resize',()=>{clearTimeout(ict);ict=setTimeout(icap,150)});
+  const cnt=g=>{const [a,b]=GYRS[g];return DB.data[119].filter(r=>r[6]>=a&&r[6]<=b).length},NM=['Gen Z','Millennials','Gen X','Baby boomers','from the Silent Generation'],pop=DB.pop[2025];
+  const ST=[{g:null,txt:`<b>${DB.data[119].length}</b> members of Congress. <span>One character each.</span>`}].concat([4,3,2,1,0].filter(g=>cnt(g)).map(g=>({g,txt:`<b>${cnt(g)}</b> ${cnt(g)===1?'is':'are'} ${NM[g]}, <span>born ${GYRS[g][0]} to ${GYRS[g][1]}.</span>`})),[{g:null,txt:`Their median age is <b>${fmt(med(AGES[119]))}</b>.${pop!=null?` <span>For everyone living in the United States, it is ${pop}.</span>`:''}`}]);
+  t.style.setProperty('--n',ST.length);
+  /* the picture: its own canvas, drawn from the same seats as the chamber in Explore */
+  const sc=$('scv'),sx=sc.getContext('2d'),R9=ROSTERS[119],SL=cells.map(c=>({c,m:R9[c.k][c.i],a:1,a0:1,ta:1})).filter(o=>o.m);let sk=1,sa=0,cur=-1;
+  const sdraw=()=>{sx.setTransform(1,0,0,1,0,0);sx.clearRect(0,0,sc.width,sc.height);sx.setTransform(sk,0,0,sk,0,0);sx.textAlign='center';sx.textBaseline='middle';let fk;
+    SL.forEach(o=>{const c=o.c,ch=GLYPH[o.m.g];if(c.k!==fk){fk=c.k;sx.font=`400 ${SEATPX[c.k]}px "IBM Plex Mono",monospace`}
+      if(o.a<1){sx.globalAlpha=.16*(1-o.a);sx.fillStyle='#f4f1e8';sx.fillText(ch,c.x,c.y)}if(o.a>0){sx.globalAlpha=o.a;sx.fillStyle=mix(o.m.g,o.m.by);sx.fillText(ch,c.x,c.y)}});sx.globalAlpha=1};
+  const ssize=()=>{const w=sc.parentElement.clientWidth;if(!w)return;const d=devicePixelRatio||1;sc.width=Math.round(w*d);sc.height=Math.round(w*AR*d);sc.style.height=w*AR+'px';sk=w/1000*d;sdraw()};
+  const sfade=()=>{cancelAnimationFrame(sa);if(RM.matches){SL.forEach(o=>o.a=o.ta);sdraw();return}SL.forEach(o=>o.a0=o.a);const t0=performance.now();
+    const step=now=>{const p=Math.min(1,(now-t0)/450),e=p<.5?2*p*p:1-(-2*p+2)**2/2;SL.forEach(o=>o.a=o.a0+(o.ta-o.a0)*e);sdraw();if(p<1)sa=requestAnimationFrame(step)};sa=requestAnimationFrame(step)};
+  new ResizeObserver(ssize).observe(sc.parentElement);document.fonts.load('400 20px "IBM Plex Mono"').then(sdraw);
+  window.cscn=()=>{if(!t.offsetParent)return;const r=t.getBoundingClientRect(),p=Math.max(0,Math.min(.999,-r.top/Math.max(1,r.height-innerHeight))),k=Math.floor(p*ST.length);if(k===cur)return;
+    cur=k;const st=$('stake');st.innerHTML=ST[k].txt;st.classList.remove('sw');void st.offsetWidth;st.classList.add('sw');SL.forEach(o=>o.ta=+(ST[k].g==null||o.m.g===ST[k].g));sfade()};
+  /* Explore (Sydney, Nov 17): everything you can click sits here, after the story, so nobody gets stuck before it ends */
+  const x=document.createElement('section');x.id='explore';x.setAttribute('aria-label','Explore the chamber');x.innerHTML='<h2 class="sec big">Explore the chamber</h2><p class="lede">Now it is yours. Pick a generation, drag the timeline back to 2017, or tap a seat to see who holds it.</p>';
+  $('v-hub').before(x);x.append($('v-chamber'));$('v-hub').before($('v-mini'));
+  /* Lead-in to the game (Sydney, Nov 17): replaces the Could you run? card. One question, one line back, then the game. Age rules only; the game itself always starts the character at 25 in 2017. */
+  const ak=document.createElement('section');ak.id='ask';ak.setAttribute('aria-label','Your age');ak.innerHTML='<h2 class="sec big">How old are you?</h2><label class="aby"><span class="gsr">Birth year</span><input id="askby" type="number" inputmode="numeric" min="1900" max="'+new Date().getFullYear()+'" placeholder="Year born" autocomplete="off"></label><p class="aline" id="askline" aria-live="polite">Put in the year you were born.</p><p class="anote">Age rules only. Citizenship years also apply.</p><p class="abridge">Now meet someone who is 25 in 2017, and has to wait.</p>';
+  $('v-hub').before(ak);
+  const Yr=new Date().getFullYear(),yy=n=>n===1?'1 year':n+' years';
+  const askT=by=>{const A=Yr-by;if(!(by>=1900&&by<=Yr))return'Put in the year you were born.';
+    if(A<18)return`At ${A} you can’t vote yet. You can in ${yy(18-A)}, and run for the House in ${yy(25-A)}.`;
+    if(A<25)return`At ${A} you can vote. You can run for the House in ${yy(25-A)}.`;
+    if(A<30)return`At ${A} you can vote and run for the House. The Senate opens at 30, in ${yy(30-A)}.`;
+    if(A<35)return`At ${A} you can vote and run for the House or the Senate. President opens at 35, in ${yy(35-A)}.`;
+    return`At ${A} you are old enough for every seat in Congress, and for President.`};
+  $('askby').oninput=()=>{const l=$('askline');l.textContent=askT(+$('askby').value);l.classList.remove('sw');void l.offsetWidth;l.classList.add('sw')};
+  $('v-mini').hidden=true;
+  {const io=new IntersectionObserver(en=>en.forEach(q=>{if(q.isIntersecting){ak.classList.add('in');io.disconnect()}}),{rootMargin:'0px 0px -15% 0px'});io.observe(ak)}
+  window.cfree=()=>x.scrollIntoView();
+  const q=$('xq');q.onfocus=()=>{$('xql').innerHTML=(S.all||[]).map(m=>`<option value="${m.name}">`).join('')};
+  q.oninput=q.onchange=()=>{const v=q.value.trim().toLowerCase();if(v.length<3)return;const A=S.all||[],m=A.find(m=>m.name.toLowerCase()===v)||(A.filter(m=>m.name.toLowerCase().includes(v)).length===1&&A.find(m=>m.name.toLowerCase().includes(v)));if(m){S.sel=m.bg;S.gen=null;render()}};
+  /* The rules (Sydney, Nov 17): one pinned screen, three scroll steps, in place of the How Congress works tabs. The grids are plain seats, not members: nothing here says which senators are up. */
+  const RS=[['Two chambers','The House has 435 seats, split among the states by population. The Senate has 100, two for each state. A bill has to pass both.'],['Terms','A House term is 2 years. A Senate term is 6. Neither chamber limits how many terms a member can serve.'],['On the ballot in 2026','Every House seat is up on November 3, 2026, and 35 of the 100 Senate seats: 33 regular elections and 2 special elections, in Ohio and Florida.']];
+  const g=(n,up)=>Array.from({length:n},(_,i)=>`<i${i<up?' class="up"':''}>#</i>`).join(''),ru=document.createElement('section');ru.id='rules';ru.setAttribute('aria-label','The rules');
+  ru.innerHTML=`<div class="rpin"><div class="rtxt"><span class="rk"><b id="rkn">1</b> of ${RS.length}</span><div class="rsteps">${RS.map(([h,p])=>`<div class="rstep"><h3>${h}</h3><p>${p}</p></div>`).join('')}</div><p class="rsrc">U.S. Constitution, Article I and the 17th Amendment; 2 U.S.C. § 7. Links are under <button data-modal="v-sources">About this site</button>.</p></div>
+    <div class="rpic"><div class="rch"><span class="rlab"><b>House</b> 435 seats</span><div class="rgrid" aria-hidden="true">${g(435,435)}</div><div class="rterm" aria-hidden="true"><i></i><i></i><i></i></div><span class="rtl">6 years = 3 House elections</span></div>
+    <div class="rch s"><span class="rlab"><b>Senate</b> 100 seats</span><div class="rgrid" aria-hidden="true">${g(100,35)}</div><div class="rterm" aria-hidden="true"><i></i></div><span class="rtl">6 years = 1 Senate election</span></div></div></div>`;
+  $('v-how').before(ru);const rst=[...ru.querySelectorAll('.rstep')];let rc=-1;
+  window.rscn=()=>{if(!ru.offsetParent)return;const r=ru.getBoundingClientRect(),p=Math.max(0,Math.min(.999,-r.top/Math.max(1,r.height-innerHeight))),k=Math.floor(p*RS.length);if(k===rc)return;rc=k;ru.dataset.k=k;$('rkn').textContent=k+1;rst.forEach((e,i)=>e.classList.toggle('on',i===k))};rscn()}
+if(!document.body.classList.contains('playing'))['v-mini','v-how','v-sources','v-hub'].forEach(id=>$(id).hidden=false);if(GAME.preview)GAME.preview($('hubcv')); /* the page loads as one scroll, before any showView call */
+{const r=document.createElement('nav');r.id='rail';r.setAttribute('aria-label','Chapters');r.innerHTML=CHAPS.map(([id,t])=>`<button data-ch="${id}" aria-current="false"><span>${t}</span><i></i></button>`).join('');document.body.append(r);
+  r.onclick=e=>{const b=e.target.closest('button');if(b)$(b.dataset.ch).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'})};
+  CHAPS.slice(1).forEach(([id])=>$(id).classList.add('chap'));let t=0;addEventListener('scroll',()=>{if(t)return;t=requestAnimationFrame(()=>{t=0;chapter();window.gscn&&gscn();window.cscn&&cscn();window.rscn&&rscn()})},{passive:true});chapter()}pager($('v-sources'),':scope>.block:not(.off),:scope>.srcgrid');
+/* The two activities are tabs on the Chamber page (Sydney, Nov 17). They are views (act, mini), not pager items, so they get their own buttons. */
+{const n=$('v-cham').querySelector('.subnav');n.insertAdjacentHTML('beforeend','<button data-go="act:t-who" data-x="act" aria-current="false">Who\'s like you?</button><button data-go="mini" data-x="mini" aria-current="false">Could you run?</button>');
+  n.onclick=e=>{const b=e.target.closest('button');if(!b||b.dataset.go)return;const B=document.body.classList;if(B.contains('act')||B.contains('mini'))showView('chamber');chGo(+b.dataset.i)}}
 // ASCII look: the Capitol photo behind the page (inlined by build.py as DB.bg) and a redraw once the monospace font has loaded
 document.body.style.setProperty('--sbg',`url("${DB.bg}")`);asciiBg(DB.bg);document.fonts.load('300 14px "IBM Plex Mono"').then(()=>{paintBg()});document.body.style.setProperty('--hubph',cpurl('Capitol_at_Dusk_2.jpg').replace('width=1600','width=800'));document.fonts.load('400 20px "IBM Plex Mono"').then(()=>draw());
 document.body.classList.add('stitch');
@@ -1566,5 +1966,5 @@ addEventListener('resize',size);let roW=0;new ResizeObserver(en=>{const w=Math.r
   let c='';[2,3,4,5].forEach((h,i)=>{for(let k=0;k<h;k++)c+=T(22+i*32,74-k*15,'#',GC[[0,1,2,3][i]],k===h-1?1:.45)});
   $('ico-run').innerHTML=`<svg viewBox="0 0 140 84">${c}</svg>`})();
 $('ramp').innerHTML=`<span aria-hidden="true">${GLYPH.map((g,i)=>`<i style="color:${GC[i]}">${g}</i>`).join('')}</span>One character per member. The older the generation, the denser the character.`;
-S.tab=null;document.body.classList.add('about');document.body.dataset.bg='chamber';buildAttrs();buildVotes();hero();render();size();
+S.tab=null;document.body.classList.add('about');document.body.dataset.bg='chamber';buildAttrs();buildVotes();hero();render();size();cscn();
 </script>

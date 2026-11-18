@@ -350,5 +350,5 @@ function preview(cv){const W=56,H=38,YRS=['2018','2020','2022','2024'];let t=0,l
   if(RM.matches){t=30;frame();return}
   if(cv._on)return;cv._on=1;
   (function loop(now){if(!cv.isConnected||!cv.offsetParent){cv._on=0;return}if(now-last>170){last=now;t++;frame()}requestAnimationFrame(loop)})(0)}
-return{preview,title(cv,t,cell){drawSp(cv,text(t),cell,false)},enter(){size();if(!G.started){G.started=true;play('title')}pdraw();if(!G.raf)G.raf=requestAnimationFrame(loop);if(matchMedia('(max-width:900px)').matches)setTimeout(()=>E('gs').scrollIntoView({block:'start'}),0)},C,G,V,play};
+return{preview,title(cv,t,cell){drawSp(cv,text(t),cell,false)},capitol(cv,maxW,maxH){const ks=Object.keys(CAP).map(Number).sort((x,y)=>y-x);let pick=ks[ks.length-1],cell=3;for(const k of ks){const c=Math.floor(Math.min(maxW/CAP[k].w,maxH/CAP[k].h));if(c>=5){pick=k;cell=c;break}}drawSp(cv,CAP[pick],cell,false)},enter(){size();if(!G.started){G.started=true;play('title')}pdraw();if(!G.raf)G.raf=requestAnimationFrame(loop);},C,G,V,play};
 })();
