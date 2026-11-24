@@ -1310,6 +1310,33 @@ body.stitch .xtools input{width:190px;cursor:text}body.stitch .xtools input::pla
 body.stitch .xtools button:hover{background:rgba(244,241,232,.14);border-color:rgba(244,241,232,.6)}body.stitch .xtools input:focus{border-color:rgba(244,241,232,.7)}
 body.stitch .xtools :focus-visible{outline:2px solid #f4f1e8;outline-offset:2px}
 @media(max-width:900px){body.stitch .xtools input{flex:1;min-width:0;width:auto}}
+
+/* Round 43 (Nov 23, class feedback): title buttons, Explore right after the opening, the age question as a form, our own Find a member list */
+#intro .ibtns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+#intro .ibtn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font:500 17px/1.2 var(--display);padding:13px 24px;border-radius:999px;color:#f4f1e8;border:1px solid rgba(244,241,232,.45);background:rgba(12,16,22,.35);transition:background .2s,border-color .2s}
+#intro .ibtn:hover{background:rgba(244,241,232,.14);border-color:rgba(244,241,232,.7)}
+#intro .ibtn.pri{background:#f4f1e8;color:#10151b;border-color:#f4f1e8;text-shadow:none}#intro .ibtn.pri:hover{background:#fff}
+#intro .ibtn:focus-visible{outline:2px solid #f4f1e8;outline-offset:3px}
+#intro .ibtn b{display:inline-flex}
+@media (prefers-reduced-motion:no-preference){#intro .ibtns{animation:vfade 1.2s ease .9s both}#intro .ibtn.pri b{animation:cue2 1.8s ease-in-out infinite}}
+body.stitch #explore{margin-top:0;padding-top:12svh}
+#ask .aform{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;justify-content:center}
+#ask .aby{display:grid;gap:10px;justify-items:center}
+#ask .alab{font:400 14px/1.2 var(--display);color:#c9cacb}
+#ask input{width:4.6ch;padding:10px 18px 12px;border:1px solid rgba(244,241,232,.55);border-radius:18px;background:rgba(12,16,22,.45);font-size:clamp(48px,6vw,84px);caret-color:#f4f1e8;transition:border-color .2s,background .2s}
+#ask input:focus{border-color:#f4f1e8;background:rgba(12,16,22,.6);box-shadow:0 0 0 4px rgba(244,241,232,.14)}
+#ask input::placeholder{color:rgba(244,241,232,.24);font-size:1em}
+#ask .ago{all:unset;box-sizing:border-box;cursor:pointer;font:500 17px/1.2 var(--display);padding:14px 26px;border-radius:999px;background:#f4f1e8;color:#10151b;text-shadow:none;margin-bottom:10px}
+#ask .ago:hover{background:#fff}#ask .ago:focus-visible{outline:2px solid #f4f1e8;outline-offset:3px}
+#ask.in>.aform{transition-delay:.3s}
+@media (prefers-reduced-motion:no-preference){#ask:not(.in)>.aform{opacity:0;translate:0 28px}#ask>.aform{transition:opacity 1s ease,translate 1s cubic-bezier(.2,.7,.2,1)}}
+.xfind{position:relative;display:flex}
+@media(max-width:900px){.xfind{flex:1;min-width:0}body.stitch .xfind input{width:100%}}
+.xlist{position:absolute;z-index:30;top:calc(100% + 6px);left:0;min-width:100%;width:max-content;max-width:min(340px,90vw);max-height:320px;overflow:auto;margin:0;padding:6px;list-style:none;border-radius:16px;background:rgba(14,18,24,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(244,241,232,.22);box-shadow:0 12px 40px rgba(0,0,0,.45);text-align:left}
+.xlist li{padding:8px 12px;border-radius:10px;cursor:pointer;font:400 15px/1.25 var(--display);color:#f4f1e8;text-shadow:none}
+.xlist li span{display:block;font-size:13px;color:#aeb0b2}
+.xlist li[aria-selected="true"],.xlist li[data-i]:hover{background:rgba(244,241,232,.14)}
+.xlist li.none{cursor:default;color:#aeb0b2}
 </style>
 
 <canvas id="abg" aria-hidden="true"></canvas>
@@ -1323,7 +1350,7 @@ body.stitch .xtools :focus-visible{outline:2px solid #f4f1e8;outline-offset:2px}
   <div class="vs" id="vs"></div>
 </header>
 
-<section id="intro" aria-hidden="true"><canvas id="icap" aria-hidden="true"></canvas><p class="ititle">The Oldest <em>Congress</em></p><p class="ilede" id="ilede"></p><p class="icue">Scroll <b><svg class="arw" viewBox="0 0 10 14" aria-hidden="true"><path d="M5 1v11M1 8l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></b></p></section>
+<section id="intro" aria-label="Title"><canvas id="icap" aria-hidden="true"></canvas><p class="ititle">The Oldest <em>Congress</em></p><p class="ilede" id="ilede"></p><div class="ibtns"><button type="button" class="ibtn pri" id="istory">Start the story <b><svg class="arw" viewBox="0 0 10 14" aria-hidden="true"><path d="M5 1v11M1 8l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></b></button><button type="button" class="ibtn" id="iskip">Skip to the game</button></div></section>
 <div id="v-cham">
 <section class="stage" id="v-chamber" data-tab="Today" aria-label="Chamber">
   <p class="take" id="take"></p>
@@ -1341,7 +1368,7 @@ body.stitch .xtools :focus-visible{outline:2px solid #f4f1e8;outline-offset:2px}
         </ul>
       </div>
     </details>
-    <div class="xtools"><input type="search" id="xq" list="xql" placeholder="Find a member" aria-label="Find a member by name"><datalist id="xql"></datalist><button data-modal="members">All members</button><button class="wlybtn" data-go="act:t-who">Who's like you?</button></div>
+    <div class="xtools"><div class="xfind"><input type="search" id="xq" placeholder="Find a member" aria-label="Find a member by name" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="xql" autocomplete="off"><ul class="xlist" id="xql" role="listbox" aria-label="Matching members" hidden></ul></div><button data-modal="members">All members</button><button class="wlybtn" data-go="act:t-who">Who's like you?</button></div>
   </div>
   <p class="ramp" id="ramp"></p>
   <div class="room"><div class="cvwrap">
@@ -1413,7 +1440,7 @@ body.stitch .xtools :focus-visible{outline:2px solid #f4f1e8;outline-offset:2px}
   </div>
   <details class="more" style="margin-top:18px"><summary>How the game works</summary>
   <dl class="grules">
-    <dt>The point</dt><dd>A seat in Congress opens only when the person in it leaves, and most members spent years building a résumé before they ran. The game shows both.</dd>
+    <dt>The point</dt><dd>A seat in Congress opens only when the person in it leaves, and most members spent years building a résumé before they ran.</dd>
     <dt>Why wait</dt><dd>Each House district has one seat. Anyone eligible can run against the member who holds it, but members who run again rarely lose, so in this game you wait for the seat to open. That part is a simplification.</dd>
     <dt>What is real</dt><dd>The three seats and what happened to them. Maya waits for Michael C. Burgess's seat (TX-26), which opened at the 2024 election. Dan waits for Eddie Bernice Johnson's seat (TX-30), which opened at the 2022 election. Rosa waits for Harold Rogers's seat (KY-5), which Harold Rogers still held in 2025. The ages are real, measured on January 3 of each Congress. The characters, Quorum the pigeon and the dialogue are made up.</dd>
     <dt>Points</dt><dd>Each choice is worth the share of the 535 seats in the 2025 Congress held by people with that background, rounded: 251 served in a state legislature (47 points), about 182 practiced law (34), at least 163 ran a business (30), at least 91 were congressional staff (17), 38 were mayors (7), 5 House members were union representatives (1), 3 were AmeriCorps volunteers (1). Source: CRS report R48535, from members' own profiles. The cards hide the points until you pick. Members overlap, so added-up points are a game score, not a share of anything.</dd>
@@ -1606,7 +1633,7 @@ body.stitch .xtools :focus-visible{outline:2px solid #f4f1e8;outline-offset:2px}
     <div class="dbody">
       <div class="pane" id="p-who" role="region" aria-labelledby="t-who" hidden>
         <h2>Who's like you?</h2>
-        <p class="hint">Start with your age, then tap any traits. Each one you use narrows the chamber.</p>
+        <p class="hint">Start with your age, then add traits.</p>
         <fieldset class="agegrp"><legend>Age</legend>
           <div class="agerow"><label for="by">Born in</label><input id="by" type="number" min="1900" max="2026" value="2004" style="width:92px">
           <label for="band">within</label><select id="band"><option>2</option><option selected>5</option><option>10</option></select><span>years</span></div>
@@ -1797,7 +1824,7 @@ function story(){
   const n=O70(c),n0=O70(c0);
   $('take').innerHTML=`<b>${n}</b> members of Congress were 70 or older in ${yr}.`+(c===c0?'':` <span>${n>=n0?'Up':'Down'} from ${n0} in ${y0}.</span>`);
   genBar();
-  if(c===c0){$('caption').textContent=`Median age ${fmt(md)}. Drag the timeline to compare Congresses, or tap a seat to see who it is.`;return}
+  if(c===c0){$('caption').textContent=`Median age ${fmt(md)}. Drag the timeline back to 2017.`;return}
   const p=c-1,py=startYear(p),d70=n-O70(p),dm=md-med(AGES[p]),prev=new Set(DB.data[p].map(r=>r[0])),nw=DB.data[c].filter(r=>!prev.has(r[0])).length,sg=x=>x>0?'+':x<0?'−':'±';
   $('caption').innerHTML=`Median age ${fmt(md)}. Since ${py}: <b>${sg(d70)}${Math.abs(d70)}</b> aged 70 or older and <b>${nw}</b> new members.`;
 }
@@ -1888,7 +1915,7 @@ let mFrom=null;function modal(id){const B=document.body,was=B.dataset.modal;if(!
 document.addEventListener('click',e=>{const o=e.target.closest('[data-modal]:not(body)');if(o){modal(o.dataset.modal);return}if(e.target.closest('.mx,#mveil'))modal(null)});addEventListener('keydown',e=>{if(e.key==='Escape')modal(null)});
 function menu(open){document.body.classList.toggle('menu',open);const b=$('menub');if(b)b.setAttribute('aria-expanded',open)}
 /* The story, top to bottom (Sydney, Nov 17): chamber, history, generations, how Congress works, then the game. [element, label, photo, menu view] */
-const CHAPS=[['cpin','The room today','chamber','room'],['v-about','Since 1789','about','hist'],['gens','Who they are','gen','gens'],['rules','The rules','how','how'],['explore','Explore','chamber','explore'],['v-hub','Your turn','play','play']];
+const CHAPS=[['cpin','The room today','chamber','room'],['explore','Explore','chamber','explore'],['v-about','Since 1789','about','hist'],['gens','Who they are','gen','gens'],['rules','The rules','how','how'],['v-hub','Your turn','play','play']];
 function chapter(){const B=document.body,r=$('rail');if(!r||B.classList.contains('playing')){document.querySelectorAll('.nav button').forEach(b=>b.setAttribute('aria-current',b.dataset.view==='play'?'page':'false'));return}
   const still=matchMedia('(prefers-reduced-motion:reduce)').matches,act=B.classList.contains('act');let cur=0;CHAPS.forEach(([id],i)=>{const e=$(id);if(!still)e.style.setProperty('--o',act?0:Math.max(0,Math.min(1,-e.getBoundingClientRect().top/innerHeight*1.3)).toFixed(3));if(e.offsetParent&&e.getBoundingClientRect().top<=innerHeight*.5)cur=i;if(e.getBoundingClientRect().top<innerHeight*.88)e.classList.add('in')});
   r.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===cur?'step':'false'));
@@ -1957,7 +1984,7 @@ function card(m){
   const dflt=!m;if(!m){m=cells.map(c=>c.m).filter(Boolean).sort((a,b)=>a.by-b.by)[0];cardM=m}
   if(!m){el.hidden=true;el.innerHTML='';return}
   const pinned=S.sel===m.bg;el.classList.toggle('pinned',pinned);
-  el.innerHTML=`<canvas aria-hidden="true"></canvas><span class="nm">${m.name}</span><span class="m">${({D:'Democrat',R:'Republican',I:'Independent'})[m.p]} · ${m.ch==='H'?'House':'Senate'} · ${m.st}</span><span>Age ${fmt(m.age)} on opening day<br>${GEN[m.g]}</span><span></span>${dflt?'<span class="m hintline">The oldest member. Point at any seat to meet someone else.</span>':''}`;
+  el.innerHTML=`<canvas aria-hidden="true"></canvas><span class="nm">${m.name}</span><span class="m">${({D:'Democrat',R:'Republican',I:'Independent'})[m.p]} · ${m.ch==='H'?'House':'Senate'} · ${m.st}</span><span>Age ${fmt(m.age)} on opening day<br>${GEN[m.g]}</span><span></span>${dflt?'<span class="m hintline">The oldest member. Tap any seat for another.</span>':''}`;
   face(el.querySelector('canvas'),m);reveal(el.querySelector('canvas'),m.bg);
   let h='';
   if(m.v!==undefined){
@@ -2500,7 +2527,7 @@ const score=()=>RES.reduce((a,k)=>a+pts(k),0);
 const rec2=()=>{const s=score();E('grec').innerHTML=`<div class="grl"><span>Résumé</span><b>${s} of ${READY}${s>=READY?' · ready':''}</b></div><div class="gmeter" role="img" aria-label="${s} of ${READY} points"><i style="width:${Math.min(100,s/READY*100)}%"></i></div><div class="gric">${RES.map(k=>`<span title="${PTS[k][1]} +${pts(k)}" aria-label="${PTS[k][1]}">${icon(k)}</span>`).join('')}</div>`};
 const short=m=>m.name.replace(/\.$/,'');
 function castPick(){return new Promise(res=>{G.mode='blank';G.dirty=true;
-  over(`<div class="gcast"><div class="gwhy"><h2>A seat opens only when someone leaves.</h2><p>Most members of Congress spent years building a résumé first. Pick a character, build their résumé, and see whether they are ready when the door opens.</p></div>
+  over(`<div class="gcast"><div class="gwhy"><h2>A seat opens only when someone leaves.</h2><p>Pick a character, build a résumé, and wait for the seat to open.</p></div>
     <div class="gcards">${CAST.map((p,i)=>`<button class="gpc" data-i="${i}"><canvas data-cast="${i}" aria-hidden="true"></canvas><b>${p.name}, ${2017-p.by}</b><span>${p.bio}</span></button>`).join('')}</div></div>`,'cast');
   const by0=C.by;document.querySelectorAll('#gover canvas[data-cast]').forEach(cv=>{const p=CAST[+cv.dataset.cast];C.by=p.by;drawSp(cv,charSp({...C,...p.look,by:p.by}),5,false)});C.by=by0;
   E('gover').onclick=e=>{const b=e.target.closest('[data-i]');if(b)res(+b.dataset.i)}})}
@@ -2644,7 +2671,7 @@ pager($('v-how'),'.hblock');pager($('v-cham'),'#v-chamber,#history,#young,#membe
   const pick=(g,w)=>{const a=DB.tl.filter(f=>f[0]===g&&f[1]===w).sort((x,y)=>x[2]-y[2]);return a.find(f=>FIMG[`${f[0]}-${f[1]}-${f[2]}`])||a[0]};
   const G5=[4,3,2,1,0].map(g=>{const [a,b]=GYRS[g];return{g,a,b,ms:DB.data[119].filter(r=>r[6]>=a&&r[6]<=b).sort((x,y)=>x[6]-y[6]),facts:[DB.tl.find(f=>f[0]===g&&f[1]==='born'&&f[2]===MAINEV[g])||pick(g,'born')].filter(Boolean),n:DB.tl.filter(f=>f[0]===g).length}}).filter(o=>o.ms.length&&o.facts.length);
   const NW=['','One generation sits','Two generations sit','Three generations sit','Four generations sit','Five generations sit'][G5.length];
-  s.innerHTML=`<h2 class="sec big">When they were young</h2><p class="lede">${NW} in Congress today. Keep scrolling for one thing that happened in the years each was born.</p>`+`<div class="gsc" style="--n:${G5.length}"><div class="gpin"><div class="gsls">${G5.map(o=>`<div class="gsl" data-g="${o.g}" style="--c1:${GR[o.g][0]};--c2:${GR[o.g][1]}"><span class="gk">Born ${o.a} to ${o.b}</span><b>${GLONG[o.g]}</b><span class="gn">${o.ms.length} member${o.ms.length===1?'':'s'} of Congress today</span><div class="gfield" aria-hidden="true">${o.ms.map((r,k)=>`<i style="color:${mix(o.g,r[6])};--k:${k}">${GLYPH[o.g]}</i>`).join('')}</div><button class="gall" data-g="${o.g}">All ${o.n} events →</button></div>`).join('')}</div><div class="gev">${G5.map(o=>`<div class="dyk sdyk" data-g="${o.g}" style="--c1:${GR[o.g][0]};--c2:${GR[o.g][1]}"></div>`).join('')}</div><div class="gprog" aria-hidden="true">${G5.map(()=>'<i></i>').join('')}</div></div></div>`;
+  s.innerHTML=`<h2 class="sec big">When they were young</h2><p class="lede">${NW} in Congress today.</p>`+`<div class="gsc" style="--n:${G5.length}"><div class="gpin"><div class="gsls">${G5.map(o=>`<div class="gsl" data-g="${o.g}" style="--c1:${GR[o.g][0]};--c2:${GR[o.g][1]}"><span class="gk">Born ${o.a} to ${o.b}</span><b>${GLONG[o.g]}</b><span class="gn">${o.ms.length} member${o.ms.length===1?'':'s'} of Congress today</span><div class="gfield" aria-hidden="true">${o.ms.map((r,k)=>`<i style="color:${mix(o.g,r[6])};--k:${k}">${GLYPH[o.g]}</i>`).join('')}</div><button class="gall" data-g="${o.g}">All ${o.n} events →</button></div>`).join('')}</div><div class="gev">${G5.map(o=>`<div class="dyk sdyk" data-g="${o.g}" style="--c1:${GR[o.g][0]};--c2:${GR[o.g][1]}"></div>`).join('')}</div><div class="gprog" aria-hidden="true">${G5.map(()=>'<i></i>').join('')}</div></div></div>`;
   $('v-how').before(s);$('v-how').after($('v-hub'));const dump=document.createElement('div');
   G5.forEach(o=>renderFact({g:o.g,i:0,ms:o.ms,facts:[o.facts[0]]},s.querySelector(`.sdyk[data-g="${o.g}"]`),dump,'story'+o.g+'0'));
   /* one pinned scene for all generations (Sydney, Nov 17): the layout stays put and each scroll step morphs the name, the characters, the year, the event and the photo into the next generation's */
@@ -2671,7 +2698,7 @@ window.jmb=el=>{if(RM.matches||!el)return;el.classList.remove('sw');void el.offs
 /* Opening (Sydney, Nov 17): a title screen first, so the page reads as a scroll. Then the chamber is pinned (#cpin is the scroll track) while the headline narrates and one generation lights at a time; at the last step the controls fade in and the chamber is free to explore. */
 {const t=document.createElement('div');t.id='cpin';$('v-about').before(t);
   t.innerHTML='<div class="spin"><p id="stake" aria-live="polite"></p><div class="swrap"><canvas id="scv" role="img" aria-label="The chamber: one typed character for each member of Congress"></canvas></div></div>';
-  const n0=O70(CS[0]),n1=O70(119);$('ilede').textContent='An interactive look at how old the people in Congress are: every member in the chamber, how it got this old, and a short game about waiting for a seat.';
+  const n0=O70(CS[0]),n1=O70(119);$('ilede').textContent='How old Congress is, and a game about waiting for a seat.';
   const icap=()=>GAME.capitol($('icap'),Math.min(innerWidth*.86,760),Math.max(120,innerHeight*.32));icap();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(icap);let ict;addEventListener('resize',()=>{clearTimeout(ict);ict=setTimeout(icap,150)});
   /* the title Capitol lights up under the pointer in the generation colors and fades back, like the portraits */
   {const cv=$('icap'),hot=new Map(),RAMP2='.:-=+*#%@';let raf=0,inside=false,tx=0,ty=0,px=0,py=0,fresh=true,lt=0;
@@ -2684,7 +2711,9 @@ window.jmb=el=>{if(RM.matches||!el)return;el.classList.remove('sw');void el.offs
     cv.addEventListener('pointermove',e=>{if(RM.matches)return;const k=GAME.capCells(cv);if(!k)return;const r=cv.getBoundingClientRect();tx=(e.clientX-r.left)/k.cell;ty=(e.clientY-r.top)/k.cell;if(!inside){inside=true;fresh=true}if(!raf)raf=requestAnimationFrame(tick)});
     cv.addEventListener('pointerleave',()=>{inside=false;if(!raf&&hot.size)raf=requestAnimationFrame(tick)})}
   const cnt=g=>{const [a,b]=GYRS[g];return DB.data[119].filter(r=>r[6]>=a&&r[6]<=b).length},NM=['Gen Z','Millennials','Gen X','Baby boomers','from the Silent Generation'],pop=DB.pop[2025];
-  const ST=[{g:null,txt:`<b>${DB.data[119].length}</b> members of Congress. <span>One character each.</span>`}].concat([4,3,2,1,0].filter(g=>cnt(g)).map(g=>({g,txt:`<b>${cnt(g)}</b> ${cnt(g)===1?'is':'are'} ${NM[g]}, <span>born ${GYRS[g][0]} to ${GYRS[g][1]}.</span>`})),[{g:null,txt:`Their median age is <b>${fmt(med(AGES[119]))}</b>.${pop!=null?` <span>For everyone living in the United States, it is ${pop}.</span>`:''}`}]);
+  /* five steps (Nov 23, was seven): everyone, the two oldest generations one at a time, the three younger ones together, the median. Then the same chamber opens up below as Explore ("Now it's yours"). */
+  const cntA=gs=>gs.reduce((a,g)=>a+cnt(g),0),YG=[2,1,0];
+  const ST=[{g:null,txt:`<b>${DB.data[119].length}</b> members of Congress. <span>One character each.</span>`}].concat([4,3].filter(g=>cnt(g)).map(g=>({g:[g],txt:`<b>${cnt(g)}</b> ${cnt(g)===1?'is':'are'} ${NM[g]}, <span>born ${GYRS[g][0]} to ${GYRS[g][1]}.</span>`})),[{g:YG,txt:`The other <b>${cntA(YG)}</b> are Gen X, Millennials and Gen Z, <span>born ${GYRS[2][0]} or later.</span>`},{g:null,txt:`Their median age is <b>${fmt(med(AGES[119]))}</b>.${pop!=null?` <span>For everyone living in the United States, it is ${pop}.</span>`:''}`}]);
   t.style.setProperty('--n',ST.length);
   /* the picture: its own canvas, drawn from the same seats as the chamber in Explore */
   const sc=$('scv'),sx=sc.getContext('2d'),R9=ROSTERS[119],SL=cells.map(c=>({c,m:R9[c.k][c.i],a:1,a0:1,ta:1})).filter(o=>o.m);let sk=1,sa=0,cur=-1;
@@ -2697,12 +2726,12 @@ window.jmb=el=>{if(RM.matches||!el)return;el.classList.remove('sw');void el.offs
     const step=now=>{const p=Math.min(1,(now-t0)/1100);SL.forEach(o=>{const q=Math.max(0,Math.min(1,(p*1.7-o.d*.7))),e=q<.5?2*q*q:1-(-2*q+2)**2/2;o.a=o.a0+(o.ta-o.a0)*e});sdraw();if(p<1)sa=requestAnimationFrame(step)};sa=requestAnimationFrame(step)};
   new ResizeObserver(ssize).observe(sc.parentElement);document.fonts.load('400 20px "IBM Plex Mono"').then(sdraw);
   window.cscn=()=>{if(!t.offsetParent)return;const r=t.getBoundingClientRect(),p=Math.max(0,Math.min(.999,-r.top/Math.max(1,r.height-innerHeight))),k=Math.floor(p*ST.length);if(k===cur)return;
-    cur=k;const st=$('stake');st.innerHTML=ST[k].txt;jmb(st,1000);SL.forEach(o=>o.ta=+(ST[k].g==null||o.m.g===ST[k].g));sfade()};
+    cur=k;const st=$('stake');st.innerHTML=ST[k].txt;jmb(st,1000);SL.forEach(o=>o.ta=+(ST[k].g==null||ST[k].g.includes(o.m.g)));sfade()};
   /* Explore (Sydney, Nov 17): everything you can click sits here, after the story, so nobody gets stuck before it ends */
-  const x=document.createElement('section');x.id='explore';x.setAttribute('aria-label','Explore the chamber');x.innerHTML='<h2 class="sec big">Explore the chamber</h2><p class="lede">Now it is yours. Pick a generation, drag the timeline back to 2017, or tap a seat to see who holds it.</p>';
-  $('v-hub').before(x);x.append($('v-chamber'));$('v-hub').before($('v-mini'));
+  const x=document.createElement('section');x.id='explore';x.setAttribute('aria-label','Explore the chamber');/* no title or lede (Sydney, Nov 23): the chamber's own headline opens it */
+  t.after(x);x.append($('v-chamber'));$('v-hub').before($('v-mini'));
   /* Lead-in to the game (Sydney, Nov 17): replaces the Could you run? card. One question, one line back, then the game. Age rules only; the game itself always starts the character at 25 in 2017. */
-  const ak=document.createElement('section');ak.id='ask';ak.setAttribute('aria-label','Your age');ak.innerHTML='<h2 class="sec big">How old are you?</h2><label class="aby"><span class="gsr">Birth year</span><input id="askby" type="number" inputmode="numeric" min="1900" max="'+new Date().getFullYear()+'" placeholder="Year born" autocomplete="off"></label><p class="aline" id="askline" aria-live="polite">Put in the year you were born.</p><p class="anote">Age rules only. Citizenship years also apply.</p><p class="abridge">Now meet someone who is 25 in 2017, and has to wait.</p>';
+  const ak=document.createElement('section');ak.id='ask';ak.setAttribute('aria-label','Your age');ak.innerHTML='<h2 class="sec big">How old are you?</h2><form class="aform" id="askf"><label class="aby"><span class="alab">The year you were born</span><input id="askby" type="number" inputmode="numeric" min="1900" max="'+new Date().getFullYear()+'" placeholder="1999" autocomplete="off"></label><button type="submit" class="ago">Check</button></form><p class="aline" id="askline" aria-live="polite">Put in the year you were born.</p><p class="anote">Age rules only. Citizenship years also apply.</p><p class="abridge">Now meet someone who is 25 in 2017, and has to wait.</p>';
   $('v-hub').before(ak);
   const Yr=new Date().getFullYear(),yy=n=>n===1?'1 year':n+' years';
   const askT=by=>{const A=Yr-by;if(!(by>=1900&&by<=Yr))return'Put in the year you were born.';
@@ -2711,12 +2740,25 @@ window.jmb=el=>{if(RM.matches||!el)return;el.classList.remove('sw');void el.offs
     if(A<30)return`At ${A} you can vote and run for the House. The Senate opens at 30, in ${yy(30-A)}.`;
     if(A<35)return`At ${A} you can vote and run for the House or the Senate. President opens at 35, in ${yy(35-A)}.`;
     return`At ${A} you are old enough for every seat in Congress, and for President.`};
-  $('askby').oninput=()=>{const l=$('askline');l.textContent=askT(+$('askby').value);jmb(l,700)};
+  const askGo=()=>{const l=$('askline'),t=askT(+$('askby').value);if(l.textContent!==t){l.textContent=t;jmb(l,700)}};
+  $('askby').oninput=()=>{const v=$('askby').value;if(v.length>=4||!v)askGo()};$('askf').onsubmit=e=>{e.preventDefault();askGo();$('askby').blur()};
   $('v-mini').hidden=true;
-  {const io=new IntersectionObserver(en=>en.forEach(q=>{if(q.isIntersecting){ak.classList.add('in');io.disconnect()}}),{rootMargin:'0px 0px -15% 0px'});io.observe(ak)}
+  {const io=new IntersectionObserver(en=>en.forEach(q=>{if(q.isIntersecting){ak.classList.add('in');io.disconnect();if(matchMedia('(pointer:fine)').matches&&!$('askby').value)setTimeout(()=>$('askby').focus({preventScroll:true}),900)}}),{rootMargin:'0px 0px -15% 0px'});io.observe(ak)}
   window.cfree=()=>x.scrollIntoView();
-  const q=$('xq');q.onfocus=()=>{$('xql').innerHTML=(S.all||[]).map(m=>`<option value="${m.name}">`).join('')};
-  q.oninput=q.onchange=()=>{const v=q.value.trim().toLowerCase();if(v.length<3)return;const A=S.all||[],m=A.find(m=>m.name.toLowerCase()===v)||(A.filter(m=>m.name.toLowerCase().includes(v)).length===1&&A.find(m=>m.name.toLowerCase().includes(v)));if(m){S.sel=m.bg;S.gen=null;render()}};
+  $('istory').onclick=()=>t.scrollIntoView({behavior:RM.matches?'auto':'smooth'});$('iskip').onclick=()=>showView('play');
+  /* Find a member (Nov 23): our own list under the field, because the browser's datalist popup opened off to the side of the page. */
+  {const q=$('xq'),L=$('xql'),CHN={H:'House',S:'Senate'};let hits=[],ix=-1;
+    const close=()=>{L.hidden=true;q.setAttribute('aria-expanded','false');ix=-1;q.removeAttribute('aria-activedescendant')};
+    const pick=m=>{S.sel=m.bg;S.gen=null;q.value=m.name;close();render()};
+    const hl=i=>{ix=i;[...L.children].forEach((li,j)=>li.setAttribute('aria-selected',j===i?'true':'false'));if(i>=0){q.setAttribute('aria-activedescendant','xo'+i);L.children[i].scrollIntoView({block:'nearest'})}};
+    const show=()=>{const v=q.value.trim().toLowerCase();if(!v){close();return}const A=S.all||[],sw=w=>w.split(/[\s.,-]+/).some(p=>p.startsWith(v));
+      hits=A.filter(m=>m.name.toLowerCase().includes(v)).sort((a,b)=>(sw(b.name.toLowerCase())-sw(a.name.toLowerCase()))||a.name.localeCompare(b.name)).slice(0,8);
+      L.innerHTML=hits.length?hits.map((m,i)=>`<li role="option" id="xo${i}" aria-selected="false" data-i="${i}">${m.name}<span>${CHN[m.ch]} · ${m.st} · ${Math.floor(m.age)}</span></li>`).join(''):'<li class="none">No member by that name</li>';
+      L.hidden=false;q.setAttribute('aria-expanded','true');hl(hits.length?0:-1)};
+    q.oninput=show;q.onfocus=()=>{if(q.value.trim())show()};
+    q.onkeydown=e=>{if(L.hidden&&e.key!=='ArrowDown')return;if(e.key==='ArrowDown'){e.preventDefault();if(L.hidden)show();else hl(Math.min(hits.length-1,ix+1))}else if(e.key==='ArrowUp'){e.preventDefault();hl(Math.max(0,ix-1))}else if(e.key==='Enter'){e.preventDefault();if(hits[ix])pick(hits[ix])}else if(e.key==='Escape'){close()}};
+    L.addEventListener('pointerdown',e=>{const li=e.target.closest('li[data-i]');if(!li)return;e.preventDefault();pick(hits[+li.dataset.i])});
+    q.addEventListener('blur',()=>setTimeout(close,120))}
   /* The rules (Sydney, Nov 17): one pinned screen, three scroll steps, in place of the How Congress works tabs. The grids are plain seats, not members: nothing here says which senators are up. */
   const RS=[['Two chambers','The House has 435 seats, split among the states by population. The Senate has 100, two for each state. A bill has to pass both.'],['Terms','A House term is 2 years. A Senate term is 6. Neither chamber limits how many terms a member can serve.'],['On the ballot in 2026','Every House seat is up on November 3, 2026, and 35 of the 100 Senate seats: 33 regular elections and 2 special elections, in Ohio and Florida.']];
   const g=(n,up,cols)=>Array.from({length:n},(_,i)=>`<i${i<up?' class="up"':''} style="--n:${i};--d:${(i/cols|0)+(i%cols)*.6}">#</i>`).join(''),ru=document.createElement('section');ru.id='rules';ru.setAttribute('aria-label','The rules');
@@ -2745,7 +2787,7 @@ window.jmb=el=>{if(RM.matches||!el)return;el.classList.remove('sw');void el.offs
     ['The oldest delegation',del(old),c=>c.st===old.k],['The youngest delegation',del(yng),c=>c.st===yng.k]];
   const sec=document.createElement('section');sec.id='usmap';sec.setAttribute('aria-label','Where they serve');
   sec.innerHTML=`<div class="mpin"><div class="mtxt"><span class="rk"><b id="mkn">1</b> of ${MS4.length}</span><div class="msteps">${MS4.map(([h,p])=>`<div class="mstep"><h3>${h}</h3><p>${p}</p></div>`).join('')}</div><p class="rsrc">Marks are grouped around each state's center, so shapes are approximate; Alaska and Hawaii are moved and Alaska is shrunk. Ages on January 3, 2025.</p></div><div class="mpic"><canvas id="mcv" role="img" aria-label="Map of the United States with one character per member of Congress, colored by generation"></canvas><div class="mcard" id="mcard" aria-hidden="true"></div></div></div>`;
-  $('v-about').after(sec);CHAPS.splice(2,0,['usmap','Where they serve','about','map']);
+  $('v-about').after(sec);CHAPS.splice(CHAPS.findIndex(c=>c[0]==='v-about')+1,0,['usmap','Where they serve','about','map']);
   const cv=$('mcv'),box=sec.querySelector('.mpic'),card=$('mcard'),stp=[...sec.querySelectorAll('.mstep')];let cs=10,k=-1,seen=0,raf=0,t0=0;
   const fit=()=>{const w=box.clientWidth,h=box.clientHeight||w*.6,d=devicePixelRatio||1;cs=Math.max(4,Math.min(w/COLS,h/ROWS));cv.width=COLS*cs*d;cv.height=ROWS*cs*d;cv.style.width=COLS*cs+'px';cv.style.height=ROWS*cs+'px';mdraw()};
   const tgt=c=>{if(!c.m)return k>0?.22:.34;if(k<0)return 0;return MS4[k][2](c)?1:k>0?.09:1};

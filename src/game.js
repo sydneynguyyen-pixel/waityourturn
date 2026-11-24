@@ -324,7 +324,7 @@ const score=()=>RES.reduce((a,k)=>a+pts(k),0);
 const rec2=()=>{const s=score();E('grec').innerHTML=`<div class="grl"><span>Résumé</span><b>${s} of ${READY}${s>=READY?' · ready':''}</b></div><div class="gmeter" role="img" aria-label="${s} of ${READY} points"><i style="width:${Math.min(100,s/READY*100)}%"></i></div><div class="gric">${RES.map(k=>`<span title="${PTS[k][1]} +${pts(k)}" aria-label="${PTS[k][1]}">${icon(k)}</span>`).join('')}</div>`};
 const short=m=>m.name.replace(/\.$/,'');
 function castPick(){return new Promise(res=>{G.mode='blank';G.dirty=true;
-  over(`<div class="gcast"><div class="gwhy"><h2>A seat opens only when someone leaves.</h2><p>Most members of Congress spent years building a résumé first. Pick a character, build their résumé, and see whether they are ready when the door opens.</p></div>
+  over(`<div class="gcast"><div class="gwhy"><h2>A seat opens only when someone leaves.</h2><p>Pick a character, build a résumé, and wait for the seat to open.</p></div>
     <div class="gcards">${CAST.map((p,i)=>`<button class="gpc" data-i="${i}"><canvas data-cast="${i}" aria-hidden="true"></canvas><b>${p.name}, ${2017-p.by}</b><span>${p.bio}</span></button>`).join('')}</div></div>`,'cast');
   const by0=C.by;document.querySelectorAll('#gover canvas[data-cast]').forEach(cv=>{const p=CAST[+cv.dataset.cast];C.by=p.by;drawSp(cv,charSp({...C,...p.look,by:p.by}),5,false)});C.by=by0;
   E('gover').onclick=e=>{const b=e.target.closest('[data-i]');if(b)res(+b.dataset.i)}})}
